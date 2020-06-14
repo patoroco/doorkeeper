@@ -1,0 +1,34 @@
+name: "DigitalOcean Doorman"
+description: "Open or close a specific port in your DigitalOcean firewall."
+
+inputs:
+  digitaloceanToken:
+    description: "Digital Ocean token"
+    required: true
+
+  firewallName:
+    description: "Name of the firewall attached to your droplet"
+    required: true
+
+  actionToDo:
+      description: "'add'/'remove' the Github's IP"
+      required: true
+
+  protocol:
+    description: "Protocol used by the service to update"
+    required: true
+    default: "tcp"
+
+  port:
+    description: "Port used by the service to update"
+    required: true
+    default: 22
+
+  dryRun:
+    description: "Specify true if you just want to check the action without apply it."
+    required: true
+    default: false
+
+runs:
+  using: "node12"
+  main: "dist/index.js"

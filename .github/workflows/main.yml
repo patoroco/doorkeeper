@@ -1,0 +1,25 @@
+name: Development
+on:
+  push:
+    branches:
+      - i_want_to_trigger_this_action_manually
+jobs:
+  local:
+    runs-on: ubuntu-latest
+    name: Test on local
+    steps:
+      # Doing the checkout step as a workaround
+      # More info: https://github.com/nektos/act/issues/228
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: "./"
+
+      - name: Opening ports
+        id: opening
+        uses: ./
+        with:
+          digitaloceanToken: ${{ secrets.DO_TOKEN }}
+          firewallName: "ubuntu-dokku"
+          actionToDo: "add"
+          dryRun: true
