@@ -27,27 +27,25 @@ Create or update a workflow, adding the file `.github/workflows/doorman.yml` ([m
 ## prepare your artifacts ##
 ############################
 
-  - name: Opening ports
-    id: opening
-    uses: ./
-    with:
-      digitaloceanToken: ${{ secrets.DO_TOKEN }}
-      firewallName: "name_of_your_droplet"
-      actionToDo: "add"
-      dryRun: false
+- name: Doorman open
+  uses: patoroco/doorman@master
+  with:
+    digitaloceanToken: ${{ secrets.DO_TOKEN }}
+    firewallName: "name_of_the_firewall"
+    actionToDo: "add"
+    dryRun: false
 
 ############################
 ## deploy to DigitalOcean ##
 ############################
 
-  - name: Closing ports
-    id: closing
-    uses: ./
-    with:
-      digitaloceanToken: ${{ secrets.DO_TOKEN }}
-      firewallName: "name_of_your_droplet"
-      actionToDo: "remove"
-      dryRun: false
+- name: Doorman close
+  uses: patoroco/doorman@master
+  with:
+    digitaloceanToken: ${{ secrets.DO_TOKEN }}
+    firewallName: "name_of_the_firewall"
+    actionToDo: "remove"
+    dryRun: false
 ```
 
 To check that everything is working as expected, you have to push these changes to your repo, and a new build in the `Actions` tab should be starting.
@@ -56,6 +54,7 @@ To check that everything is working as expected, you have to push these changes 
 Development
 -----------
 First of all, you have to install the dependencies:
+
 ```bash
 npm install
 ```
@@ -68,6 +67,7 @@ npm run pack && act -j local -s DO_TOKEN
 ```
 
 You can also run the code itself using:
+
 ```bash
 ts-node src/main.ts
 ```
@@ -75,5 +75,5 @@ ts-node src/main.ts
 LICENSE
 -------
 
-- [MIT License](LICENSE.md)
+- [MIT License](LICENSE.md).
 - The Doorman Icon was [downloaded from Vecteezy](https://www.vecteezy.com/free-vector/doorman).
