@@ -14,6 +14,7 @@ async function main() {
 
   const config = await getConfig();
 
+  console.log(`Current IP: ${config.IP}`);
   if (config.dryrun) {
     console.log("Running in DryRun MODE...");
   }

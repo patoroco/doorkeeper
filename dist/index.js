@@ -1286,6 +1286,7 @@ function main() {
         //   firewallName: "ubuntu-dokku"
         // };
         const config = yield utils_1.getConfig();
+        console.log(`Current IP: ${config.IP}`);
         if (config.dryrun) {
             console.log("Running in DryRun MODE...");
         }
