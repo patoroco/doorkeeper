@@ -1,4 +1,4 @@
-![](images/doorman.png)
+![Doorman](images/doorman.png)
 
 Doorkeeper DigitalOcean Action
 ==============================
@@ -6,17 +6,17 @@ Doorkeeper DigitalOcean Action
 This Github action allows you to open or close an specific port in your DigitalOcean firewall.
 It's really useful for deploy in your instances from Github Actions, as [they don't provide a list of IPs to add to your security groups](https://help.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#ip-addresses-of-github-hosted-runners).
 
-![](images/diagram.png)
+![Diagram of doorkeeper](images/diagram.png)
 
 
 Usage
 -----
 You need to generate a **personal access token** from [your DigitalOcean Applications & API](https://cloud.digitalocean.com/account/api/tokens) page.
 
-![](images/do_token.png)
+![DigitalOcean token](images/do_token.png)
 
 Copy that token, and paste in the secrets of your repo:
-![](images/secrets.png)
+![Github Repo Secrets](images/secrets.png)
 
 Create or update a workflow, adding the file `.github/workflows/doorkeeper.yml` ([more info about how to use Github Actions](https://help.github.com/en/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)).
 
