@@ -1,7 +1,5 @@
 import * as core from "@actions/core";
 import fetch from "node-fetch";
-import {firewall} from "dots-wrapper/dist/modules";
-import {prototype} from "module";
 
 export interface ActionConfig {
   DO_TOKEN: string;
@@ -14,8 +12,6 @@ export interface ActionConfig {
 }
 
 export async function getConfig(): Promise<ActionConfig> {
-  // TODO: checkInputs
-
   const token = core.getInput("digitaloceanToken");
   if (token == undefined || token.length == 0) {
     throw new Error("You must specify the 'digitaloceanToken' input.");
@@ -57,7 +53,8 @@ export async function getConfig(): Promise<ActionConfig> {
   };
 }
 
-async function getLocalIP(): Promise<string> {
+// TODO: remove the export here and test the full configuration
+export async function getLocalIP(): Promise<string> {
   const response = await fetch("https://ifconfig.me/ip");
   return response.text();
 }
