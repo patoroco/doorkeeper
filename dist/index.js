@@ -1,3 +1,4 @@
+module.exports =
 /******/ (function(modules, runtime) { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The module cache
@@ -1588,12 +1589,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getConfig = void 0;
+exports.getLocalIP = exports.getConfig = void 0;
 const core = __importStar(__webpack_require__(470));
 const node_fetch_1 = __importDefault(__webpack_require__(454));
 function getConfig() {
     return __awaiter(this, void 0, void 0, function* () {
-        // TODO: checkInputs
         const token = core.getInput("digitaloceanToken");
         if (token == undefined || token.length == 0) {
             throw new Error("You must specify the 'digitaloceanToken' input.");
@@ -1629,12 +1629,14 @@ function getConfig() {
     });
 }
 exports.getConfig = getConfig;
+// TODO: remove the export here and test the full configuration
 function getLocalIP() {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield node_fetch_1.default("https://ifconfig.me/ip");
         return response.text();
     });
 }
+exports.getLocalIP = getLocalIP;
 
 
 /***/ }),
