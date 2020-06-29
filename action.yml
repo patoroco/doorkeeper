@@ -1,4 +1,4 @@
-name: "DigitalOcean Doorman"
+name: "DigitalOcean Doorkeeper"
 description: "Open or close a specific port in your DigitalOcean firewall."
 
 inputs:
