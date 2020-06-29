@@ -18,7 +18,7 @@ jobs:
     needs: [tests]
     steps:
       - run: |
-        [ -z "`git status --porcelain`" ] && true || false
+        '[ -z "`git status --porcelain`" ] && true || false'
 
 
       # TODO: test the build itself, and the diff with the dist folder
