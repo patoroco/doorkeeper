@@ -1,7 +1,7 @@
 ![](images/doorman.png)
 
-Doorman DigitalOcean Action
-===========================
+Doorkeeper DigitalOcean Action
+==============================
 
 This Github action allows you to open or close an specific port in your DigitalOcean firewall.
 It's really useful for deploy in your instances from Github Actions, as [they don't provide a list of IPs to add to your security groups](https://help.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners#ip-addresses-of-github-hosted-runners).
@@ -18,7 +18,7 @@ You need to generate a **personal access token** from [your DigitalOcean Applica
 Copy that token, and paste in the secrets of your repo:
 ![](images/secrets.png)
 
-Create or update a workflow, adding the file `.github/workflows/doorman.yml` ([more info about how to use Github Actions](https://help.github.com/en/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)).
+Create or update a workflow, adding the file `.github/workflows/doorkeeper.yml` ([more info about how to use Github Actions](https://help.github.com/en/actions/getting-started-with-github-actions/starting-with-preconfigured-workflow-templates)).
 
 
 ```yaml
@@ -27,8 +27,8 @@ Create or update a workflow, adding the file `.github/workflows/doorman.yml` ([m
 ## prepare your artifacts ##
 ############################
 
-- name: Doorman open
-  uses: patoroco/doorman@master
+- name: Doorkeeper open
+  uses: patoroco/doorkeeper@master
   with:
     digitaloceanToken: ${{ secrets.DO_TOKEN }}
     firewallName: "name_of_the_firewall"
@@ -39,8 +39,8 @@ Create or update a workflow, adding the file `.github/workflows/doorman.yml` ([m
 ## deploy to DigitalOcean ##
 ############################
 
-- name: Doorman close
-  uses: patoroco/doorman@master
+- name: Doorkeeper close
+  uses: patoroco/doorkeeper@master
   with:
     digitaloceanToken: ${{ secrets.DO_TOKEN }}
     firewallName: "name_of_the_firewall"
