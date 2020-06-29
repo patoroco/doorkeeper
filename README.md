@@ -1,6 +1,7 @@
 ![Doorman](images/doorman.png)
 
 Doorkeeper DigitalOcean Action
+[![Tests](https://github.com/patoroco/doorkeeper/workflows/Tests/badge.svg)](https://github.com/patoroco/doorkeeper/actions?query=workflow%3ATests)
 ==============================
 
 This Github action allows you to open or close an specific port in your DigitalOcean firewall.
