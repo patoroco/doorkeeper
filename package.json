@@ -1,24 +1,25 @@
 {
-  "name": "digitalocean-action",
-  "version": "1.0.0",
-  "description": "",
+  "name": "digitalocean-doorkeeper",
+  "version": "0.1.0",
+  "description": "This Github action allows you to open or close an specific port in your DigitalOcean firewall. It's really useful for deploy in your instances from Github Actions, as they don't provide a list of IPs to add to your security groups.",
   "main": "src/main.ts",
   "scripts": {
-    "build": "tsc",
+    "local": "ts-node src/main.ts",
+    "local:action": "npm run pack && act -j local -s DO_TOKEN",
     "pack": "ncc build",
     "test": "jest",
     "test:watch": "jest --watchAll"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/patoroco/digitalocean.git"
+    "url": "git+https://github.com/patoroco/doorkeeper.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/patoroco/digitalocean/issues"
+    "url": "https://github.com/patoroco/doorkeeper/issues"
   },
-  "homepage": "https://github.com/patoroco/digitalocean#readme",
+  "homepage": "https://github.com/patoroco/doorkeeper#readme",
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",

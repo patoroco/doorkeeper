@@ -59,17 +59,16 @@ First of all, you have to install the dependencies:
 npm install
 ```
 
-I've been using [act](https://github.com/nektos/act) to test the action in local, and it's really useful because it doesn't require to push anything to github.
-To use it, you only need to run the `pack` script, which will create the `dist/index.js`, and run the action with `act`:
+I've been using [act](https://github.com/nektos/act) to test the action in local, and it's really useful because it doesn't require to push anything to github. After install it, you can do:
 
 ```bash
-npm run pack && act -j local -s DO_TOKEN
+npm run local:action
 ```
 
 You can also run the code itself using:
 
 ```bash
-ts-node src/main.ts
+npm run local
 ```
 
 LICENSE
