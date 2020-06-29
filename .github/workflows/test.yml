@@ -17,8 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [tests]
     steps:
-      - run: |
-        '[ -z "`git status --porcelain`" ] && true || false'
+      - run: ls
+      - run: pwd
+      - run: .github/workflows/check-status.sh
 
 
       # TODO: test the build itself, and the diff with the dist folder
