@@ -1,2 +1,8 @@
 #!/bin/bash
-[ -z "`git status --porcelain`" ] && true || false
+if [ -z "`git status --porcelain`" ]; then
+  true
+else
+  echo "The following files appear as changed:"
+  git status --porcelain
+  false
+fi
