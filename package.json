@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/patoroco/doorkeeper#readme",
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@types/node-fetch": "^2.5.7",
     "dots-wrapper": "^3.3.0",
