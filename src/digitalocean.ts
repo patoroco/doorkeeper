@@ -36,6 +36,8 @@ export async function getFirewall({firewall: firewallClient}: ClientInterface, n
     throw new Error(`The firewall with name '${name}', doesn't exist.`);
   }
 
+  console.log(`firewall protects: ${firewall.droplet_ids ?? 'no-ids'} ${firewall.id ?? 'no-id'}`)
+
   return firewall;
 }
 
@@ -70,13 +72,12 @@ export async function updateInboundRules(
   }
 
   const updated = {
-    id: firewall.id,
-    name: firewall.name,
-    droplet_ids: firewall.droplet_ids,
-    tags: firewall.tags,
+    ...firewall,
     inbound_rules: inboundRules,
     outbound_rules: prepareOutboundRules(firewall.outbound_rules)
   };
+
+  console.log(`update protects: ${updated.droplet_ids ?? 'no-ids'} ${updated.id ?? 'no-id'}`)
 
   const {
     data: {firewall: response}
