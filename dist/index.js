@@ -4449,14 +4449,12 @@ function getDOClient(config) {
 }
 exports.getDOClient = getDOClient;
 function getFirewall({ firewall: firewallClient }, name) {
-    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const { data: { firewalls } } = yield firewallClient.listFirewalls({});
         const firewall = firewalls.find(f => f.name == name);
         if (firewall == undefined) {
             throw new Error(`The firewall with name '${name}', doesn't exist.`);
         }
-        console.log(`firewall protects: ${(_a = firewall.droplet_ids) !== null && _a !== void 0 ? _a : 'no-ids'} ${(_b = firewall.id) !== null && _b !== void 0 ? _b : 'no-id'}`);
         return firewall;
     });
 }
@@ -4480,14 +4478,12 @@ function generateInboundRules(oldRules, config) {
 }
 exports.generateInboundRules = generateInboundRules;
 function updateInboundRules({ firewall: firewallClient }, firewall, inboundRules, dryrun = true) {
-    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         printFirewallRules(inboundRules, "(updated)");
         if (dryrun) {
             return;
         }
         const updated = Object.assign(Object.assign({}, firewall), { inbound_rules: inboundRules, outbound_rules: prepareOutboundRules(firewall.outbound_rules) });
-        console.log(`update protects: ${(_a = updated.droplet_ids) !== null && _a !== void 0 ? _a : 'no-ids'} ${(_b = updated.id) !== null && _b !== void 0 ? _b : 'no-id'}`);
         const { data: { firewall: response } } = yield firewallClient.updateFirewall(updated);
         console.log(response.status);
     });
