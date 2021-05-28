@@ -58,11 +58,12 @@ module.exports =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteRegistry = void 0;
-exports.deleteRegistry = ({ httpClient, }) => () => {
+const deleteRegistry = ({ httpClient, }) => () => {
     const path = '/registry';
     const url = `${path}`;
     return httpClient.delete(url);
 };
+exports.deleteRegistry = deleteRegistry;
 //# sourceMappingURL=delete-registry.js.map
 
 /***/ }),
@@ -73,7 +74,7 @@ exports.deleteRegistry = ({ httpClient, }) => () => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.patchDefaultProject = void 0;
-exports.patchDefaultProject = ({ httpClient, }) => ({ description, environment, is_default, name, purpose, }) => {
+const patchDefaultProject = ({ httpClient, }) => ({ description, environment, is_default, name, purpose, }) => {
     const path = '/projects';
     const body = {
         description,
@@ -85,6 +86,7 @@ exports.patchDefaultProject = ({ httpClient, }) => ({ description, environment, 
     const url = `${path}/default`;
     return httpClient.patch(url, body);
 };
+exports.patchDefaultProject = patchDefaultProject;
 //# sourceMappingURL=patch-default-project.js.map
 
 /***/ }),
@@ -100,12 +102,13 @@ exports.patchDefaultProject = ({ httpClient, }) => ({ description, environment, 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeRulesFromLoadBalancer = void 0;
-exports.removeRulesFromLoadBalancer = ({ httpClient, }) => ({ forwarding_rules, id, load_balancer_id, }) => {
+const removeRulesFromLoadBalancer = ({ httpClient, }) => ({ forwarding_rules, load_balancer_id, }) => {
     const path = '/load_balancers';
     const body = { forwarding_rules };
-    const url = `${path}/${load_balancer_id || id}/forwarding_rules`;
+    const url = `${path}/${load_balancer_id}/forwarding_rules`;
     return httpClient.delete(url, { data: body });
 };
+exports.removeRulesFromLoadBalancer = removeRulesFromLoadBalancer;
 //# sourceMappingURL=remove-rules-from-load-balancer.js.map
 
 /***/ }),
@@ -116,13 +119,14 @@ exports.removeRulesFromLoadBalancer = ({ httpClient, }) => ({ forwarding_rules, 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rebootDroplet = void 0;
-exports.rebootDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
+const rebootDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'reboot';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.rebootDroplet = rebootDroplet;
 //# sourceMappingURL=reboot-droplet.js.map
 
 /***/ }),
@@ -134,9 +138,10 @@ exports.rebootDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createVpc = void 0;
-exports.createVpc = ({ httpClient, }) => ({ description, ip_range, name, region, }) => {
+const createVpc = ({ httpClient, }) => ({ description, ip_range, is_default, name, region, }) => {
     const path = '/vpcs';
     const body = {
+        default: is_default,
         description,
         ip_range,
         name,
@@ -145,6 +150,7 @@ exports.createVpc = ({ httpClient, }) => ({ description, ip_range, name, region,
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createVpc = createVpc;
 //# sourceMappingURL=create-vpc.js.map
 
 /***/ }),
@@ -157,11 +163,12 @@ exports.createVpc = ({ httpClient, }) => ({ description, ip_range, name, region,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeDatabaseClusterUser = void 0;
-exports.removeDatabaseClusterUser = ({ httpClient, }) => ({ database_cluster_id, user_name, }) => {
+const removeDatabaseClusterUser = ({ httpClient, }) => ({ database_cluster_id, user_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/users/${user_name}`;
     return httpClient.delete(url);
 };
+exports.removeDatabaseClusterUser = removeDatabaseClusterUser;
 //# sourceMappingURL=remove-database-cluster-user.js.map
 
 /***/ }),
@@ -185,16 +192,18 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.vpc = exports.volume = exports.tag = exports.sshKey = exports.snapshot = exports.size = exports.region = exports.project = exports.loadBalancer = exports.kubernetes = exports.image = exports.floatingIp = exports.firewall = exports.droplet = exports.domain = exports.database = exports.customer = exports.containerRegistry = exports.certificate = exports.cdnEndpoint = exports.action = exports.account = void 0;
+exports.vpc = exports.volume = exports.tag = exports.sshKey = exports.snapshot = exports.size = exports.region = exports.project = exports.loadBalancer = exports.kubernetes = exports.image = exports.floatingIp = exports.firewall = exports.droplet = exports.domain = exports.database = exports.customer = exports.containerRegistry = exports.certificate = exports.cdnEndpoint = exports.app = exports.action = exports.account = void 0;
 const account = __importStar(__webpack_require__(221));
 exports.account = account;
 const action = __importStar(__webpack_require__(167));
 exports.action = action;
+const app = __importStar(__webpack_require__(773));
+exports.app = app;
 const cdnEndpoint = __importStar(__webpack_require__(449));
 exports.cdnEndpoint = cdnEndpoint;
 const certificate = __importStar(__webpack_require__(371));
@@ -255,7 +264,7 @@ module.exports = eval("require")("encoding");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeDropletsFromFirewall = void 0;
-exports.removeDropletsFromFirewall = ({ httpClient, }) => ({ droplet_ids, firewall_id, }) => {
+const removeDropletsFromFirewall = ({ httpClient, }) => ({ droplet_ids, firewall_id, }) => {
     const path = '/firewalls';
     const body = {
         droplet_ids,
@@ -263,6 +272,7 @@ exports.removeDropletsFromFirewall = ({ httpClient, }) => ({ droplet_ids, firewa
     const url = `${path}/${firewall_id}/droplets`;
     return httpClient.delete(url, { data: body });
 };
+exports.removeDropletsFromFirewall = removeDropletsFromFirewall;
 //# sourceMappingURL=remove-droplets-from-firewall.js.map
 
 /***/ }),
@@ -274,12 +284,13 @@ exports.removeDropletsFromFirewall = ({ httpClient, }) => ({ droplet_ids, firewa
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listSshKeys = void 0;
-exports.listSshKeys = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listSshKeys = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/account/keys';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listSshKeys = listSshKeys;
 //# sourceMappingURL=list-ssh-keys.js.map
 
 /***/ }),
@@ -308,7 +319,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(751), exports);
@@ -322,11 +333,12 @@ __exportStar(__webpack_require__(751), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSnapshot = void 0;
-exports.getSnapshot = ({ httpClient, }) => ({ id, snapshot_id, }) => {
+const getSnapshot = ({ httpClient, }) => ({ snapshot_id, }) => {
     const path = '/snapshots';
-    const url = `${path}/${snapshot_id || id}`;
+    const url = `${path}/${snapshot_id}`;
     return httpClient.get(url);
 };
+exports.getSnapshot = getSnapshot;
 //# sourceMappingURL=get-snapshot.js.map
 
 /***/ }),
@@ -336,14 +348,7 @@ exports.getSnapshot = ({ httpClient, }) => ({ id, snapshot_id, }) => {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listImageActions = void 0;
-exports.listImageActions = ({ httpClient, }) => ({ page = 1, per_page = 25, image_id, }) => {
-    const path = '/images';
-    const queryParams = { page, per_page };
-    const url = `${path}/${image_id}/actions`;
-    return httpClient.get(url, { params: queryParams });
-};
-//# sourceMappingURL=list-image-actions.js.map
+//# sourceMappingURL=app-deployment.js.map
 
 /***/ }),
 /* 32 */
@@ -353,12 +358,13 @@ exports.listImageActions = ({ httpClient, }) => ({ page = 1, per_page = 25, imag
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDatabaseClusters = void 0;
-exports.listDatabaseClusters = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listDatabaseClusters = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/databases';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDatabaseClusters = listDatabaseClusters;
 //# sourceMappingURL=list-database-clusters.js.map
 
 /***/ }),
@@ -371,12 +377,13 @@ exports.listDatabaseClusters = ({ httpClient, }) => ({ page = 1, per_page = 25, 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listInvoiceItems = void 0;
-exports.listInvoiceItems = ({ httpClient, }) => ({ invoice_uuid, page = 1, per_page = 25, }) => {
+const listInvoiceItems = ({ httpClient, }) => ({ invoice_uuid, page = 1, per_page = 25, }) => {
     const path = '/customers/my/invoices';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${invoice_uuid}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listInvoiceItems = listInvoiceItems;
 //# sourceMappingURL=list-invoice-items.js.map
 
 /***/ }),
@@ -395,7 +402,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(398), exports);
@@ -405,7 +412,23 @@ __exportStar(__webpack_require__(398), exports);
 /* 39 */,
 /* 40 */,
 /* 41 */,
-/* 42 */,
+/* 42 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createApp = void 0;
+const createApp = ({ httpClient, }) => ({ spec, }) => {
+    const path = '/apps';
+    const body = { spec };
+    const url = `${path}`;
+    return httpClient.post(url, body);
+};
+exports.createApp = createApp;
+//# sourceMappingURL=create-app.js.map
+
+/***/ }),
 /* 43 */,
 /* 44 */,
 /* 45 */,
@@ -422,7 +445,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(688), exports);
@@ -434,7 +457,15 @@ __exportStar(__webpack_require__(29), exports);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 47 */,
+/* 47 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-service-route.js.map
+
+/***/ }),
 /* 48 */,
 /* 49 */,
 /* 50 */
@@ -444,12 +475,13 @@ __exportStar(__webpack_require__(29), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDatabaseClusterDbs = void 0;
-exports.listDatabaseClusterDbs = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
+const listDatabaseClusterDbs = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
     const path = '/databases';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${database_cluster_id}/dbs`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDatabaseClusterDbs = listDatabaseClusterDbs;
 //# sourceMappingURL=list-database-cluster-dbs.js.map
 
 /***/ }),
@@ -486,11 +518,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNodePool = void 0;
-exports.getNodePool = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_id, }) => {
+const getNodePool = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_id, }) => {
     const path = '/kubernetes/clusters';
     const url = `${path}/${kubernetes_cluster_id}/node_pools/${node_pool_id}`;
     return httpClient.get(url);
 };
+exports.getNodePool = getNodePool;
 //# sourceMappingURL=get-node-pool.js.map
 
 /***/ }),
@@ -504,15 +537,16 @@ exports.getNodePool = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_i
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNode = void 0;
-exports.deleteNode = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_id, node_id, drain_node = true, replace_node = false, }) => {
+const deleteNode = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_id, node_id, drain_node = true, replace_node = false, }) => {
     const path = '/kubernetes/clusters';
     const url = `${path}/${kubernetes_cluster_id}/node_pools/${node_pool_id}/nodes/${node_id}`;
-    const queryParams = {
+    const query_params = {
         replace: replace_node ? 1 : 0,
         skip_drain: drain_node ? 0 : 1,
     };
-    return httpClient.delete(url, { params: queryParams });
+    return httpClient.delete(url, { params: query_params });
 };
+exports.deleteNode = deleteNode;
 //# sourceMappingURL=delete-node.js.map
 
 /***/ }),
@@ -524,7 +558,7 @@ exports.deleteNode = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_id
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProject = void 0;
-exports.updateProject = ({ httpClient, }) => ({ description, environment, is_default, name, project_id, purpose, }) => {
+const updateProject = ({ httpClient, }) => ({ description, environment, is_default, name, project_id, purpose, }) => {
     const path = '/projects';
     const body = {
         description,
@@ -536,6 +570,7 @@ exports.updateProject = ({ httpClient, }) => ({ description, environment, is_def
     const url = `${path}/${project_id}`;
     return httpClient.put(url, body);
 };
+exports.updateProject = updateProject;
 //# sourceMappingURL=update-project.js.map
 
 /***/ }),
@@ -546,14 +581,28 @@ exports.updateProject = ({ httpClient, }) => ({ description, environment, is_def
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-;
-;
 //# sourceMappingURL=invoice-summary.js.map
 
 /***/ }),
 /* 65 */,
 /* 66 */,
-/* 67 */,
+/* 67 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listApps = void 0;
+const listApps = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+    const path = '/apps';
+    const params = { page, per_page };
+    const url = `${path}`;
+    return httpClient.get(url, { params });
+};
+exports.listApps = listApps;
+//# sourceMappingURL=list-apps.js.map
+
+/***/ }),
 /* 68 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -561,11 +610,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getConnectionPool = void 0;
-exports.getConnectionPool = ({ httpClient, }) => ({ database_cluster_id, pool_name, }) => {
+const getConnectionPool = ({ httpClient, }) => ({ database_cluster_id, pool_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/pools/${pool_name}`;
     return httpClient.get(url);
 };
+exports.getConnectionPool = getConnectionPool;
 //# sourceMappingURL=get-connection-pool.js.map
 
 /***/ }),
@@ -576,11 +626,12 @@ exports.getConnectionPool = ({ httpClient, }) => ({ database_cluster_id, pool_na
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDatabaseClusterEvictionPolicy = void 0;
-exports.getDatabaseClusterEvictionPolicy = ({ httpClient, }) => ({ database_cluster_id, }) => {
+const getDatabaseClusterEvictionPolicy = ({ httpClient, }) => ({ database_cluster_id, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/eviction_policy`;
     return httpClient.get(url);
 };
+exports.getDatabaseClusterEvictionPolicy = getDatabaseClusterEvictionPolicy;
 //# sourceMappingURL=get-database-cluster-eviction-policy.js.map
 
 /***/ }),
@@ -591,13 +642,14 @@ exports.getDatabaseClusterEvictionPolicy = ({ httpClient, }) => ({ database_clus
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.restoreDroplet = void 0;
-exports.restoreDroplet = ({ httpClient, }) => ({ droplet_id, image, }) => {
+const restoreDroplet = ({ httpClient, }) => ({ droplet_id, image, }) => {
     const path = '/droplets';
     const type = 'restore';
     const body = { image, type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.restoreDroplet = restoreDroplet;
 //# sourceMappingURL=restore-droplet.js.map
 
 /***/ }),
@@ -608,31 +660,17 @@ exports.restoreDroplet = ({ httpClient, }) => ({ droplet_id, image, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listActions = void 0;
-exports.listActions = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listActions = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/actions';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listActions = listActions;
 //# sourceMappingURL=list-actions.js.map
 
 /***/ }),
-/* 72 */
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-/**
- * Detect Electron renderer process, which is node, but we should
- * treat as a browser.
- */
-
-if (typeof process === 'undefined' || process.type === 'renderer') {
-  module.exports = __webpack_require__(235);
-} else {
-  module.exports = __webpack_require__(738);
-}
-
-
-/***/ }),
+/* 72 */,
 /* 73 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -646,7 +684,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(356), exports);
@@ -660,11 +698,12 @@ __exportStar(__webpack_require__(356), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSshKey = void 0;
-exports.getSshKey = ({ httpClient, }) => ({ id, ssh_key_id, }) => {
+const getSshKey = ({ httpClient, }) => ({ ssh_key_id, }) => {
     const path = '/account/keys';
-    const url = `${path}/${ssh_key_id || id}`;
+    const url = `${path}/${ssh_key_id}`;
     return httpClient.get(url);
 };
+exports.getSshKey = getSshKey;
 //# sourceMappingURL=get-ssh-key.js.map
 
 /***/ }),
@@ -684,13 +723,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.powerCycleDroplet = void 0;
-exports.powerCycleDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
+const powerCycleDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'power_cycle';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.powerCycleDroplet = powerCycleDroplet;
 //# sourceMappingURL=power-cycle-droplet.js.map
 
 /***/ }),
@@ -701,23 +741,7 @@ exports.powerCycleDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listImages = void 0;
-exports.listImages = ({ httpClient, }) => ({ page = 1, per_page = 25, tag_name, type, user_images, }) => {
-    const path = '/images';
-    const queryParams = { page, per_page };
-    const hasTypeFilter = typeof type === 'string';
-    const hasPrivateFilter = typeof user_images === 'boolean';
-    const hasTagFilter = typeof tag_name === 'string';
-    if (hasTypeFilter)
-        Object.assign(queryParams, { type });
-    if (hasPrivateFilter)
-        Object.assign(queryParams, { private: user_images });
-    if (hasTagFilter)
-        Object.assign(queryParams, { tag_name });
-    const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
-};
-//# sourceMappingURL=list-images.js.map
+//# sourceMappingURL=app-deployment-static-site.js.map
 
 /***/ }),
 /* 79 */,
@@ -728,7 +752,21 @@ exports.listImages = ({ httpClient, }) => ({ page = 1, per_page = 25, tag_name, 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=project-resource-links.js.map
+exports.listImages = void 0;
+const listImages = ({ httpClient, }) => ({ page = 1, per_page = 25, tag_name = undefined, type = undefined, user_images = undefined, }) => {
+    const path = '/images';
+    const query_params = {
+        page,
+        per_page,
+        private: user_images,
+        tag_name,
+        type,
+    };
+    const url = `${path}`;
+    return httpClient.get(url, { params: query_params });
+};
+exports.listImages = listImages;
+//# sourceMappingURL=list-images.js.map
 
 /***/ }),
 /* 82 */
@@ -765,7 +803,7 @@ exports.toCommandValue = toCommandValue;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createReadOnlyReplica = void 0;
-exports.createReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, name, region, size, tags, }) => {
+const createReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, name, region, size, tags, }) => {
     const path = '/databases';
     const body = {
         name,
@@ -776,10 +814,26 @@ exports.createReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, nam
     const url = `${path}/${database_cluster_id}/replicas`;
     return httpClient.post(url, body);
 };
+exports.createReadOnlyReplica = createReadOnlyReplica;
 //# sourceMappingURL=create-read-only-replica.js.map
 
 /***/ }),
-/* 86 */,
+/* 86 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createAppDeployment = void 0;
+const createAppDeployment = ({ httpClient, }) => ({ app_id, }) => {
+    const path = '/apps';
+    const url = `${path}/${app_id}/deployments`;
+    return httpClient.post(url);
+};
+exports.createAppDeployment = createAppDeployment;
+//# sourceMappingURL=create-app-deployment.js.map
+
+/***/ }),
 /* 87 */
 /***/ (function(module) {
 
@@ -799,11 +853,12 @@ module.exports = require("os");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getClusterlintDiagnostics = void 0;
-exports.getClusterlintDiagnostics = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
+const getClusterlintDiagnostics = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
     const path = '/kubernetes/clusters';
     const url = `${path}/${kubernetes_cluster_id}/clusterlint`;
     return httpClient.get(url);
 };
+exports.getClusterlintDiagnostics = getClusterlintDiagnostics;
 //# sourceMappingURL=get-clusterlint-diagnostics.js.map
 
 /***/ }),
@@ -818,12 +873,13 @@ exports.getClusterlintDiagnostics = ({ httpClient, }) => ({ kubernetes_cluster_i
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listFloatingIpActions = void 0;
-exports.listFloatingIpActions = ({ httpClient, }) => ({ ip, page = 1, per_page = 25, }) => {
+const listFloatingIpActions = ({ httpClient, }) => ({ ip, page = 1, per_page = 25, }) => {
     const path = '/floating_ips';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${ip}/actions`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listFloatingIpActions = listFloatingIpActions;
 //# sourceMappingURL=list-floating-ip-actions.js.map
 
 /***/ }),
@@ -835,11 +891,12 @@ exports.listFloatingIpActions = ({ httpClient, }) => ({ ip, page = 1, per_page =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVolumeAction = void 0;
-exports.getVolumeAction = ({ httpClient, }) => ({ action_id, volume_id, }) => {
+const getVolumeAction = ({ httpClient, }) => ({ action_id, volume_id, }) => {
     const path = '/volumes';
     const url = `${path}/${volume_id}/actions/${action_id}`;
     return httpClient.get(url);
 };
+exports.getVolumeAction = getVolumeAction;
 //# sourceMappingURL=get-volume-action.js.map
 
 /***/ }),
@@ -886,11 +943,12 @@ exports.issueCommand = issueCommand;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCdnEndpoint = void 0;
-exports.getCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, }) => {
+const getCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, }) => {
     const path = '/cdn/endpoints';
     const url = `${path}/${cdn_endpoint_id}`;
     return httpClient.get(url);
 };
+exports.getCdnEndpoint = getCdnEndpoint;
 //# sourceMappingURL=get-cdn-endpoint.js.map
 
 /***/ }),
@@ -905,268 +963,30 @@ exports.getCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDomainRecords = void 0;
-exports.listDomainRecords = ({ httpClient, }) => ({ domain_name, page = 1, per_page = 25, }) => {
+const listDomainRecords = ({ httpClient, }) => ({ domain_name, name, page = 1, per_page = 25, type, }) => {
     const path = '/domains';
-    const queryParams = { page, per_page };
+    const query_params = {
+        name,
+        page,
+        per_page,
+        type,
+    };
     const url = `${path}/${domain_name}/records`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDomainRecords = listDomainRecords;
 //# sourceMappingURL=list-domain-records.js.map
 
 /***/ }),
-/* 110 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/**
- * This is the common logic for both the Node.js and web browser
- * implementations of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = createDebug.debug = createDebug['default'] = createDebug;
-exports.coerce = coerce;
-exports.disable = disable;
-exports.enable = enable;
-exports.enabled = enabled;
-exports.humanize = __webpack_require__(632);
-
-/**
- * Active `debug` instances.
- */
-exports.instances = [];
-
-/**
- * The currently active debug mode names, and names to skip.
- */
-
-exports.names = [];
-exports.skips = [];
-
-/**
- * Map of special "%n" handling functions, for the debug "format" argument.
- *
- * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
- */
-
-exports.formatters = {};
-
-/**
- * Select a color.
- * @param {String} namespace
- * @return {Number}
- * @api private
- */
-
-function selectColor(namespace) {
-  var hash = 0, i;
-
-  for (i in namespace) {
-    hash  = ((hash << 5) - hash) + namespace.charCodeAt(i);
-    hash |= 0; // Convert to 32bit integer
-  }
-
-  return exports.colors[Math.abs(hash) % exports.colors.length];
-}
-
-/**
- * Create a debugger with the given `namespace`.
- *
- * @param {String} namespace
- * @return {Function}
- * @api public
- */
-
-function createDebug(namespace) {
-
-  var prevTime;
-
-  function debug() {
-    // disabled?
-    if (!debug.enabled) return;
-
-    var self = debug;
-
-    // set `diff` timestamp
-    var curr = +new Date();
-    var ms = curr - (prevTime || curr);
-    self.diff = ms;
-    self.prev = prevTime;
-    self.curr = curr;
-    prevTime = curr;
-
-    // turn the `arguments` into a proper Array
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-
-    args[0] = exports.coerce(args[0]);
-
-    if ('string' !== typeof args[0]) {
-      // anything else let's inspect with %O
-      args.unshift('%O');
-    }
-
-    // apply any `formatters` transformations
-    var index = 0;
-    args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
-      // if we encounter an escaped % then don't increase the array index
-      if (match === '%%') return match;
-      index++;
-      var formatter = exports.formatters[format];
-      if ('function' === typeof formatter) {
-        var val = args[index];
-        match = formatter.call(self, val);
-
-        // now we need to remove `args[index]` since it's inlined in the `format`
-        args.splice(index, 1);
-        index--;
-      }
-      return match;
-    });
-
-    // apply env-specific formatting (colors, etc.)
-    exports.formatArgs.call(self, args);
-
-    var logFn = debug.log || exports.log || console.log.bind(console);
-    logFn.apply(self, args);
-  }
-
-  debug.namespace = namespace;
-  debug.enabled = exports.enabled(namespace);
-  debug.useColors = exports.useColors();
-  debug.color = selectColor(namespace);
-  debug.destroy = destroy;
-
-  // env-specific initialization logic for debug instances
-  if ('function' === typeof exports.init) {
-    exports.init(debug);
-  }
-
-  exports.instances.push(debug);
-
-  return debug;
-}
-
-function destroy () {
-  var index = exports.instances.indexOf(this);
-  if (index !== -1) {
-    exports.instances.splice(index, 1);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/**
- * Enables a debug mode by namespaces. This can include modes
- * separated by a colon and wildcards.
- *
- * @param {String} namespaces
- * @api public
- */
-
-function enable(namespaces) {
-  exports.save(namespaces);
-
-  exports.names = [];
-  exports.skips = [];
-
-  var i;
-  var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
-  var len = split.length;
-
-  for (i = 0; i < len; i++) {
-    if (!split[i]) continue; // ignore empty strings
-    namespaces = split[i].replace(/\*/g, '.*?');
-    if (namespaces[0] === '-') {
-      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
-    } else {
-      exports.names.push(new RegExp('^' + namespaces + '$'));
-    }
-  }
-
-  for (i = 0; i < exports.instances.length; i++) {
-    var instance = exports.instances[i];
-    instance.enabled = exports.enabled(instance.namespace);
-  }
-}
-
-/**
- * Disable debug output.
- *
- * @api public
- */
-
-function disable() {
-  exports.enable('');
-}
-
-/**
- * Returns true if the given mode name is enabled, false otherwise.
- *
- * @param {String} name
- * @return {Boolean}
- * @api public
- */
-
-function enabled(name) {
-  if (name[name.length - 1] === '*') {
-    return true;
-  }
-  var i, len;
-  for (i = 0, len = exports.skips.length; i < len; i++) {
-    if (exports.skips[i].test(name)) {
-      return false;
-    }
-  }
-  for (i = 0, len = exports.names.length; i < len; i++) {
-    if (exports.names[i].test(name)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Coerce `val`.
- *
- * @param {Mixed} val
- * @return {Mixed}
- * @api private
- */
-
-function coerce(val) {
-  if (val instanceof Error) return val.stack || val.message;
-  return val;
-}
-
-
-/***/ }),
+/* 110 */,
 /* 111 */,
 /* 112 */
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
+/***/ (function(__unusedmodule, exports) {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(__webpack_require__(81), exports);
-__exportStar(__webpack_require__(612), exports);
-__exportStar(__webpack_require__(302), exports);
-__exportStar(__webpack_require__(864), exports);
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=app-spec.js.map
 
 /***/ }),
 /* 113 */
@@ -1191,7 +1011,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(531), exports);
@@ -1206,7 +1026,7 @@ __exportStar(__webpack_require__(531), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateKubernetesCluster = void 0;
-exports.updateKubernetesCluster = ({ httpClient, }) => ({ auto_upgrade, kubernetes_cluster_id, maintenance_policy, name, tags, }) => {
+const updateKubernetesCluster = ({ httpClient, }) => ({ auto_upgrade, kubernetes_cluster_id, maintenance_policy, name, tags, }) => {
     const path = '/kubernetes/clusters';
     const body = {
         auto_upgrade,
@@ -1217,10 +1037,26 @@ exports.updateKubernetesCluster = ({ httpClient, }) => ({ auto_upgrade, kubernet
     const url = `${path}/${kubernetes_cluster_id}`;
     return httpClient.put(url, body);
 };
+exports.updateKubernetesCluster = updateKubernetesCluster;
 //# sourceMappingURL=update-kubernetes-cluster.js.map
 
 /***/ }),
-/* 117 */,
+/* 117 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDropletDestroyStatus = void 0;
+const getDropletDestroyStatus = ({ httpClient, }) => ({ droplet_id, }) => {
+    const path = '/droplets';
+    const url = `${path}/${droplet_id}/destroy_with_associated_resources/status`;
+    return httpClient.get(url);
+};
+exports.getDropletDestroyStatus = getDropletDestroyStatus;
+//# sourceMappingURL=get-droplet-destroy-status.js.map
+
+/***/ }),
 /* 118 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -1228,7 +1064,7 @@ exports.updateKubernetesCluster = ({ httpClient, }) => ({ auto_upgrade, kubernet
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCdnEndpoint = void 0;
-exports.createCdnEndpoint = ({ httpClient, }) => ({ origin, ttl, certificate_id, custom_domain, }) => {
+const createCdnEndpoint = ({ httpClient, }) => ({ origin, ttl, certificate_id, custom_domain, }) => {
     const path = '/cdn/endpoints';
     const body = {
         origin,
@@ -1239,6 +1075,7 @@ exports.createCdnEndpoint = ({ httpClient, }) => ({ origin, ttl, certificate_id,
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createCdnEndpoint = createCdnEndpoint;
 //# sourceMappingURL=create-cdn-endpoint.js.map
 
 /***/ }),
@@ -1248,14 +1085,7 @@ exports.createCdnEndpoint = ({ httpClient, }) => ({ origin, ttl, certificate_id,
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listTags = void 0;
-exports.listTags = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
-    const path = '/tags';
-    const queryParams = { page, per_page };
-    const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
-};
-//# sourceMappingURL=list-tags.js.map
+//# sourceMappingURL=git-source.js.map
 
 /***/ }),
 /* 120 */
@@ -1271,7 +1101,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(808), exports);
@@ -1301,7 +1131,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(860), exports);
@@ -1372,7 +1202,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(494), exports);
@@ -1398,7 +1228,6 @@ var utils = __webpack_require__(815);
 
 function encode(val) {
   return encodeURIComponent(val).
-    replace(/%40/gi, '@').
     replace(/%3A/gi, ':').
     replace(/%24/g, '$').
     replace(/%2C/gi, ',').
@@ -1476,13 +1305,14 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.snapshotDroplet = void 0;
-exports.snapshotDroplet = ({ httpClient, }) => ({ droplet_id, name, }) => {
+const snapshotDroplet = ({ httpClient, }) => ({ droplet_id, name, }) => {
     const path = '/droplets';
     const type = 'snapshot';
     const body = { name, type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.snapshotDroplet = snapshotDroplet;
 //# sourceMappingURL=snapshot-droplet.js.map
 
 /***/ }),
@@ -1493,12 +1323,13 @@ exports.snapshotDroplet = ({ httpClient, }) => ({ droplet_id, name, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.untagResources = void 0;
-exports.untagResources = ({ httpClient, }) => ({ tag_name, resources, }) => {
+const untagResources = ({ httpClient, }) => ({ tag_name, resources, }) => {
     const path = '/tags';
     const body = { resources };
     const url = `${path}/${tag_name}/resources`;
     return httpClient.delete(url, { data: body });
 };
+exports.untagResources = untagResources;
 //# sourceMappingURL=untag-resources.js.map
 
 /***/ }),
@@ -1521,11 +1352,12 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(26), exports);
 __exportStar(__webpack_require__(121), exports);
+__exportStar(__webpack_require__(391), exports);
 __exportStar(__webpack_require__(558), exports);
 __exportStar(__webpack_require__(818), exports);
 //# sourceMappingURL=index.js.map
@@ -1539,16 +1371,25 @@ __exportStar(__webpack_require__(818), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.configureRegistry = void 0;
-exports.configureRegistry = ({ httpClient, }) => ({ name, }) => {
+const configureRegistry = ({ httpClient, }) => ({ name, }) => {
     const path = '/registry';
     const body = { name };
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.configureRegistry = configureRegistry;
 //# sourceMappingURL=configure-registry.js.map
 
 /***/ }),
-/* 148 */,
+/* 148 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=github-source.js.map
+
+/***/ }),
 /* 149 */,
 /* 150 */
 /***/ (function(__unusedmodule, exports) {
@@ -1571,7 +1412,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=database-cluster-connection-pool.js.map
 
 /***/ }),
-/* 155 */,
+/* 155 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeContainerRegistry = void 0;
+const removeContainerRegistry = ({ httpClient, }) => ({ cluster_uuids, }) => {
+    const path = '/kubernetes/clusters/registry';
+    const body = { cluster_uuids };
+    const url = `${path}`;
+    return httpClient.delete(url, { data: body });
+};
+exports.removeContainerRegistry = removeContainerRegistry;
+//# sourceMappingURL=remove-container-registry.js.map
+
+/***/ }),
 /* 156 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -1594,11 +1451,12 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(713), exports);
 __exportStar(__webpack_require__(793), exports);
+__exportStar(__webpack_require__(461), exports);
 __exportStar(__webpack_require__(75), exports);
 __exportStar(__webpack_require__(678), exports);
 __exportStar(__webpack_require__(672), exports);
@@ -1608,7 +1466,32 @@ __exportStar(__webpack_require__(672), exports);
 /* 158 */,
 /* 159 */,
 /* 160 */,
-/* 161 */,
+/* 161 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDatabaseCluster = void 0;
+const createDatabaseCluster = ({ httpClient, }) => ({ engine, name, num_nodes, private_network_uuid, region, size, tags, version, }) => {
+    const path = '/databases';
+    const body = {
+        engine,
+        name,
+        num_nodes,
+        private_network_uuid,
+        region,
+        size,
+        tags,
+        version,
+    };
+    const url = `${path}`;
+    return httpClient.post(url, body);
+};
+exports.createDatabaseCluster = createDatabaseCluster;
+//# sourceMappingURL=create-database-cluster.js.map
+
+/***/ }),
 /* 162 */,
 /* 163 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
@@ -1714,7 +1597,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(559), exports);
@@ -1732,7 +1615,7 @@ __exportStar(__webpack_require__(422), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateLoadBalancer = void 0;
-exports.updateLoadBalancer = ({ httpClient, }) => ({ algorithm, droplet_ids, enable_proxy_protocol, forwarding_rules, health_check, load_balancer_id, name, redirect_http_to_https, region, sticky_sessions, tag, vpc_uuid, }) => {
+const updateLoadBalancer = ({ httpClient, }) => ({ algorithm, droplet_ids, enable_proxy_protocol, forwarding_rules, health_check, load_balancer_id, name, redirect_http_to_https, region, sticky_sessions, tag, vpc_uuid, }) => {
     const path = '/load_balancers';
     const body = {
         algorithm,
@@ -1750,6 +1633,7 @@ exports.updateLoadBalancer = ({ httpClient, }) => ({ algorithm, droplet_ids, ena
     const url = `${path}/${load_balancer_id}`;
     return httpClient.put(url, body);
 };
+exports.updateLoadBalancer = updateLoadBalancer;
 //# sourceMappingURL=update-load-balancer.js.map
 
 /***/ }),
@@ -1769,11 +1653,12 @@ exports.updateLoadBalancer = ({ httpClient, }) => ({ algorithm, droplet_ids, ena
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getKubernetesCluster = void 0;
-exports.getKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
+const getKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
     const path = '/kubernetes/clusters';
     const url = `${path}/${kubernetes_cluster_id}`;
     return httpClient.get(url);
 };
+exports.getKubernetesCluster = getKubernetesCluster;
 //# sourceMappingURL=get-kubernetes-cluster.js.map
 
 /***/ }),
@@ -1784,12 +1669,13 @@ exports.getKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, })
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listVolumeSnapshots = void 0;
-exports.listVolumeSnapshots = ({ httpClient, }) => ({ id, page = 1, per_page = 25, volume_id, }) => {
+const listVolumeSnapshots = ({ httpClient, }) => ({ page = 1, per_page = 25, volume_id, }) => {
     const path = '/volumes';
-    const queryParams = { page, per_page };
-    const url = `${path}/${volume_id || id}/snapshots`;
-    return httpClient.get(url, { params: queryParams });
+    const query_params = { page, per_page };
+    const url = `${path}/${volume_id}/snapshots`;
+    return httpClient.get(url, { params: query_params });
 };
+exports.listVolumeSnapshots = listVolumeSnapshots;
 //# sourceMappingURL=list-volume-snapshots.js.map
 
 /***/ }),
@@ -1800,19 +1686,187 @@ exports.listVolumeSnapshots = ({ httpClient, }) => ({ id, page = 1, per_page = 2
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listConnectionPools = void 0;
-exports.listConnectionPools = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
+const listConnectionPools = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
     const path = '/databases';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${database_cluster_id}/pools`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listConnectionPools = listConnectionPools;
 //# sourceMappingURL=list-connection-pools.js.map
 
 /***/ }),
 /* 183 */,
 /* 184 */,
 /* 185 */,
-/* 186 */,
+/* 186 */
+/***/ (function(module) {
+
+/**
+ * Helpers.
+ */
+
+var s = 1000;
+var m = s * 60;
+var h = m * 60;
+var d = h * 24;
+var w = d * 7;
+var y = d * 365.25;
+
+/**
+ * Parse or format the given `val`.
+ *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
+ * @param {String|Number} val
+ * @param {Object} [options]
+ * @throws {Error} throw an error if val is not a non-empty string or a number
+ * @return {String|Number}
+ * @api public
+ */
+
+module.exports = function(val, options) {
+  options = options || {};
+  var type = typeof val;
+  if (type === 'string' && val.length > 0) {
+    return parse(val);
+  } else if (type === 'number' && isFinite(val)) {
+    return options.long ? fmtLong(val) : fmtShort(val);
+  }
+  throw new Error(
+    'val is not a non-empty string or a valid number. val=' +
+      JSON.stringify(val)
+  );
+};
+
+/**
+ * Parse the given `str` and return milliseconds.
+ *
+ * @param {String} str
+ * @return {Number}
+ * @api private
+ */
+
+function parse(str) {
+  str = String(str);
+  if (str.length > 100) {
+    return;
+  }
+  var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
+    str
+  );
+  if (!match) {
+    return;
+  }
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
+  switch (type) {
+    case 'years':
+    case 'year':
+    case 'yrs':
+    case 'yr':
+    case 'y':
+      return n * y;
+    case 'weeks':
+    case 'week':
+    case 'w':
+      return n * w;
+    case 'days':
+    case 'day':
+    case 'd':
+      return n * d;
+    case 'hours':
+    case 'hour':
+    case 'hrs':
+    case 'hr':
+    case 'h':
+      return n * h;
+    case 'minutes':
+    case 'minute':
+    case 'mins':
+    case 'min':
+    case 'm':
+      return n * m;
+    case 'seconds':
+    case 'second':
+    case 'secs':
+    case 'sec':
+    case 's':
+      return n * s;
+    case 'milliseconds':
+    case 'millisecond':
+    case 'msecs':
+    case 'msec':
+    case 'ms':
+      return n;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Short format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtShort(ms) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return Math.round(ms / d) + 'd';
+  }
+  if (msAbs >= h) {
+    return Math.round(ms / h) + 'h';
+  }
+  if (msAbs >= m) {
+    return Math.round(ms / m) + 'm';
+  }
+  if (msAbs >= s) {
+    return Math.round(ms / s) + 's';
+  }
+  return ms + 'ms';
+}
+
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function fmtLong(ms) {
+  var msAbs = Math.abs(ms);
+  if (msAbs >= d) {
+    return plural(ms, msAbs, d, 'day');
+  }
+  if (msAbs >= h) {
+    return plural(ms, msAbs, h, 'hour');
+  }
+  if (msAbs >= m) {
+    return plural(ms, msAbs, m, 'minute');
+  }
+  if (msAbs >= s) {
+    return plural(ms, msAbs, s, 'second');
+  }
+  return ms + ' ms';
+}
+
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, msAbs, n, name) {
+  var isPlural = msAbs >= n * 1.5;
+  return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
+}
+
+
+/***/ }),
 /* 187 */,
 /* 188 */,
 /* 189 */,
@@ -1834,18 +1888,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addDropletsToLoadBalancer = void 0;
-exports.addDropletsToLoadBalancer = ({ httpClient, }) => ({ droplet_ids, id, load_balancer_id, }) => {
+const addDropletsToLoadBalancer = ({ httpClient, }) => ({ droplet_ids, load_balancer_id, }) => {
     const path = '/load_balancers';
     const body = {
         droplet_ids,
     };
-    const url = `${path}/${load_balancer_id || id}/droplets`;
+    const url = `${path}/${load_balancer_id}/droplets`;
     return httpClient.post(url, body);
 };
+exports.addDropletsToLoadBalancer = addDropletsToLoadBalancer;
 //# sourceMappingURL=add-droplets-to-load-balancer.js.map
 
 /***/ }),
-/* 194 */,
+/* 194 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-worker.js.map
+
+/***/ }),
 /* 195 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -1853,12 +1916,13 @@ exports.addDropletsToLoadBalancer = ({ httpClient, }) => ({ droplet_ids, id, loa
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDatabaseClusterUsers = void 0;
-exports.listDatabaseClusterUsers = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
+const listDatabaseClusterUsers = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
     const path = '/databases';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${database_cluster_id}/users`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDatabaseClusterUsers = listDatabaseClusterUsers;
 //# sourceMappingURL=list-database-cluster-users.js.map
 
 /***/ }),
@@ -1869,13 +1933,14 @@ exports.listDatabaseClusterUsers = ({ httpClient, }) => ({ page = 1, per_page = 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetDropletPassword = void 0;
-exports.resetDropletPassword = ({ httpClient, }) => ({ droplet_id, }) => {
+const resetDropletPassword = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'password_reset';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.resetDropletPassword = resetDropletPassword;
 //# sourceMappingURL=reset-droplet-password.js.map
 
 /***/ }),
@@ -1952,7 +2017,7 @@ module.exports = (
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCertificate = void 0;
-exports.createCertificate = ({ httpClient, }) => ({ certificate_chain, dns_names, leaf_certificate, name, private_key, type, }) => {
+const createCertificate = ({ httpClient, }) => ({ certificate_chain, dns_names, leaf_certificate, name, private_key, type, }) => {
     const path = '/certificates';
     const body = {
         certificate_chain,
@@ -1965,6 +2030,7 @@ exports.createCertificate = ({ httpClient, }) => ({ certificate_chain, dns_names
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createCertificate = createCertificate;
 //# sourceMappingURL=create-certificate.js.map
 
 /***/ }),
@@ -1975,12 +2041,13 @@ exports.createCertificate = ({ httpClient, }) => ({ certificate_chain, dns_names
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listInvoices = void 0;
-exports.listInvoices = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listInvoices = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/customers/my/invoices';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listInvoices = listInvoices;
 //# sourceMappingURL=list-invoices.js.map
 
 /***/ }),
@@ -1994,7 +2061,7 @@ exports.listInvoices = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDefaultProject = void 0;
-exports.updateDefaultProject = ({ httpClient, }) => ({ description, environment, is_default, name, purpose, }) => {
+const updateDefaultProject = ({ httpClient, }) => ({ description, environment, is_default, name, purpose, }) => {
     const path = '/projects';
     const body = {
         description,
@@ -2006,6 +2073,7 @@ exports.updateDefaultProject = ({ httpClient, }) => ({ description, environment,
     const url = `${path}/default`;
     return httpClient.put(url, body);
 };
+exports.updateDefaultProject = updateDefaultProject;
 //# sourceMappingURL=update-default-project.js.map
 
 /***/ }),
@@ -2024,14 +2092,15 @@ module.exports = require("https");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDropletActions = void 0;
-exports.listDropletActions = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
+const listDropletActions = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
     const path = '/droplets';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.get(url, {
-        params: queryParams,
+        params: query_params,
     });
 };
+exports.listDropletActions = listDropletActions;
 //# sourceMappingURL=list-droplet-actions.js.map
 
 /***/ }),
@@ -2042,7 +2111,7 @@ exports.listDropletActions = ({ httpClient, }) => ({ droplet_id, page = 1, per_p
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateNodePool = void 0;
-exports.updateNodePool = ({ httpClient, }) => ({ auto_scale, count, kubernetes_cluster_id, labels, max_nodes, min_nodes, name, node_pool_id, tags, }) => {
+const updateNodePool = ({ httpClient, }) => ({ auto_scale, count, kubernetes_cluster_id, labels, max_nodes, min_nodes, name, node_pool_id, tags, taints, }) => {
     const path = '/kubernetes/clusters';
     const body = {
         auto_scale,
@@ -2052,10 +2121,12 @@ exports.updateNodePool = ({ httpClient, }) => ({ auto_scale, count, kubernetes_c
         min_nodes,
         name,
         tags,
+        taints,
     };
     const url = `${path}/${kubernetes_cluster_id}/node_pools/${node_pool_id}`;
     return httpClient.put(url, body);
 };
+exports.updateNodePool = updateNodePool;
 //# sourceMappingURL=update-node-pool.js.map
 
 /***/ }),
@@ -2066,11 +2137,12 @@ exports.updateNodePool = ({ httpClient, }) => ({ auto_scale, count, kubernetes_c
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCdnEndpoint = void 0;
-exports.deleteCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, }) => {
+const deleteCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, }) => {
     const path = '/cdn/endpoints';
     const url = `${path}/${cdn_endpoint_id}`;
     return httpClient.delete(url);
 };
+exports.deleteCdnEndpoint = deleteCdnEndpoint;
 //# sourceMappingURL=delete-cdn-endpoint.js.map
 
 /***/ }),
@@ -2087,12 +2159,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(753), exports);
 __exportStar(__webpack_require__(388), exports);
 __exportStar(__webpack_require__(508), exports);
+__exportStar(__webpack_require__(847), exports);
 __exportStar(__webpack_require__(227), exports);
 __exportStar(__webpack_require__(446), exports);
 __exportStar(__webpack_require__(101), exports);
@@ -2114,15 +2187,24 @@ __exportStar(__webpack_require__(120), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteConnectionPool = void 0;
-exports.deleteConnectionPool = ({ httpClient, }) => ({ database_cluster_id, pool_name, }) => {
+const deleteConnectionPool = ({ httpClient, }) => ({ database_cluster_id, pool_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/pools/${pool_name}`;
     return httpClient.delete(url);
 };
+exports.deleteConnectionPool = deleteConnectionPool;
 //# sourceMappingURL=delete-connection-pool.js.map
 
 /***/ }),
-/* 220 */,
+/* 220 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-cors-allow-origin.js.map
+
+/***/ }),
 /* 221 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -2136,7 +2218,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(681), exports);
@@ -2157,7 +2239,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(147), exports);
@@ -2177,12 +2259,13 @@ __exportStar(__webpack_require__(855), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listVolumeActions = void 0;
-exports.listVolumeActions = ({ httpClient, }) => ({ id, page = 1, per_page = 25, volume_id, }) => {
+const listVolumeActions = ({ httpClient, }) => ({ page = 1, per_page = 25, volume_id, }) => {
     const path = '/volumes';
-    const queryParams = { page, per_page };
-    const url = `${path}/${volume_id || id}/actions`;
-    return httpClient.get(url, { params: queryParams });
+    const query_params = { page, per_page };
+    const url = `${path}/${volume_id}/actions`;
+    return httpClient.get(url, { params: query_params });
 };
+exports.listVolumeActions = listVolumeActions;
 //# sourceMappingURL=list-volume-actions.js.map
 
 /***/ }),
@@ -2194,11 +2277,12 @@ exports.listVolumeActions = ({ httpClient, }) => ({ id, page = 1, per_page = 25,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteVolume = void 0;
-exports.deleteVolume = ({ httpClient, }) => ({ id, volume_id, }) => {
+const deleteVolume = ({ httpClient, }) => ({ volume_id, }) => {
     const path = '/volumes';
-    const url = `${path}/${volume_id || id}`;
+    const url = `${path}/${volume_id}`;
     return httpClient.delete(url);
 };
+exports.deleteVolume = deleteVolume;
 //# sourceMappingURL=delete-volume.js.map
 
 /***/ }),
@@ -2211,236 +2295,68 @@ exports.deleteVolume = ({ httpClient, }) => ({ id, volume_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rebuildDroplet = void 0;
-exports.rebuildDroplet = ({ httpClient, }) => ({ droplet_id, image, }) => {
+const rebuildDroplet = ({ httpClient, }) => ({ droplet_id, image, }) => {
     const path = '/droplets';
     const type = 'rebuild';
     const body = { image, type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.rebuildDroplet = rebuildDroplet;
 //# sourceMappingURL=rebuild-droplet.js.map
 
 /***/ }),
-/* 231 */,
-/* 232 */,
-/* 233 */
+/* 231 */
 /***/ (function(__unusedmodule, exports) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.configureDatabaseClusterEvictionPolicy = void 0;
-exports.configureDatabaseClusterEvictionPolicy = ({ httpClient, }) => ({ database_cluster_id, eviction_policy, }) => {
-    const path = '/databases';
-    const body = { eviction_policy };
-    const url = `${path}/${database_cluster_id}/eviction_policy`;
-    return httpClient.put(url, body);
+//# sourceMappingURL=app-deployment-job.js.map
+
+/***/ }),
+/* 232 */,
+/* 233 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-//# sourceMappingURL=configure-database-cluster-eviction-policy.js.map
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(__webpack_require__(220), exports);
+__exportStar(__webpack_require__(727), exports);
+__exportStar(__webpack_require__(432), exports);
+__exportStar(__webpack_require__(231), exports);
+__exportStar(__webpack_require__(951), exports);
+__exportStar(__webpack_require__(941), exports);
+__exportStar(__webpack_require__(497), exports);
+__exportStar(__webpack_require__(841), exports);
+__exportStar(__webpack_require__(735), exports);
+__exportStar(__webpack_require__(518), exports);
+__exportStar(__webpack_require__(78), exports);
+__exportStar(__webpack_require__(194), exports);
+__exportStar(__webpack_require__(31), exports);
+__exportStar(__webpack_require__(47), exports);
+__exportStar(__webpack_require__(400), exports);
+__exportStar(__webpack_require__(112), exports);
+__exportStar(__webpack_require__(770), exports);
+__exportStar(__webpack_require__(119), exports);
+__exportStar(__webpack_require__(148), exports);
+__exportStar(__webpack_require__(299), exports);
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 /* 234 */,
-/* 235 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = __webpack_require__(110);
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-  '#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC',
-  '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF',
-  '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC',
-  '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF',
-  '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC',
-  '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033',
-  '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366',
-  '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933',
-  '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC',
-  '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF',
-  '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-function useColors() {
-  // NB: In an Electron preload script, document will be defined but not fully
-  // initialized. Since we know we're in Chrome, we'll just detect this case
-  // explicitly
-  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
-    return true;
-  }
-
-  // Internet Explorer and Edge do not support colors.
-  if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-    return false;
-  }
-
-  // is webkit? http://stackoverflow.com/a/16459606/376773
-  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-    // double check webkit in userAgent just in case we are in a worker
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
-}
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  try {
-    return JSON.stringify(v);
-  } catch (err) {
-    return '[UnexpectedJSONParseError]: ' + err.message;
-  }
-};
-
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs(args) {
-  var useColors = this.useColors;
-
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return;
-
-  var c = 'color: ' + this.color;
-  args.splice(1, 0, c, 'color: inherit')
-
-  // the final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-zA-Z%]/g, function(match) {
-    if ('%%' === match) return;
-    index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-
-  args.splice(lastC, 0, c);
-}
-
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
-
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
-    } else {
-      exports.storage.debug = namespaces;
-    }
-  } catch(e) {}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  var r;
-  try {
-    r = exports.storage.debug;
-  } catch(e) {}
-
-  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-  if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = process.env.DEBUG;
-  }
-
-  return r;
-}
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage() {
-  try {
-    return window.localStorage;
-  } catch (e) {}
-}
-
-
-/***/ }),
+/* 235 */,
 /* 236 */,
 /* 237 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
@@ -2455,7 +2371,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(447), exports);
@@ -2476,11 +2392,12 @@ __exportStar(__webpack_require__(659), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDatabaseClusterDb = void 0;
-exports.deleteDatabaseClusterDb = ({ httpClient, }) => ({ database_cluster_id, db_name, }) => {
+const deleteDatabaseClusterDb = ({ httpClient, }) => ({ database_cluster_id, db_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/dbs/${db_name}`;
     return httpClient.delete(url);
 };
+exports.deleteDatabaseClusterDb = deleteDatabaseClusterDb;
 //# sourceMappingURL=delete-database-cluster-db.js.map
 
 /***/ }),
@@ -2651,7 +2568,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=vpc.js.map
 
 /***/ }),
-/* 254 */,
+/* 254 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listDropletAssociatedResources = void 0;
+const listDropletAssociatedResources = ({ httpClient, }) => ({ droplet_id, }) => {
+    const path = '/droplets';
+    const url = `${path}/${droplet_id}/destroy_with_associated_resources`;
+    return httpClient.get(url);
+};
+exports.listDropletAssociatedResources = listDropletAssociatedResources;
+//# sourceMappingURL=list-droplet-associated-resources.js.map
+
+/***/ }),
 /* 255 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -2659,11 +2591,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDatabaseClusterSqlMode = void 0;
-exports.getDatabaseClusterSqlMode = ({ httpClient, }) => ({ database_cluster_id, }) => {
+const getDatabaseClusterSqlMode = ({ httpClient, }) => ({ database_cluster_id, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/sql_mode`;
     return httpClient.get(url);
 };
+exports.getDatabaseClusterSqlMode = getDatabaseClusterSqlMode;
 //# sourceMappingURL=get-database-cluster-sql-mode.js.map
 
 /***/ }),
@@ -2674,11 +2607,12 @@ exports.getDatabaseClusterSqlMode = ({ httpClient, }) => ({ database_cluster_id,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDroplet = void 0;
-exports.getDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
+const getDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const url = `${path}/${droplet_id}`;
     return httpClient.get(url);
 };
+exports.getDroplet = getDroplet;
 //# sourceMappingURL=get-droplet.js.map
 
 /***/ }),
@@ -2691,12 +2625,13 @@ exports.getDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDatabaseClusterFirewallRules = void 0;
-exports.listDatabaseClusterFirewallRules = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
+const listDatabaseClusterFirewallRules = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
     const path = '/databases';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${database_cluster_id}/firewall`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDatabaseClusterFirewallRules = listDatabaseClusterFirewallRules;
 //# sourceMappingURL=list-database-cluster-firewall-rules.js.map
 
 /***/ }),
@@ -2712,7 +2647,7 @@ exports.listDatabaseClusterFirewallRules = ({ httpClient, }) => ({ page = 1, per
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addDropletsToFirewall = void 0;
-exports.addDropletsToFirewall = ({ httpClient, }) => ({ droplet_ids, firewall_id, }) => {
+const addDropletsToFirewall = ({ httpClient, }) => ({ droplet_ids, firewall_id, }) => {
     const path = '/firewalls';
     const body = {
         droplet_ids,
@@ -2720,6 +2655,7 @@ exports.addDropletsToFirewall = ({ httpClient, }) => ({ droplet_ids, firewall_id
     const url = `${path}/${firewall_id}/droplets`;
     return httpClient.post(url, body);
 };
+exports.addDropletsToFirewall = addDropletsToFirewall;
 //# sourceMappingURL=add-droplets-to-firewall.js.map
 
 /***/ }),
@@ -2736,8 +2672,58 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 270 */,
-/* 271 */,
-/* 272 */,
+/* 271 */
+/***/ (function(module) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+/* 272 */
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Syntactic sugar for invoking a function and expanding an array for arguments.
+ *
+ * Common use case would be to use `Function.prototype.apply`.
+ *
+ *  ```js
+ *  function f(x, y, z) {}
+ *  var args = [1, 2, 3];
+ *  f.apply(null, args);
+ *  ```
+ *
+ * With `spread` this example can be re-written.
+ *
+ *  ```js
+ *  spread(function(x, y, z) {})([1, 2, 3]);
+ *  ```
+ *
+ * @param {Function} callback
+ * @returns {Function}
+ */
+module.exports = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr);
+  };
+};
+
+
+/***/ }),
 /* 273 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -2745,12 +2731,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listFloatingIps = void 0;
-exports.listFloatingIps = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listFloatingIps = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/floating_ips';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listFloatingIps = listFloatingIps;
 //# sourceMappingURL=list-floating-ips.js.map
 
 /***/ }),
@@ -2769,13 +2756,14 @@ exports.listFloatingIps = ({ httpClient, }) => ({ page = 1, per_page = 25, }) =>
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shutdownDroplet = void 0;
-exports.shutdownDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
+const shutdownDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'shutdown';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.shutdownDroplet = shutdownDroplet;
 //# sourceMappingURL=shutdown-droplet.js.map
 
 /***/ }),
@@ -2845,11 +2833,12 @@ module.exports = InterceptorManager;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteVpc = void 0;
-exports.deleteVpc = ({ httpClient, }) => ({ vpc_id, }) => {
+const deleteVpc = ({ httpClient, }) => ({ vpc_id, }) => {
     const path = '/vpcs';
     const url = `${path}/${vpc_id}`;
     return httpClient.delete(url);
 };
+exports.deleteVpc = deleteVpc;
 //# sourceMappingURL=delete-vpc.js.map
 
 /***/ }),
@@ -2957,7 +2946,7 @@ module.exports = (
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCustomImage = void 0;
-exports.createCustomImage = ({ httpClient, }) => ({ description, distribution, name, region, tags, url, }) => {
+const createCustomImage = ({ httpClient, }) => ({ description, distribution, name, region, tags, url, }) => {
     const path = '/images';
     const _url = `${path}`;
     const body = {
@@ -2970,6 +2959,7 @@ exports.createCustomImage = ({ httpClient, }) => ({ description, distribution, n
     };
     return httpClient.post(_url, body);
 };
+exports.createCustomImage = createCustomImage;
 //# sourceMappingURL=create-custom-image.js.map
 
 /***/ }),
@@ -2979,7 +2969,15 @@ exports.createCustomImage = ({ httpClient, }) => ({ description, distribution, n
 /* 296 */,
 /* 297 */,
 /* 298 */,
-/* 299 */,
+/* 299 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=image-source.js.map
+
+/***/ }),
 /* 300 */,
 /* 301 */,
 /* 302 */
@@ -3001,12 +2999,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDomains = void 0;
-exports.listDomains = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listDomains = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/domains';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDomains = listDomains;
 //# sourceMappingURL=list-domains.js.map
 
 /***/ }),
@@ -3021,13 +3020,14 @@ exports.listDomains = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unassignIpFromDroplet = void 0;
-exports.unassignIpFromDroplet = ({ httpClient, }) => ({ ip, }) => {
+const unassignIpFromDroplet = ({ httpClient, }) => ({ ip, }) => {
     const path = '/floating_ips';
     const type = 'unassign';
     const body = { type };
     const url = `${path}/${ip}/actions`;
     return httpClient.post(url, body);
 };
+exports.unassignIpFromDroplet = unassignIpFromDroplet;
 //# sourceMappingURL=unassign-ip-from-droplet.js.map
 
 /***/ }),
@@ -3046,7 +3046,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 318 */,
-/* 319 */,
+/* 319 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=project-resource-links.js.map
+
+/***/ }),
 /* 320 */,
 /* 321 */,
 /* 322 */,
@@ -3059,11 +3067,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVpc = void 0;
-exports.getVpc = ({ httpClient, }) => ({ vpc_id, }) => {
+const getVpc = ({ httpClient, }) => ({ vpc_id, }) => {
     const path = '/vpcs';
     const url = `${path}/${vpc_id}`;
     return httpClient.get(url);
 };
+exports.getVpc = getVpc;
 //# sourceMappingURL=get-vpc.js.map
 
 /***/ }),
@@ -3087,13 +3096,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resizeVolume = void 0;
-exports.resizeVolume = ({ httpClient, }) => ({ id, region, size_gigabytes, volume_id, }) => {
+const resizeVolume = ({ httpClient, }) => ({ region, size_gigabytes, volume_id, }) => {
     const path = '/volumes';
     const type = 'resize';
     const body = { region, size_gigabytes, type };
-    const url = `${path}/${volume_id || id}/actions`;
+    const url = `${path}/${volume_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.resizeVolume = resizeVolume;
 //# sourceMappingURL=resize-volume.js.map
 
 /***/ }),
@@ -3104,12 +3114,13 @@ exports.resizeVolume = ({ httpClient, }) => ({ id, region, size_gigabytes, volum
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transferImage = void 0;
-exports.transferImage = ({ httpClient, }) => ({ image_id, region, }) => {
+const transferImage = ({ httpClient, }) => ({ image_id, region, }) => {
     const path = '/images';
     const url = `${path}/${image_id}/actions`;
     const body = { type: 'transfer', region };
     return httpClient.post(url, body);
 };
+exports.transferImage = transferImage;
 //# sourceMappingURL=transfer-image.js.map
 
 /***/ }),
@@ -3188,9 +3199,10 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(__webpack_require__(635), exports);
 __exportStar(__webpack_require__(633), exports);
 __exportStar(__webpack_require__(435), exports);
 __exportStar(__webpack_require__(918), exports);
@@ -3205,6 +3217,7 @@ __exportStar(__webpack_require__(387), exports);
 __exportStar(__webpack_require__(895), exports);
 __exportStar(__webpack_require__(524), exports);
 __exportStar(__webpack_require__(790), exports);
+__exportStar(__webpack_require__(155), exports);
 __exportStar(__webpack_require__(496), exports);
 __exportStar(__webpack_require__(412), exports);
 __exportStar(__webpack_require__(116), exports);
@@ -3220,12 +3233,13 @@ __exportStar(__webpack_require__(591), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listProjectResources = void 0;
-exports.listProjectResources = ({ httpClient, }) => ({ page = 1, per_page = 25, project_id, }) => {
+const listProjectResources = ({ httpClient, }) => ({ page = 1, per_page = 25, project_id, }) => {
     const path = '/projects';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${project_id}/resources`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listProjectResources = listProjectResources;
 //# sourceMappingURL=list-project-resources.js.map
 
 /***/ }),
@@ -3240,12 +3254,13 @@ exports.listProjectResources = ({ httpClient, }) => ({ page = 1, per_page = 25, 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getKubernetesClusterKubeconfig = void 0;
-exports.getKubernetesClusterKubeconfig = ({ httpClient, }) => ({ kubernetes_cluster_id, expiration_in_seconds, }) => {
+const getKubernetesClusterKubeconfig = ({ httpClient, }) => ({ kubernetes_cluster_id, expiration_in_seconds, }) => {
     const path = '/kubernetes/clusters';
-    const queryParams = { expiry_seconds: expiration_in_seconds };
+    const query_params = { expiry_seconds: expiration_in_seconds };
     const url = `${path}/${kubernetes_cluster_id}/kubeconfig`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.getKubernetesClusterKubeconfig = getKubernetesClusterKubeconfig;
 //# sourceMappingURL=get-kubernetes-cluster-kubeconfig.js.map
 
 /***/ }),
@@ -3262,11 +3277,12 @@ exports.getKubernetesClusterKubeconfig = ({ httpClient, }) => ({ kubernetes_clus
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLoadBalancer = void 0;
-exports.getLoadBalancer = ({ httpClient, }) => ({ id, load_balancer_id, }) => {
+const getLoadBalancer = ({ httpClient, }) => ({ load_balancer_id, }) => {
     const path = '/load_balancers';
-    const url = `${path}/${load_balancer_id || id}`;
+    const url = `${path}/${load_balancer_id}`;
     return httpClient.get(url);
 };
+exports.getLoadBalancer = getLoadBalancer;
 //# sourceMappingURL=get-load-balancer.js.map
 
 /***/ }),
@@ -3279,7 +3295,7 @@ exports.getLoadBalancer = ({ httpClient, }) => ({ id, load_balancer_id, }) => {
 
 
 var utils = __webpack_require__(815);
-var bind = __webpack_require__(727);
+var bind = __webpack_require__(271);
 var Axios = __webpack_require__(779);
 var mergeConfig = __webpack_require__(825);
 var defaults = __webpack_require__(529);
@@ -3323,7 +3339,10 @@ axios.isCancel = __webpack_require__(871);
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(879);
+axios.spread = __webpack_require__(272);
+
+// Expose isAxiosError
+axios.isAxiosError = __webpack_require__(769);
 
 module.exports = axios;
 
@@ -3341,11 +3360,12 @@ module.exports.default = axios;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImage = void 0;
-exports.getImage = ({ httpClient, }) => ({ image_id, slug, }) => {
+const getImage = ({ httpClient, }) => ({ image_id, slug, }) => {
     const path = '/images';
     const url = `${path}/${image_id || slug}`;
     return httpClient.get(url);
 };
+exports.getImage = getImage;
 //# sourceMappingURL=get-image.js.map
 
 /***/ }),
@@ -3374,13 +3394,14 @@ module.exports = require("assert");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.disableDropletBackups = void 0;
-exports.disableDropletBackups = ({ httpClient, }) => ({ droplet_id, }) => {
+const disableDropletBackups = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'disable_backups';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.disableDropletBackups = disableDropletBackups;
 //# sourceMappingURL=disable-droplet-backups.js.map
 
 /***/ }),
@@ -3414,7 +3435,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(253), exports);
@@ -3451,7 +3472,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
   error.response = response;
   error.isAxiosError = true;
 
-  error.toJSON = function() {
+  error.toJSON = function toJSON() {
     return {
       // Standard
       message: this.message,
@@ -3481,14 +3502,15 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDropletBackups = void 0;
-exports.listDropletBackups = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
+const listDropletBackups = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
     const path = '/droplets';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${droplet_id}/backups`;
     return httpClient.get(url, {
-        params: queryParams,
+        params: query_params,
     });
 };
+exports.listDropletBackups = listDropletBackups;
 //# sourceMappingURL=list-droplet-backups.js.map
 
 /***/ }),
@@ -3505,7 +3527,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(204), exports);
@@ -3536,7 +3558,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(724), exports);
@@ -3551,11 +3573,12 @@ __exportStar(__webpack_require__(724), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDomain = void 0;
-exports.deleteDomain = ({ httpClient, }) => ({ name, }) => {
+const deleteDomain = ({ httpClient, }) => ({ name, }) => {
     const path = '/domains';
     const url = `${path}/${name}`;
     return httpClient.delete(url);
 };
+exports.deleteDomain = deleteDomain;
 //# sourceMappingURL=delete-domain.js.map
 
 /***/ }),
@@ -3569,11 +3592,12 @@ exports.deleteDomain = ({ httpClient, }) => ({ name, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroyReadOnlyReplica = void 0;
-exports.destroyReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, read_only_replica_name, }) => {
+const destroyReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, read_only_replica_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/replicas/${read_only_replica_name}`;
     return httpClient.delete(url);
 };
+exports.destroyReadOnlyReplica = destroyReadOnlyReplica;
 //# sourceMappingURL=destroy-read-only-replica.js.map
 
 /***/ }),
@@ -3585,11 +3609,12 @@ exports.destroyReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, re
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listAvailableOptionsOfKubernetes = void 0;
-exports.listAvailableOptionsOfKubernetes = ({ httpClient, }) => () => {
+const listAvailableOptionsOfKubernetes = ({ httpClient, }) => () => {
     const path = '/kubernetes/options';
     const url = `${path}`;
     return httpClient.get(url);
 };
+exports.listAvailableOptionsOfKubernetes = listAvailableOptionsOfKubernetes;
 //# sourceMappingURL=list-available-options-of-kubernetes.js.map
 
 /***/ }),
@@ -3600,18 +3625,27 @@ exports.listAvailableOptionsOfKubernetes = ({ httpClient, }) => () => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createVolumeSnapshot = void 0;
-exports.createVolumeSnapshot = ({ httpClient, }) => ({ id, name, tags, volume_id, }) => {
+const createVolumeSnapshot = ({ httpClient, }) => ({ name, tags, volume_id, }) => {
     const path = '/volumes';
     const body = { name, tags };
-    const url = `${path}/${volume_id || id}/snapshots`;
+    const url = `${path}/${volume_id}/snapshots`;
     return httpClient.post(url, body);
 };
+exports.createVolumeSnapshot = createVolumeSnapshot;
 //# sourceMappingURL=create-volume-snapshot.js.map
 
 /***/ }),
 /* 389 */,
 /* 390 */,
-/* 391 */,
+/* 391 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=load-balancer-status.js.map
+
+/***/ }),
 /* 392 */,
 /* 393 */,
 /* 394 */,
@@ -3624,13 +3658,14 @@ exports.createVolumeSnapshot = ({ httpClient, }) => ({ id, name, tags, volume_id
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.powerOnDroplet = void 0;
-exports.powerOnDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
+const powerOnDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'power_on';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.powerOnDroplet = powerOnDroplet;
 //# sourceMappingURL=power-on-droplet.js.map
 
 /***/ }),
@@ -3644,7 +3679,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 399 */,
-/* 400 */,
+/* 400 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-service-spec.js.map
+
+/***/ }),
 /* 401 */,
 /* 402 */
 /***/ (function(__unusedmodule, exports) {
@@ -3653,12 +3696,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listCertificates = void 0;
-exports.listCertificates = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listCertificates = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/certificates';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listCertificates = listCertificates;
 //# sourceMappingURL=list-certificates.js.map
 
 /***/ }),
@@ -3669,13 +3713,14 @@ exports.listCertificates = ({ httpClient, }) => ({ page = 1, per_page = 25, }) =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resizeDroplet = void 0;
-exports.resizeDroplet = ({ httpClient, }) => ({ disk, droplet_id, size, }) => {
+const resizeDroplet = ({ httpClient, }) => ({ disk, droplet_id, size, }) => {
     const path = '/droplets';
     const type = 'resize';
     const body = { disk, size, type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.resizeDroplet = resizeDroplet;
 //# sourceMappingURL=resize-droplet.js.map
 
 /***/ }),
@@ -3687,15 +3732,16 @@ exports.resizeDroplet = ({ httpClient, }) => ({ disk, droplet_id, size, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.doActionByDropletTag = void 0;
-exports.doActionByDropletTag = ({ httpClient, }) => ({ tag_name, type, }) => {
+const doActionByDropletTag = ({ httpClient, }) => ({ tag_name, type, }) => {
     const path = '/droplets/actions';
-    const queryParams = { tag_name };
+    const query_params = { tag_name };
     const body = { type };
     const url = `${path}`;
     return httpClient.post(url, body, {
-        params: queryParams,
+        params: query_params,
     });
 };
+exports.doActionByDropletTag = doActionByDropletTag;
 //# sourceMappingURL=do-action-by-droplet-tag.js.map
 
 /***/ }),
@@ -3713,7 +3759,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(902), exports);
@@ -3743,7 +3789,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createApiClient = void 0;
 const axios_1 = __importDefault(__webpack_require__(53));
-exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestTimeoutInMs, token, }) => {
+const createApiClient = ({ createContext, modules, }) => ({ endpoint, requestTimeoutInMs, token, }) => {
     const context = createContext({
         axios: axios_1.default,
         endpoint,
@@ -3784,6 +3830,8 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
         createDroplets: modules.droplet.createDroplets(context),
         deleteDroplet: modules.droplet.deleteDroplet(context),
         deleteDropletsByTag: modules.droplet.deleteDropletsByTag(context),
+        destroyDropletAndAllAssociatedResources: modules.droplet.destroyDropletAndAllAssociatedResources(context),
+        destroyDropletAndAssociatedResources: modules.droplet.destroyDropletAndAssociatedResources(context),
         disableDropletBackups: modules.droplet.disableDropletBackups(context),
         doActionByDropletTag: modules.droplet.doActionByDropletTag(context),
         enableDropletBackups: modules.droplet.enableDropletBackups(context),
@@ -3791,7 +3839,9 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
         enableDropletPrivateNetworking: modules.droplet.enableDropletPrivateNetworking(context),
         getDroplet: modules.droplet.getDroplet(context),
         getDropletAction: modules.droplet.getDropletAction(context),
+        getDropletDestroyStatus: modules.droplet.getDropletDestroyStatus(context),
         listDropletActions: modules.droplet.listDropletActions(context),
+        listDropletAssociatedResources: modules.droplet.listDropletAssociatedResources(context),
         listDropletBackups: modules.droplet.listDropletBackups(context),
         listDropletKernels: modules.droplet.listDropletKernels(context),
         listDropletNeighborhoods: modules.droplet.listDropletNeighborhoods(context),
@@ -3807,6 +3857,7 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
         resetDropletPassword: modules.droplet.resetDropletPassword(context),
         resizeDroplet: modules.droplet.resizeDroplet(context),
         restoreDroplet: modules.droplet.restoreDroplet(context),
+        retryDropletDestroy: modules.droplet.retryDropletDestroy(context),
         shutdownDroplet: modules.droplet.shutdownDroplet(context),
         snapshotDroplet: modules.droplet.snapshotDroplet(context),
     });
@@ -3883,15 +3934,16 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
     });
     const volume = Object.freeze({
         attachVolumeToDroplet: modules.volume.attachVolumeToDroplet(context),
-        createVolumeSnapshot: modules.volume.createVolumeSnapshot(context),
         createVolume: modules.volume.createVolume(context),
+        createVolumeSnapshot: modules.volume.createVolumeSnapshot(context),
         deleteVolume: modules.volume.deleteVolume(context),
+        deleteVolumeByName: modules.volume.deleteVolumeByName(context),
         detachVolumeFromDroplet: modules.volume.detachVolumeFromDroplet(context),
-        getVolumeAction: modules.volume.getVolumeAction(context),
         getVolume: modules.volume.getVolume(context),
+        getVolumeAction: modules.volume.getVolumeAction(context),
         listVolumeActions: modules.volume.listVolumeActions(context),
-        listVolumeSnapshots: modules.volume.listVolumeSnapshots(context),
         listVolumes: modules.volume.listVolumes(context),
+        listVolumeSnapshots: modules.volume.listVolumeSnapshots(context),
         resizeVolume: modules.volume.resizeVolume(context),
     });
     const database = Object.freeze({
@@ -3943,6 +3995,7 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
         updateProject: modules.project.updateProject(context),
     });
     const kubernetes = Object.freeze({
+        addContainerRegistry: modules.kubernetes.addContainerRegistry(context),
         createKubernetesCluster: modules.kubernetes.createKubernetesCluster(context),
         createNodePool: modules.kubernetes.createNodePool(context),
         deleteKubernetesCluster: modules.kubernetes.deleteKubernetesCluster(context),
@@ -3957,6 +4010,7 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
         listKubernetesClusterAvailableUpgrades: modules.kubernetes.listKubernetesClusterAvailableUpgrades(context),
         listKubernetesClusters: modules.kubernetes.listKubernetesClusters(context),
         listNodePools: modules.kubernetes.listNodePools(context),
+        removeContainerRegistry: modules.kubernetes.removeContainerRegistry(context),
         runClusterlintOnKubernetesCluster: modules.kubernetes.runClusterlintOnKubernetesCluster(context),
         updateKubernetesCluster: modules.kubernetes.updateKubernetesCluster(context),
         updateNodePool: modules.kubernetes.updateNodePool(context),
@@ -3992,10 +4046,25 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
         listVpcs: modules.vpc.listVpcs(context),
         updateVpc: modules.vpc.updateVpc(context),
     });
+    const app = Object.freeze({
+        cancelAppDeployment: modules.app.cancelAppDeployment(context),
+        createApp: modules.app.createApp(context),
+        createAppDeployment: modules.app.createAppDeployment(context),
+        deleteApp: modules.app.deleteApp(context),
+        getAggregatedAppDeploymentLogs: modules.app.getAggregatedAppDeploymentLogs(context),
+        getApp: modules.app.getApp(context),
+        getAppDeployment: modules.app.getAppDeployment(context),
+        getAppDeploymentLogs: modules.app.getAppDeploymentLogs(context),
+        listAppDeployments: modules.app.listAppDeployments(context),
+        listApps: modules.app.listApps(context),
+        runAppDetection: modules.app.runAppDetection(context),
+        updateApp: modules.app.updateApp(context),
+    });
     return Object.freeze({
         _options,
         account,
         action,
+        app,
         cdnEndpoint,
         certificate,
         containerRegistry,
@@ -4018,6 +4087,7 @@ exports.createApiClient = ({ createContext, modules, }) => ({ endpoint, requestT
         vpc,
     });
 };
+exports.createApiClient = createApiClient;
 //# sourceMappingURL=create-api-client.js.map
 
 /***/ }),
@@ -4055,13 +4125,14 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(452), exports);
 __exportStar(__webpack_require__(459), exports);
 __exportStar(__webpack_require__(482), exports);
 __exportStar(__webpack_require__(156), exports);
+__exportStar(__webpack_require__(439), exports);
 __exportStar(__webpack_require__(733), exports);
 __exportStar(__webpack_require__(569), exports);
 __exportStar(__webpack_require__(419), exports);
@@ -4088,7 +4159,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(150), exports);
@@ -4103,14 +4174,14 @@ __exportStar(__webpack_require__(150), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listVpcResources = void 0;
-exports.listVpcResources = ({ httpClient, }) => ({ page = 1, per_page = 25, resource_type, vpc_id, }) => {
-    const path = '/vpcs';
-    const queryParams = { page, per_page, resource_type };
-    const url = `${path}/${vpc_id}/members`;
-    return httpClient.get(url, { params: queryParams });
+exports.retryDropletDestroy = void 0;
+const retryDropletDestroy = ({ httpClient, }) => ({ droplet_id, }) => {
+    const path = '/droplets';
+    const url = `${path}/${droplet_id}/destroy_with_associated_resources/retry`;
+    return httpClient.post(url);
 };
-//# sourceMappingURL=list-vpc-resources.js.map
+exports.retryDropletDestroy = retryDropletDestroy;
+//# sourceMappingURL=retry-droplet-destroy.js.map
 
 /***/ }),
 /* 419 */
@@ -4137,7 +4208,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(288), exports);
@@ -4172,13 +4243,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.enableDropletBackups = void 0;
-exports.enableDropletBackups = ({ httpClient, }) => ({ droplet_id, }) => {
+const enableDropletBackups = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'enable_backups';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.enableDropletBackups = enableDropletBackups;
 //# sourceMappingURL=enable-droplet-backups.js.map
 
 /***/ }),
@@ -4189,12 +4261,13 @@ exports.enableDropletBackups = ({ httpClient, }) => ({ droplet_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getKubernetesClusterCredentials = void 0;
-exports.getKubernetesClusterCredentials = ({ httpClient, }) => ({ kubernetes_cluster_id, expiration_in_seconds, }) => {
+const getKubernetesClusterCredentials = ({ httpClient, }) => ({ kubernetes_cluster_id, expiration_in_seconds, }) => {
     const path = '/kubernetes/clusters';
-    const queryParams = { expiry_seconds: expiration_in_seconds };
+    const query_params = { expiry_seconds: expiration_in_seconds };
     const url = `${path}/${kubernetes_cluster_id}/credentials`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.getKubernetesClusterCredentials = getKubernetesClusterCredentials;
 //# sourceMappingURL=get-kubernetes-cluster-credentials.js.map
 
 /***/ }),
@@ -4205,7 +4278,7 @@ exports.getKubernetesClusterCredentials = ({ httpClient, }) => ({ kubernetes_clu
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.patchProject = void 0;
-exports.patchProject = ({ httpClient, }) => ({ description, environment, is_default, name, project_id, purpose, }) => {
+const patchProject = ({ httpClient, }) => ({ description, environment, is_default, name, project_id, purpose, }) => {
     const path = '/projects';
     const body = {
         description,
@@ -4217,6 +4290,7 @@ exports.patchProject = ({ httpClient, }) => ({ description, environment, is_defa
     const url = `${path}/${project_id}`;
     return httpClient.patch(url, body);
 };
+exports.patchProject = patchProject;
 //# sourceMappingURL=patch-project.js.map
 
 /***/ }),
@@ -4305,7 +4379,15 @@ function escapeProperty(s) {
 //# sourceMappingURL=command.js.map
 
 /***/ }),
-/* 432 */,
+/* 432 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-env.js.map
+
+/***/ }),
 /* 433 */,
 /* 434 */,
 /* 435 */
@@ -4315,7 +4397,7 @@ function escapeProperty(s) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createNodePool = void 0;
-exports.createNodePool = ({ httpClient, }) => ({ auto_scale, count, kubernetes_cluster_id, labels, max_nodes, min_nodes, name, size, tags, }) => {
+const createNodePool = ({ httpClient, }) => ({ auto_scale, count, kubernetes_cluster_id, labels, max_nodes, min_nodes, name, size, tags, taints, }) => {
     const path = '/kubernetes/clusters';
     const body = {
         auto_scale,
@@ -4326,17 +4408,27 @@ exports.createNodePool = ({ httpClient, }) => ({ auto_scale, count, kubernetes_c
         name,
         size,
         tags,
+        taints,
     };
     const url = `${path}/${kubernetes_cluster_id}/node_pools`;
     return httpClient.post(url, body);
 };
+exports.createNodePool = createNodePool;
 //# sourceMappingURL=create-node-pool.js.map
 
 /***/ }),
 /* 436 */,
 /* 437 */,
 /* 438 */,
-/* 439 */,
+/* 439 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=kubernetes-cluster-node-pool-taint.js.map
+
+/***/ }),
 /* 440 */,
 /* 441 */,
 /* 442 */,
@@ -4357,12 +4449,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listRegions = void 0;
-exports.listRegions = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listRegions = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/regions';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listRegions = listRegions;
 //# sourceMappingURL=list-regions.js.map
 
 /***/ }),
@@ -4373,13 +4466,14 @@ exports.listRegions = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.detachVolumeFromDroplet = void 0;
-exports.detachVolumeFromDroplet = ({ httpClient, }) => ({ droplet_id, id, region, volume_id, }) => {
+const detachVolumeFromDroplet = ({ httpClient, }) => ({ droplet_id, region, volume_id, }) => {
     const path = '/volumes';
     const type = 'detach';
     const body = { droplet_id, region, type };
-    const url = `${path}/${volume_id || id}/actions`;
+    const url = `${path}/${volume_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.detachVolumeFromDroplet = detachVolumeFromDroplet;
 //# sourceMappingURL=detach-volume-from-droplet.js.map
 
 /***/ }),
@@ -4390,13 +4484,14 @@ exports.detachVolumeFromDroplet = ({ httpClient, }) => ({ droplet_id, id, region
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.downloadInvoice = void 0;
-exports.downloadInvoice = ({ httpClient, }) => ({ invoice_uuid, format, }) => {
+const downloadInvoice = ({ httpClient, }) => ({ invoice_uuid, format, }) => {
     const path = '/customers/my/invoices';
     const url = `${path}/${invoice_uuid}/${format}`;
     return httpClient.get(url, {
         responseType: 'stream',
     });
 };
+exports.downloadInvoice = downloadInvoice;
 //# sourceMappingURL=download-invoice.js.map
 
 /***/ }),
@@ -4414,7 +4509,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(118), exports);
@@ -6202,13 +6297,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFloatingIp = void 0;
-exports.getFloatingIp = ({ httpClient, }) => ({ ip, }) => {
-    const path = '/floating_ips';
-    const url = `${path}/${ip}`;
-    return httpClient.get(url);
-};
-//# sourceMappingURL=get-floating-ip.js.map
+//# sourceMappingURL=firewall-pending-change.js.map
 
 /***/ }),
 /* 462 */,
@@ -6227,7 +6316,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(832), exports);
@@ -6246,11 +6335,12 @@ __exportStar(__webpack_require__(915), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroySshKey = void 0;
-exports.destroySshKey = ({ httpClient, }) => ({ id, ssh_key_id, }) => {
+const destroySshKey = ({ httpClient, }) => ({ ssh_key_id, }) => {
     const path = '/account/keys';
-    const url = `${path}/${ssh_key_id || id}`;
+    const url = `${path}/${ssh_key_id}`;
     return httpClient.delete(url);
 };
+exports.destroySshKey = destroySshKey;
 //# sourceMappingURL=destroy-ssh-key.js.map
 
 /***/ }),
@@ -6523,7 +6613,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=container-registry.js.map
 
 /***/ }),
-/* 479 */,
+/* 479 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAggregatedAppDeploymentLogs = void 0;
+const getAggregatedAppDeploymentLogs = ({ httpClient, }) => ({ app_id, component_name, deployment_id, follow, pod_connection_timeout, type, }) => {
+    const path = '/apps';
+    const url = `${path}/${app_id}/deployments/${deployment_id}/logs`;
+    const query_params = { component_name, follow, pod_connection_timeout, type };
+    return httpClient.get(url, { params: query_params });
+};
+exports.getAggregatedAppDeploymentLogs = getAggregatedAppDeploymentLogs;
+//# sourceMappingURL=get-aggregated-app-deployment-logs.js.map
+
+/***/ }),
 /* 480 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -6531,12 +6637,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.configureDatabaseClusterMaintenanceWindow = void 0;
-exports.configureDatabaseClusterMaintenanceWindow = ({ httpClient, }) => ({ database_cluster_id, day, hour, }) => {
+const configureDatabaseClusterMaintenanceWindow = ({ httpClient, }) => ({ database_cluster_id, day, hour, }) => {
     const path = '/databases';
     const body = { day, hour };
     const url = `${path}/${database_cluster_id}/maintenance`;
     return httpClient.put(url, body);
 };
+exports.configureDatabaseClusterMaintenanceWindow = configureDatabaseClusterMaintenanceWindow;
 //# sourceMappingURL=configure-database-cluster-maintenance-window.js.map
 
 /***/ }),
@@ -6558,16 +6665,288 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRegistry = void 0;
-exports.getRegistry = ({ httpClient, }) => () => {
+const getRegistry = ({ httpClient, }) => () => {
     const path = '/registry';
     const url = `${path}`;
     return httpClient.get(url);
 };
+exports.getRegistry = getRegistry;
 //# sourceMappingURL=get-registry.js.map
 
 /***/ }),
 /* 485 */,
-/* 486 */,
+/* 486 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+
+/**
+ * This is the common logic for both the Node.js and web browser
+ * implementations of `debug()`.
+ */
+
+function setup(env) {
+	createDebug.debug = createDebug;
+	createDebug.default = createDebug;
+	createDebug.coerce = coerce;
+	createDebug.disable = disable;
+	createDebug.enable = enable;
+	createDebug.enabled = enabled;
+	createDebug.humanize = __webpack_require__(186);
+
+	Object.keys(env).forEach(key => {
+		createDebug[key] = env[key];
+	});
+
+	/**
+	* Active `debug` instances.
+	*/
+	createDebug.instances = [];
+
+	/**
+	* The currently active debug mode names, and names to skip.
+	*/
+
+	createDebug.names = [];
+	createDebug.skips = [];
+
+	/**
+	* Map of special "%n" handling functions, for the debug "format" argument.
+	*
+	* Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+	*/
+	createDebug.formatters = {};
+
+	/**
+	* Selects a color for a debug namespace
+	* @param {String} namespace The namespace string for the for the debug instance to be colored
+	* @return {Number|String} An ANSI color code for the given namespace
+	* @api private
+	*/
+	function selectColor(namespace) {
+		let hash = 0;
+
+		for (let i = 0; i < namespace.length; i++) {
+			hash = ((hash << 5) - hash) + namespace.charCodeAt(i);
+			hash |= 0; // Convert to 32bit integer
+		}
+
+		return createDebug.colors[Math.abs(hash) % createDebug.colors.length];
+	}
+	createDebug.selectColor = selectColor;
+
+	/**
+	* Create a debugger with the given `namespace`.
+	*
+	* @param {String} namespace
+	* @return {Function}
+	* @api public
+	*/
+	function createDebug(namespace) {
+		let prevTime;
+
+		function debug(...args) {
+			// Disabled?
+			if (!debug.enabled) {
+				return;
+			}
+
+			const self = debug;
+
+			// Set `diff` timestamp
+			const curr = Number(new Date());
+			const ms = curr - (prevTime || curr);
+			self.diff = ms;
+			self.prev = prevTime;
+			self.curr = curr;
+			prevTime = curr;
+
+			args[0] = createDebug.coerce(args[0]);
+
+			if (typeof args[0] !== 'string') {
+				// Anything else let's inspect with %O
+				args.unshift('%O');
+			}
+
+			// Apply any `formatters` transformations
+			let index = 0;
+			args[0] = args[0].replace(/%([a-zA-Z%])/g, (match, format) => {
+				// If we encounter an escaped % then don't increase the array index
+				if (match === '%%') {
+					return match;
+				}
+				index++;
+				const formatter = createDebug.formatters[format];
+				if (typeof formatter === 'function') {
+					const val = args[index];
+					match = formatter.call(self, val);
+
+					// Now we need to remove `args[index]` since it's inlined in the `format`
+					args.splice(index, 1);
+					index--;
+				}
+				return match;
+			});
+
+			// Apply env-specific formatting (colors, etc.)
+			createDebug.formatArgs.call(self, args);
+
+			const logFn = self.log || createDebug.log;
+			logFn.apply(self, args);
+		}
+
+		debug.namespace = namespace;
+		debug.enabled = createDebug.enabled(namespace);
+		debug.useColors = createDebug.useColors();
+		debug.color = selectColor(namespace);
+		debug.destroy = destroy;
+		debug.extend = extend;
+		// Debug.formatArgs = formatArgs;
+		// debug.rawLog = rawLog;
+
+		// env-specific initialization logic for debug instances
+		if (typeof createDebug.init === 'function') {
+			createDebug.init(debug);
+		}
+
+		createDebug.instances.push(debug);
+
+		return debug;
+	}
+
+	function destroy() {
+		const index = createDebug.instances.indexOf(this);
+		if (index !== -1) {
+			createDebug.instances.splice(index, 1);
+			return true;
+		}
+		return false;
+	}
+
+	function extend(namespace, delimiter) {
+		const newDebug = createDebug(this.namespace + (typeof delimiter === 'undefined' ? ':' : delimiter) + namespace);
+		newDebug.log = this.log;
+		return newDebug;
+	}
+
+	/**
+	* Enables a debug mode by namespaces. This can include modes
+	* separated by a colon and wildcards.
+	*
+	* @param {String} namespaces
+	* @api public
+	*/
+	function enable(namespaces) {
+		createDebug.save(namespaces);
+
+		createDebug.names = [];
+		createDebug.skips = [];
+
+		let i;
+		const split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+		const len = split.length;
+
+		for (i = 0; i < len; i++) {
+			if (!split[i]) {
+				// ignore empty strings
+				continue;
+			}
+
+			namespaces = split[i].replace(/\*/g, '.*?');
+
+			if (namespaces[0] === '-') {
+				createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+			} else {
+				createDebug.names.push(new RegExp('^' + namespaces + '$'));
+			}
+		}
+
+		for (i = 0; i < createDebug.instances.length; i++) {
+			const instance = createDebug.instances[i];
+			instance.enabled = createDebug.enabled(instance.namespace);
+		}
+	}
+
+	/**
+	* Disable debug output.
+	*
+	* @return {String} namespaces
+	* @api public
+	*/
+	function disable() {
+		const namespaces = [
+			...createDebug.names.map(toNamespace),
+			...createDebug.skips.map(toNamespace).map(namespace => '-' + namespace)
+		].join(',');
+		createDebug.enable('');
+		return namespaces;
+	}
+
+	/**
+	* Returns true if the given mode name is enabled, false otherwise.
+	*
+	* @param {String} name
+	* @return {Boolean}
+	* @api public
+	*/
+	function enabled(name) {
+		if (name[name.length - 1] === '*') {
+			return true;
+		}
+
+		let i;
+		let len;
+
+		for (i = 0, len = createDebug.skips.length; i < len; i++) {
+			if (createDebug.skips[i].test(name)) {
+				return false;
+			}
+		}
+
+		for (i = 0, len = createDebug.names.length; i < len; i++) {
+			if (createDebug.names[i].test(name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	* Convert regexp to namespace
+	*
+	* @param {RegExp} regxep
+	* @return {String} namespace
+	* @api private
+	*/
+	function toNamespace(regexp) {
+		return regexp.toString()
+			.substring(2, regexp.toString().length - 2)
+			.replace(/\.\*\?$/, '*');
+	}
+
+	/**
+	* Coerce `val`.
+	*
+	* @param {Mixed} val
+	* @return {Mixed}
+	* @api private
+	*/
+	function coerce(val) {
+		if (val instanceof Error) {
+			return val.stack || val.message;
+		}
+		return val;
+	}
+
+	createDebug.enable(createDebug.load());
+
+	return createDebug;
+}
+
+module.exports = setup;
+
+
+/***/ }),
 /* 487 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -6575,17 +6954,26 @@ exports.getRegistry = ({ httpClient, }) => () => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertImageToSnapshot = void 0;
-exports.convertImageToSnapshot = ({ httpClient, }) => ({ image_id, }) => {
+const convertImageToSnapshot = ({ httpClient, }) => ({ image_id, }) => {
     const path = '/images';
     const url = `${path}/${image_id}/actions`;
     const body = { type: 'convert' };
     return httpClient.post(url, body);
 };
+exports.convertImageToSnapshot = convertImageToSnapshot;
 //# sourceMappingURL=convert-image-to-snapshot.js.map
 
 /***/ }),
 /* 488 */,
-/* 489 */,
+/* 489 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=tag-resource-details.js.map
+
+/***/ }),
 /* 490 */,
 /* 491 */
 /***/ (function(__unusedmodule, exports) {
@@ -6594,12 +6982,13 @@ exports.convertImageToSnapshot = ({ httpClient, }) => ({ image_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeRulesFromFirewall = void 0;
-exports.removeRulesFromFirewall = ({ httpClient, }) => ({ firewall_id, inbound_rules, outbound_rules, }) => {
+const removeRulesFromFirewall = ({ httpClient, }) => ({ firewall_id, inbound_rules, outbound_rules, }) => {
     const path = '/firewalls';
     const body = { inbound_rules, outbound_rules };
     const url = `${path}/${firewall_id}/rules`;
     return httpClient.delete(url, { data: body });
 };
+exports.removeRulesFromFirewall = removeRulesFromFirewall;
 //# sourceMappingURL=remove-rules-from-firewall.js.map
 
 /***/ }),
@@ -6610,12 +6999,13 @@ exports.removeRulesFromFirewall = ({ httpClient, }) => ({ firewall_id, inbound_r
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDockerCredentials = void 0;
-exports.getDockerCredentials = ({ httpClient, }) => ({ can_write = false, }) => {
+const getDockerCredentials = ({ httpClient, }) => ({ can_write = false, }) => {
     const path = '/registry/docker-credentials';
-    const queryParams = { read_write: can_write };
+    const query_params = { read_write: can_write };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.getDockerCredentials = getDockerCredentials;
 //# sourceMappingURL=get-docker-credentials.js.map
 
 /***/ }),
@@ -6626,12 +7016,13 @@ exports.getDockerCredentials = ({ httpClient, }) => ({ can_write = false, }) => 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listLoadBalancers = void 0;
-exports.listLoadBalancers = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listLoadBalancers = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/load_balancers';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listLoadBalancers = listLoadBalancers;
 //# sourceMappingURL=list-load-balancers.js.map
 
 /***/ }),
@@ -6642,7 +7033,7 @@ exports.listLoadBalancers = ({ httpClient, }) => ({ page = 1, per_page = 25, }) 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDomainRecord = void 0;
-exports.createDomainRecord = ({ httpClient, }) => ({ domain_name, data, flags, name, port, priority, tag, ttl, type, weight, }) => {
+const createDomainRecord = ({ httpClient, }) => ({ domain_name, data, flags, name, port, priority, tag, ttl, type, weight, }) => {
     const path = '/domains';
     const body = {
         data,
@@ -6658,6 +7049,7 @@ exports.createDomainRecord = ({ httpClient, }) => ({ domain_name, data, flags, n
     const url = `${path}/${domain_name}/records`;
     return httpClient.post(url, body);
 };
+exports.createDomainRecord = createDomainRecord;
 //# sourceMappingURL=create-domain-record.js.map
 
 /***/ }),
@@ -6669,7 +7061,7 @@ exports.createDomainRecord = ({ httpClient, }) => ({ domain_name, data, flags, n
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.runClusterlintOnKubernetesCluster = void 0;
-exports.runClusterlintOnKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, include_groups, include_checks, exclude_groups, exclude_checks, }) => {
+const runClusterlintOnKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, include_groups, include_checks, exclude_groups, exclude_checks, }) => {
     const path = '/kubernetes/clusters';
     const body = {
         include_groups,
@@ -6680,10 +7072,19 @@ exports.runClusterlintOnKubernetesCluster = ({ httpClient, }) => ({ kubernetes_c
     const url = `${path}/${kubernetes_cluster_id}/clusterlint`;
     return httpClient.post(url, body);
 };
+exports.runClusterlintOnKubernetesCluster = runClusterlintOnKubernetesCluster;
 //# sourceMappingURL=run-clusterlint-on-kubernetes-cluster.js.map
 
 /***/ }),
-/* 497 */,
+/* 497 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-progress-step.js.map
+
+/***/ }),
 /* 498 */,
 /* 499 */
 /***/ (function(module, __unusedexports, __webpack_require__) {
@@ -6693,6 +7094,7 @@ exports.runClusterlintOnKubernetesCluster = ({ httpClient, }) => ({ kubernetes_c
 
 var utils = __webpack_require__(815);
 var settle = __webpack_require__(564);
+var cookies = __webpack_require__(199);
 var buildURL = __webpack_require__(133);
 var buildFullPath = __webpack_require__(960);
 var parseHeaders = __webpack_require__(333);
@@ -6713,7 +7115,7 @@ module.exports = function xhrAdapter(config) {
     // HTTP basic authentication
     if (config.auth) {
       var username = config.auth.username || '';
-      var password = config.auth.password || '';
+      var password = config.auth.password ? unescape(encodeURIComponent(config.auth.password)) : '';
       requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
     }
 
@@ -6794,8 +7196,6 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(199);
-
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
         cookies.read(config.xsrfCookieName) :
@@ -6861,7 +7261,7 @@ module.exports = function xhrAdapter(config) {
       });
     }
 
-    if (requestData === undefined) {
+    if (!requestData) {
       requestData = null;
     }
 
@@ -6873,7 +7273,29 @@ module.exports = function xhrAdapter(config) {
 
 /***/ }),
 /* 500 */,
-/* 501 */,
+/* 501 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(__webpack_require__(319), exports);
+__exportStar(__webpack_require__(612), exports);
+__exportStar(__webpack_require__(302), exports);
+__exportStar(__webpack_require__(864), exports);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
 /* 502 */,
 /* 503 */,
 /* 504 */,
@@ -6884,7 +7306,7 @@ module.exports = function xhrAdapter(config) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resizeDatabaseCluster = void 0;
-exports.resizeDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, num_nodes, size, }) => {
+const resizeDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, num_nodes, size, }) => {
     const path = '/databases';
     const body = {
         num_nodes,
@@ -6893,6 +7315,7 @@ exports.resizeDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, num
     const url = `${path}/${database_cluster_id}/resize`;
     return httpClient.put(url, body);
 };
+exports.resizeDatabaseCluster = resizeDatabaseCluster;
 //# sourceMappingURL=resize-database-cluster.js.map
 
 /***/ }),
@@ -6925,7 +7348,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -6954,7 +7377,7 @@ exports.utils = utils;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createVolume = void 0;
-exports.createVolume = ({ httpClient, }) => ({ description, filesystem_label, filesystem_type, name, region, size_gigabytes, snapshot_id, tags, }) => {
+const createVolume = ({ httpClient, }) => ({ description, filesystem_label, filesystem_type, name, region, size_gigabytes, snapshot_id, tags, }) => {
     const path = '/volumes';
     const body = {
         description,
@@ -6969,6 +7392,7 @@ exports.createVolume = ({ httpClient, }) => ({ description, filesystem_label, fi
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createVolume = createVolume;
 //# sourceMappingURL=create-volume.js.map
 
 /***/ }),
@@ -6980,14 +7404,15 @@ exports.createVolume = ({ httpClient, }) => ({ description, filesystem_label, fi
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateSshKey = void 0;
-exports.updateSshKey = ({ httpClient, }) => ({ id, name, ssh_key_id, }) => {
+const updateSshKey = ({ httpClient, }) => ({ name, ssh_key_id, }) => {
     const path = '/account/keys';
     const body = {
         name,
     };
-    const url = `${path}/${ssh_key_id || id}`;
+    const url = `${path}/${ssh_key_id}`;
     return httpClient.put(url, body);
 };
+exports.updateSshKey = updateSshKey;
 //# sourceMappingURL=update-ssh-key.js.map
 
 /***/ }),
@@ -7000,7 +7425,7 @@ exports.updateSshKey = ({ httpClient, }) => ({ id, name, ssh_key_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateCdnEndpoint = void 0;
-exports.updateCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, ttl, certificate_id, custom_domain, }) => {
+const updateCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, ttl, certificate_id, custom_domain, }) => {
     const path = '/cdn/endpoints';
     const body = {
         ttl,
@@ -7010,6 +7435,7 @@ exports.updateCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, ttl, certif
     const url = `${path}/${cdn_endpoint_id}`;
     return httpClient.put(url, body);
 };
+exports.updateCdnEndpoint = updateCdnEndpoint;
 //# sourceMappingURL=update-cdn-endpoint.js.map
 
 /***/ }),
@@ -7022,19 +7448,28 @@ exports.updateCdnEndpoint = ({ httpClient, }) => ({ cdn_endpoint_id, ttl, certif
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDropletNeighbors = void 0;
-exports.listDropletNeighbors = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
+const listDropletNeighbors = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
     const path = '/droplets';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${droplet_id}/neighbors`;
     return httpClient.get(url, {
-        params: queryParams,
+        params: query_params,
     });
 };
+exports.listDropletNeighbors = listDropletNeighbors;
 //# sourceMappingURL=list-droplet-neighbors.js.map
 
 /***/ }),
 /* 517 */,
-/* 518 */,
+/* 518 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-service.js.map
+
+/***/ }),
 /* 519 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -7042,11 +7477,12 @@ exports.listDropletNeighbors = ({ httpClient, }) => ({ droplet_id, page = 1, per
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDefaultProject = void 0;
-exports.getDefaultProject = ({ httpClient, }) => () => {
+const getDefaultProject = ({ httpClient, }) => () => {
     const path = '/projects';
     const url = `${path}/default`;
     return httpClient.get(url);
 };
+exports.getDefaultProject = getDefaultProject;
 //# sourceMappingURL=get-default-project.js.map
 
 /***/ }),
@@ -7063,13 +7499,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(928), exports);
 __exportStar(__webpack_require__(892), exports);
 __exportStar(__webpack_require__(838), exports);
-__exportStar(__webpack_require__(119), exports);
+__exportStar(__webpack_require__(781), exports);
 __exportStar(__webpack_require__(640), exports);
 __exportStar(__webpack_require__(138), exports);
 __exportStar(__webpack_require__(980), exports);
@@ -7083,23 +7519,15 @@ __exportStar(__webpack_require__(980), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDatabaseCluster = void 0;
-exports.createDatabaseCluster = ({ httpClient, }) => ({ engine, name, num_nodes, private_network_uuid, region, size, tags, version, }) => {
-    const path = '/databases';
-    const body = {
-        engine,
-        name,
-        num_nodes,
-        private_network_uuid,
-        region,
-        size,
-        tags,
-        version,
-    };
-    const url = `${path}`;
-    return httpClient.post(url, body);
+exports.getAppDeploymentLogs = void 0;
+const getAppDeploymentLogs = ({ httpClient, }) => ({ app_id, component_name, deployment_id, follow, pod_connection_timeout, type, }) => {
+    const path = '/apps';
+    const url = `${path}/${app_id}/deployments/${deployment_id}/components/${component_name}/logs`;
+    const query_params = { follow, pod_connection_timeout, type };
+    return httpClient.get(url, { params: query_params });
 };
-//# sourceMappingURL=create-database-cluster.js.map
+exports.getAppDeploymentLogs = getAppDeploymentLogs;
+//# sourceMappingURL=get-app-deployment-logs.js.map
 
 /***/ }),
 /* 523 */,
@@ -7110,12 +7538,13 @@ exports.createDatabaseCluster = ({ httpClient, }) => ({ engine, name, num_nodes,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listKubernetesClusters = void 0;
-exports.listKubernetesClusters = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listKubernetesClusters = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/kubernetes/clusters';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listKubernetesClusters = listKubernetesClusters;
 //# sourceMappingURL=list-kubernetes-clusters.js.map
 
 /***/ }),
@@ -7266,6 +7695,7 @@ var defaults = {
   xsrfHeaderName: 'X-XSRF-TOKEN',
 
   maxContentLength: -1,
+  maxBodyLength: -1,
 
   validateStatus: function validateStatus(status) {
     return status >= 200 && status < 300;
@@ -7308,11 +7738,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFloatingIp = void 0;
-exports.deleteFloatingIp = ({ httpClient, }) => ({ ip, }) => {
+const deleteFloatingIp = ({ httpClient, }) => ({ ip, }) => {
     const path = '/floating_ips';
     const url = `${path}/${ip}`;
     return httpClient.delete(url);
 };
+exports.deleteFloatingIp = deleteFloatingIp;
 //# sourceMappingURL=delete-floating-ip.js.map
 
 /***/ }),
@@ -7334,19 +7765,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateImage = void 0;
-exports.updateImage = ({ httpClient, }) => ({ description, distribution, image_id, name, }) => {
+const updateImage = ({ httpClient, }) => ({ description, distribution, image_id, name, }) => {
     const path = '/images';
     const url = `${path}/${image_id}`;
     const body = { description, distribution, name };
     return httpClient.post(url, body);
 };
+exports.updateImage = updateImage;
 //# sourceMappingURL=update-image.js.map
 
 /***/ }),
 /* 538 */,
 /* 539 */,
 /* 540 */,
-/* 541 */,
+/* 541 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.destroyDropletAndAllAssociatedResources = void 0;
+const destroyDropletAndAllAssociatedResources = ({ httpClient, }) => ({ acknowledge, droplet_id, }) => {
+    const path = '/droplets';
+    const url = `${path}/${droplet_id}/destroy_with_associated_resources/dangerous`;
+    const headers = {
+        'X-Dangerous': `${acknowledge}`,
+    };
+    return httpClient.delete(url, { headers, data: undefined });
+};
+exports.destroyDropletAndAllAssociatedResources = destroyDropletAndAllAssociatedResources;
+//# sourceMappingURL=destroy-droplet-and-all-associated-resources.js.map
+
+/***/ }),
 /* 542 */,
 /* 543 */,
 /* 544 */,
@@ -7358,45 +7808,52 @@ exports.updateImage = ({ httpClient, }) => ({ description, distribution, image_i
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 var url = __webpack_require__(835);
+var URL = url.URL;
 var http = __webpack_require__(605);
 var https = __webpack_require__(211);
-var assert = __webpack_require__(357);
 var Writable = __webpack_require__(413).Writable;
-var debug = __webpack_require__(72)("follow-redirects");
-
-// RFC7231§4.2.1: Of the request methods defined by this specification,
-// the GET, HEAD, OPTIONS, and TRACE methods are defined to be safe.
-var SAFE_METHODS = { GET: true, HEAD: true, OPTIONS: true, TRACE: true };
+var assert = __webpack_require__(357);
+var debug = __webpack_require__(900);
 
 // Create handlers that pass events from native requests
+var events = ["abort", "aborted", "connect", "error", "socket", "timeout"];
 var eventHandlers = Object.create(null);
-["abort", "aborted", "error", "socket", "timeout"].forEach(function (event) {
-  eventHandlers[event] = function (arg) {
-    this._redirectable.emit(event, arg);
+events.forEach(function (event) {
+  eventHandlers[event] = function (arg1, arg2, arg3) {
+    this._redirectable.emit(event, arg1, arg2, arg3);
   };
 });
+
+// Error types with codes
+var RedirectionError = createErrorType(
+  "ERR_FR_REDIRECTION_FAILURE",
+  ""
+);
+var TooManyRedirectsError = createErrorType(
+  "ERR_FR_TOO_MANY_REDIRECTS",
+  "Maximum number of redirects exceeded"
+);
+var MaxBodyLengthExceededError = createErrorType(
+  "ERR_FR_MAX_BODY_LENGTH_EXCEEDED",
+  "Request body larger than maxBodyLength limit"
+);
+var WriteAfterEndError = createErrorType(
+  "ERR_STREAM_WRITE_AFTER_END",
+  "write after end"
+);
 
 // An HTTP(S) request that can be redirected
 function RedirectableRequest(options, responseCallback) {
   // Initialize the request
   Writable.call(this);
-  options.headers = options.headers || {};
+  this._sanitizeOptions(options);
   this._options = options;
+  this._ended = false;
+  this._ending = false;
   this._redirectCount = 0;
   this._redirects = [];
   this._requestBodyLength = 0;
   this._requestBodyBuffers = [];
-
-  // Since http.request treats host as an alias of hostname,
-  // but the url module interprets host as hostname plus port,
-  // eliminate the host property to avoid confusion.
-  if (options.host) {
-    // Use hostname if set, because it has precedence
-    if (!options.hostname) {
-      options.hostname = options.host;
-    }
-    delete options.host;
-  }
 
   // Attach a callback if passed
   if (responseCallback) {
@@ -7409,28 +7866,26 @@ function RedirectableRequest(options, responseCallback) {
     self._processResponse(response);
   };
 
-  // Complete the URL object when necessary
-  if (!options.pathname && options.path) {
-    var searchPos = options.path.indexOf("?");
-    if (searchPos < 0) {
-      options.pathname = options.path;
-    }
-    else {
-      options.pathname = options.path.substring(0, searchPos);
-      options.search = options.path.substring(searchPos);
-    }
-  }
-
   // Perform the first request
   this._performRequest();
 }
 RedirectableRequest.prototype = Object.create(Writable.prototype);
 
+RedirectableRequest.prototype.abort = function () {
+  abortRequest(this._currentRequest);
+  this.emit("abort");
+};
+
 // Writes buffered data to the current native request
 RedirectableRequest.prototype.write = function (data, encoding, callback) {
+  // Writing is not allowed if end has been called
+  if (this._ending) {
+    throw new WriteAfterEndError();
+  }
+
   // Validate input and shift parameters if necessary
   if (!(typeof data === "string" || typeof data === "object" && ("length" in data))) {
-    throw new Error("data should be a string, Buffer or Uint8Array");
+    throw new TypeError("data should be a string, Buffer or Uint8Array");
   }
   if (typeof encoding === "function") {
     callback = encoding;
@@ -7453,7 +7908,7 @@ RedirectableRequest.prototype.write = function (data, encoding, callback) {
   }
   // Error when we exceed the maximum body length
   else {
-    this.emit("error", new Error("Request body larger than maxBodyLength limit"));
+    this.emit("error", new MaxBodyLengthExceededError());
     this.abort();
   }
 };
@@ -7470,11 +7925,20 @@ RedirectableRequest.prototype.end = function (data, encoding, callback) {
     encoding = null;
   }
 
-  // Write data and end
-  var currentRequest = this._currentRequest;
-  this.write(data || "", encoding, function () {
-    currentRequest.end(null, null, callback);
-  });
+  // Write data if needed and end
+  if (!data) {
+    this._ended = this._ending = true;
+    this._currentRequest.end(null, null, callback);
+  }
+  else {
+    var self = this;
+    var currentRequest = this._currentRequest;
+    this.write(data, encoding, function () {
+      self._ended = true;
+      currentRequest.end(null, null, callback);
+    });
+    this._ending = true;
+  }
 };
 
 // Sets a header value on the current native request
@@ -7489,10 +7953,61 @@ RedirectableRequest.prototype.removeHeader = function (name) {
   this._currentRequest.removeHeader(name);
 };
 
+// Global timeout for all underlying requests
+RedirectableRequest.prototype.setTimeout = function (msecs, callback) {
+  var self = this;
+  if (callback) {
+    this.on("timeout", callback);
+  }
+
+  function destroyOnTimeout(socket) {
+    socket.setTimeout(msecs);
+    socket.removeListener("timeout", socket.destroy);
+    socket.addListener("timeout", socket.destroy);
+  }
+
+  // Sets up a timer to trigger a timeout event
+  function startTimer(socket) {
+    if (self._timeout) {
+      clearTimeout(self._timeout);
+    }
+    self._timeout = setTimeout(function () {
+      self.emit("timeout");
+      clearTimer();
+    }, msecs);
+    destroyOnTimeout(socket);
+  }
+
+  // Prevent a timeout from triggering
+  function clearTimer() {
+    clearTimeout(this._timeout);
+    if (callback) {
+      self.removeListener("timeout", callback);
+    }
+    if (!this.socket) {
+      self._currentRequest.removeListener("socket", startTimer);
+    }
+  }
+
+  // Start the timer when the socket is opened
+  if (this.socket) {
+    startTimer(this.socket);
+  }
+  else {
+    this._currentRequest.once("socket", startTimer);
+  }
+
+  this.on("socket", destroyOnTimeout);
+  this.once("response", clearTimer);
+  this.once("error", clearTimer);
+
+  return this;
+};
+
 // Proxy all other public ClientRequest methods
 [
-  "abort", "flushHeaders", "getHeader",
-  "setNoDelay", "setSocketKeepAlive", "setTimeout",
+  "flushHeaders", "getHeader",
+  "setNoDelay", "setSocketKeepAlive",
 ].forEach(function (method) {
   RedirectableRequest.prototype[method] = function (a, b) {
     return this._currentRequest[method](a, b);
@@ -7506,13 +8021,44 @@ RedirectableRequest.prototype.removeHeader = function (name) {
   });
 });
 
+RedirectableRequest.prototype._sanitizeOptions = function (options) {
+  // Ensure headers are always present
+  if (!options.headers) {
+    options.headers = {};
+  }
+
+  // Since http.request treats host as an alias of hostname,
+  // but the url module interprets host as hostname plus port,
+  // eliminate the host property to avoid confusion.
+  if (options.host) {
+    // Use hostname if set, because it has precedence
+    if (!options.hostname) {
+      options.hostname = options.host;
+    }
+    delete options.host;
+  }
+
+  // Complete the URL object when necessary
+  if (!options.pathname && options.path) {
+    var searchPos = options.path.indexOf("?");
+    if (searchPos < 0) {
+      options.pathname = options.path;
+    }
+    else {
+      options.pathname = options.path.substring(0, searchPos);
+      options.search = options.path.substring(searchPos);
+    }
+  }
+};
+
+
 // Executes the next native request (initial or redirect)
 RedirectableRequest.prototype._performRequest = function () {
   // Load the native protocol
   var protocol = this._options.protocol;
   var nativeProtocol = this._options.nativeProtocols[protocol];
   if (!nativeProtocol) {
-    this.emit("error", new Error("Unsupported protocol " + protocol));
+    this.emit("error", new TypeError("Unsupported protocol " + protocol));
     return;
   }
 
@@ -7530,11 +8076,8 @@ RedirectableRequest.prototype._performRequest = function () {
 
   // Set up event handlers
   request._redirectable = this;
-  for (var event in eventHandlers) {
-    /* istanbul ignore else */
-    if (event) {
-      request.on(event, eventHandlers[event]);
-    }
+  for (var e = 0; e < events.length; e++) {
+    request.on(events[e], eventHandlers[events[e]]);
   }
 
   // End a redirected request
@@ -7542,14 +8085,29 @@ RedirectableRequest.prototype._performRequest = function () {
   if (this._isRedirect) {
     // Write the request entity and end.
     var i = 0;
+    var self = this;
     var buffers = this._requestBodyBuffers;
-    (function writeNext() {
-      if (i < buffers.length) {
-        var buffer = buffers[i++];
-        request.write(buffer.data, buffer.encoding, writeNext);
-      }
-      else {
-        request.end();
+    (function writeNext(error) {
+      // Only write if this request has not been redirected yet
+      /* istanbul ignore else */
+      if (request === self._currentRequest) {
+        // Report any write errors
+        /* istanbul ignore if */
+        if (error) {
+          self.emit("error", error);
+        }
+        // Write the next buffer if there are still left
+        else if (i < buffers.length) {
+          var buffer = buffers[i++];
+          /* istanbul ignore else */
+          if (!request.finished) {
+            request.write(buffer.data, buffer.encoding, writeNext);
+          }
+        }
+        // End the request if `end` has been called on us
+        else if (self._ended) {
+          request.end();
+        }
       }
     }());
   }
@@ -7558,11 +8116,12 @@ RedirectableRequest.prototype._performRequest = function () {
 // Processes a response from the current native request
 RedirectableRequest.prototype._processResponse = function (response) {
   // Store the redirected response
+  var statusCode = response.statusCode;
   if (this._options.trackRedirects) {
     this._redirects.push({
       url: this._currentUrl,
       headers: response.headers,
-      statusCode: response.statusCode,
+      statusCode: statusCode,
     });
   }
 
@@ -7574,52 +8133,73 @@ RedirectableRequest.prototype._processResponse = function (response) {
   // even if the specific status code is not understood.
   var location = response.headers.location;
   if (location && this._options.followRedirects !== false &&
-      response.statusCode >= 300 && response.statusCode < 400) {
+      statusCode >= 300 && statusCode < 400) {
+    // Abort the current request
+    abortRequest(this._currentRequest);
+    // Discard the remainder of the response to avoid waiting for data
+    response.destroy();
+
     // RFC7231§6.4: A client SHOULD detect and intervene
     // in cyclical redirections (i.e., "infinite" redirection loops).
     if (++this._redirectCount > this._options.maxRedirects) {
-      this.emit("error", new Error("Max redirects exceeded."));
+      this.emit("error", new TooManyRedirectsError());
       return;
     }
 
     // RFC7231§6.4: Automatic redirection needs to done with
-    // care for methods not known to be safe […],
-    // since the user might not wish to redirect an unsafe request.
-    // RFC7231§6.4.7: The 307 (Temporary Redirect) status code indicates
-    // that the target resource resides temporarily under a different URI
-    // and the user agent MUST NOT change the request method
-    // if it performs an automatic redirection to that URI.
-    var header;
-    var headers = this._options.headers;
-    if (response.statusCode !== 307 && !(this._options.method in SAFE_METHODS)) {
+    // care for methods not known to be safe, […]
+    // RFC7231§6.4.2–3: For historical reasons, a user agent MAY change
+    // the request method from POST to GET for the subsequent request.
+    if ((statusCode === 301 || statusCode === 302) && this._options.method === "POST" ||
+        // RFC7231§6.4.4: The 303 (See Other) status code indicates that
+        // the server is redirecting the user agent to a different resource […]
+        // A user agent can perform a retrieval request targeting that URI
+        // (a GET or HEAD request if using HTTP) […]
+        (statusCode === 303) && !/^(?:GET|HEAD)$/.test(this._options.method)) {
       this._options.method = "GET";
       // Drop a possible entity and headers related to it
       this._requestBodyBuffers = [];
-      for (header in headers) {
-        if (/^content-/i.test(header)) {
-          delete headers[header];
-        }
-      }
+      removeMatchingHeaders(/^content-/i, this._options.headers);
     }
 
     // Drop the Host header, as the redirect might lead to a different host
-    if (!this._isRedirect) {
-      for (header in headers) {
-        if (/^host$/i.test(header)) {
-          delete headers[header];
-        }
+    var previousHostName = removeMatchingHeaders(/^host$/i, this._options.headers) ||
+      url.parse(this._currentUrl).hostname;
+
+    // Create the redirected request
+    var redirectUrl = url.resolve(this._currentUrl, location);
+    debug("redirecting to", redirectUrl);
+    this._isRedirect = true;
+    var redirectUrlParts = url.parse(redirectUrl);
+    Object.assign(this._options, redirectUrlParts);
+
+    // Drop the Authorization header if redirecting to another host
+    if (redirectUrlParts.hostname !== previousHostName) {
+      removeMatchingHeaders(/^authorization$/i, this._options.headers);
+    }
+
+    // Evaluate the beforeRedirect callback
+    if (typeof this._options.beforeRedirect === "function") {
+      var responseDetails = { headers: response.headers };
+      try {
+        this._options.beforeRedirect.call(null, this._options, responseDetails);
       }
+      catch (err) {
+        this.emit("error", err);
+        return;
+      }
+      this._sanitizeOptions(this._options);
     }
 
     // Perform the redirected request
-    var redirectUrl = url.resolve(this._currentUrl, location);
-    debug("redirecting to", redirectUrl);
-    Object.assign(this._options, url.parse(redirectUrl));
-    this._isRedirect = true;
-    this._performRequest();
-
-    // Discard the remainder of the response to avoid waiting for data
-    response.destroy();
+    try {
+      this._performRequest();
+    }
+    catch (cause) {
+      var error = new RedirectionError("Redirected request failed: " + cause.message);
+      error.cause = cause;
+      this.emit("error", error);
+    }
   }
   else {
     // The response is not a redirect; return it as-is
@@ -7648,32 +8228,111 @@ function wrap(protocols) {
     var wrappedProtocol = exports[scheme] = Object.create(nativeProtocol);
 
     // Executes a request, following redirects
-    wrappedProtocol.request = function (options, callback) {
-      if (typeof options === "string") {
-        options = url.parse(options);
-        options.maxRedirects = exports.maxRedirects;
+    function request(input, options, callback) {
+      // Parse parameters
+      if (typeof input === "string") {
+        var urlStr = input;
+        try {
+          input = urlToOptions(new URL(urlStr));
+        }
+        catch (err) {
+          /* istanbul ignore next */
+          input = url.parse(urlStr);
+        }
+      }
+      else if (URL && (input instanceof URL)) {
+        input = urlToOptions(input);
       }
       else {
-        options = Object.assign({
-          protocol: protocol,
-          maxRedirects: exports.maxRedirects,
-          maxBodyLength: exports.maxBodyLength,
-        }, options);
+        callback = options;
+        options = input;
+        input = { protocol: protocol };
       }
+      if (typeof options === "function") {
+        callback = options;
+        options = null;
+      }
+
+      // Set defaults
+      options = Object.assign({
+        maxRedirects: exports.maxRedirects,
+        maxBodyLength: exports.maxBodyLength,
+      }, input, options);
       options.nativeProtocols = nativeProtocols;
+
       assert.equal(options.protocol, protocol, "protocol mismatch");
       debug("options", options);
       return new RedirectableRequest(options, callback);
-    };
+    }
 
     // Executes a GET request, following redirects
-    wrappedProtocol.get = function (options, callback) {
-      var request = wrappedProtocol.request(options, callback);
-      request.end();
-      return request;
-    };
+    function get(input, options, callback) {
+      var wrappedRequest = wrappedProtocol.request(input, options, callback);
+      wrappedRequest.end();
+      return wrappedRequest;
+    }
+
+    // Expose the properties on the wrapped protocol
+    Object.defineProperties(wrappedProtocol, {
+      request: { value: request, configurable: true, enumerable: true, writable: true },
+      get: { value: get, configurable: true, enumerable: true, writable: true },
+    });
   });
   return exports;
+}
+
+/* istanbul ignore next */
+function noop() { /* empty */ }
+
+// from https://github.com/nodejs/node/blob/master/lib/internal/url.js
+function urlToOptions(urlObject) {
+  var options = {
+    protocol: urlObject.protocol,
+    hostname: urlObject.hostname.startsWith("[") ?
+      /* istanbul ignore next */
+      urlObject.hostname.slice(1, -1) :
+      urlObject.hostname,
+    hash: urlObject.hash,
+    search: urlObject.search,
+    pathname: urlObject.pathname,
+    path: urlObject.pathname + urlObject.search,
+    href: urlObject.href,
+  };
+  if (urlObject.port !== "") {
+    options.port = Number(urlObject.port);
+  }
+  return options;
+}
+
+function removeMatchingHeaders(regex, headers) {
+  var lastValue;
+  for (var header in headers) {
+    if (regex.test(header)) {
+      lastValue = headers[header];
+      delete headers[header];
+    }
+  }
+  return lastValue;
+}
+
+function createErrorType(code, defaultMessage) {
+  function CustomError(message) {
+    Error.captureStackTrace(this, this.constructor);
+    this.message = message || defaultMessage;
+  }
+  CustomError.prototype = new Error();
+  CustomError.prototype.constructor = CustomError;
+  CustomError.prototype.name = "Error [" + code + "]";
+  CustomError.prototype.code = code;
+  return CustomError;
+}
+
+function abortRequest(request) {
+  for (var e = 0; e < events.length; e++) {
+    request.removeListener(events[e], eventHandlers[events[e]]);
+  }
+  request.on("error", noop);
+  request.abort();
 }
 
 // Exports
@@ -7689,12 +8348,13 @@ module.exports.wrap = wrap;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignResourcesToDefaultProject = void 0;
-exports.assignResourcesToDefaultProject = ({ httpClient, }) => ({ resources, }) => {
+const assignResourcesToDefaultProject = ({ httpClient, }) => ({ resources, }) => {
     const path = '/projects';
     const body = { resources };
     const url = `${path}/default/resources`;
     return httpClient.post(url, body);
 };
+exports.assignResourcesToDefaultProject = assignResourcesToDefaultProject;
 //# sourceMappingURL=assign-resources-to-default-project.js.map
 
 /***/ }),
@@ -7702,7 +8362,23 @@ exports.assignResourcesToDefaultProject = ({ httpClient, }) => ({ resources, }) 
 /* 552 */,
 /* 553 */,
 /* 554 */,
-/* 555 */,
+/* 555 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateApp = void 0;
+const updateApp = ({ httpClient, }) => ({ app_id, spec, }) => {
+    const path = '/apps';
+    const body = { spec };
+    const url = `${path}/${app_id}`;
+    return httpClient.put(url, body);
+};
+exports.updateApp = updateApp;
+//# sourceMappingURL=update-app.js.map
+
+/***/ }),
 /* 556 */,
 /* 557 */,
 /* 558 */
@@ -7721,11 +8397,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAction = void 0;
-exports.getAction = ({ httpClient, }) => ({ action_id, }) => {
+const getAction = ({ httpClient, }) => ({ action_id, }) => {
     const path = '/action';
     const url = `${path}/${action_id}`;
     return httpClient.get(url);
 };
+exports.getAction = getAction;
 //# sourceMappingURL=get-action.js.map
 
 /***/ }),
@@ -7750,7 +8427,7 @@ var createError = __webpack_require__(851);
  */
 module.exports = function settle(resolve, reject, response) {
   var validateStatus = response.config.validateStatus;
-  if (!validateStatus || validateStatus(response.status)) {
+  if (!response.status || !validateStatus || validateStatus(response.status)) {
     resolve(response);
   } else {
     reject(createError(
@@ -7779,16 +8456,16 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(__webpack_require__(233), exports);
+__exportStar(__webpack_require__(968), exports);
 __exportStar(__webpack_require__(480), exports);
 __exportStar(__webpack_require__(949), exports);
 __exportStar(__webpack_require__(708), exports);
 __exportStar(__webpack_require__(916), exports);
 __exportStar(__webpack_require__(824), exports);
-__exportStar(__webpack_require__(522), exports);
+__exportStar(__webpack_require__(161), exports);
 __exportStar(__webpack_require__(85), exports);
 __exportStar(__webpack_require__(219), exports);
 __exportStar(__webpack_require__(239), exports);
@@ -7837,15 +8514,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDroplets = void 0;
-exports.listDroplets = ({ httpClient, }) => ({ page = 1, per_page = 25, tag_name, }) => {
+const listDroplets = ({ httpClient, }) => ({ page = 1, per_page = 25, tag_name = undefined, }) => {
     const path = '/droplets';
-    const queryParams = { page, per_page };
-    const hasTagnameFilter = typeof tag_name === 'string';
-    if (hasTagnameFilter)
-        Object.assign(queryParams, { tag_name });
+    const query_params = {
+        page,
+        per_page,
+        tag_name,
+    };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDroplets = listDroplets;
 //# sourceMappingURL=list-droplets.js.map
 
 /***/ }),
@@ -7856,11 +8535,12 @@ exports.listDroplets = ({ httpClient, }) => ({ page = 1, per_page = 25, tag_name
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVolume = void 0;
-exports.getVolume = ({ httpClient, }) => ({ id, volume_id, }) => {
+const getVolume = ({ httpClient, }) => ({ volume_id, }) => {
     const path = '/volumes';
-    const url = `${path}/${volume_id || id}`;
+    const url = `${path}/${volume_id}`;
     return httpClient.get(url);
 };
+exports.getVolume = getVolume;
 //# sourceMappingURL=get-volume.js.map
 
 /***/ }),
@@ -7874,11 +8554,12 @@ exports.getVolume = ({ httpClient, }) => ({ id, volume_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNodePool = void 0;
-exports.deleteNodePool = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_id, }) => {
+const deleteNodePool = ({ httpClient, }) => ({ kubernetes_cluster_id, node_pool_id, }) => {
     const path = '/kubernetes/clusters';
     const url = `${path}/${kubernetes_cluster_id}/node_pools/${node_pool_id}`;
     return httpClient.delete(url);
 };
+exports.deleteNodePool = deleteNodePool;
 //# sourceMappingURL=delete-node-pool.js.map
 
 /***/ }),
@@ -7890,13 +8571,14 @@ exports.deleteNodePool = ({ httpClient, }) => ({ kubernetes_cluster_id, node_poo
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.changeDropletKernel = void 0;
-exports.changeDropletKernel = ({ httpClient, }) => ({ droplet_id, kernel, }) => {
+const changeDropletKernel = ({ httpClient, }) => ({ droplet_id, kernel, }) => {
     const path = '/droplets';
     const type = 'change_kernel';
     const body = { kernel, type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.changeDropletKernel = changeDropletKernel;
 //# sourceMappingURL=change-droplet-kernel.js.map
 
 /***/ }),
@@ -7911,11 +8593,12 @@ exports.changeDropletKernel = ({ httpClient, }) => ({ droplet_id, kernel, }) => 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDatabaseClusterDb = void 0;
-exports.getDatabaseClusterDb = ({ httpClient, }) => ({ database_cluster_id, db_name, }) => {
+const getDatabaseClusterDb = ({ httpClient, }) => ({ database_cluster_id, db_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/dbs/${db_name}`;
     return httpClient.get(url);
 };
+exports.getDatabaseClusterDb = getDatabaseClusterDb;
 //# sourceMappingURL=get-database-cluster-db.js.map
 
 /***/ }),
@@ -7978,12 +8661,13 @@ module.exports = function isAbsoluteURL(url) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.upgradeKubernetesCluster = void 0;
-exports.upgradeKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, version, }) => {
+const upgradeKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, version, }) => {
     const path = '/kubernetes/clusters';
     const body = { version };
     const url = `${path}/${kubernetes_cluster_id}/upgrade`;
     return httpClient.post(url, body);
 };
+exports.upgradeKubernetesCluster = upgradeKubernetesCluster;
 //# sourceMappingURL=upgrade-kubernetes-cluster.js.map
 
 /***/ }),
@@ -7996,7 +8680,23 @@ exports.upgradeKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id
 /* 598 */,
 /* 599 */,
 /* 600 */,
-/* 601 */,
+/* 601 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listImageActions = void 0;
+const listImageActions = ({ httpClient, }) => ({ page = 1, per_page = 25, image_id, }) => {
+    const path = '/images';
+    const query_params = { page, per_page };
+    const url = `${path}/${image_id}/actions`;
+    return httpClient.get(url, { params: query_params });
+};
+exports.listImageActions = listImageActions;
+//# sourceMappingURL=list-image-actions.js.map
+
+/***/ }),
 /* 602 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -8004,12 +8704,13 @@ exports.upgradeKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listVpcs = void 0;
-exports.listVpcs = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listVpcs = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/vpcs';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listVpcs = listVpcs;
 //# sourceMappingURL=list-vpcs.js.map
 
 /***/ }),
@@ -8045,7 +8746,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(550), exports);
@@ -8059,7 +8760,7 @@ __exportStar(__webpack_require__(337), exports);
 __exportStar(__webpack_require__(937), exports);
 __exportStar(__webpack_require__(4), exports);
 __exportStar(__webpack_require__(430), exports);
-__exportStar(__webpack_require__(112), exports);
+__exportStar(__webpack_require__(501), exports);
 __exportStar(__webpack_require__(209), exports);
 __exportStar(__webpack_require__(62), exports);
 //# sourceMappingURL=index.js.map
@@ -8073,11 +8774,12 @@ __exportStar(__webpack_require__(62), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getInvoiceSummary = void 0;
-exports.getInvoiceSummary = ({ httpClient, }) => ({ invoice_uuid, }) => {
+const getInvoiceSummary = ({ httpClient, }) => ({ invoice_uuid, }) => {
     const path = '/customers/my/invoices';
     const url = `${path}/${invoice_uuid}/summary`;
     return httpClient.get(url);
 };
+exports.getInvoiceSummary = getInvoiceSummary;
 //# sourceMappingURL=get-invoice-summary.js.map
 
 /***/ }),
@@ -8099,11 +8801,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDatabaseCluster = void 0;
-exports.getDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, }) => {
+const getDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}`;
     return httpClient.get(url);
 };
+exports.getDatabaseCluster = getDatabaseCluster;
 //# sourceMappingURL=get-database-cluster.js.map
 
 /***/ }),
@@ -8115,7 +8818,7 @@ exports.getDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, }) => 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDroplet = void 0;
-exports.createDroplet = ({ httpClient, }) => ({ backups, image, ipv6, monitoring, name, private_networking, region, size, ssh_keys, tags, user_data, volumes, vpc_uuid, }) => {
+const createDroplet = ({ httpClient, }) => ({ backups, image, ipv6, monitoring, name, private_networking, region, size, ssh_keys, tags, user_data, volumes, vpc_uuid, }) => {
     const path = '/droplets';
     const body = {
         backups,
@@ -8135,6 +8838,7 @@ exports.createDroplet = ({ httpClient, }) => ({ backups, image, ipv6, monitoring
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createDroplet = createDroplet;
 //# sourceMappingURL=create-droplet.js.map
 
 /***/ }),
@@ -8153,7 +8857,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(917), exports);
@@ -8168,12 +8872,13 @@ __exportStar(__webpack_require__(114), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.migrateDatabaseCluster = void 0;
-exports.migrateDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, region, }) => {
+const migrateDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, region, }) => {
     const path = '/databases';
     const body = { region };
     const url = `${path}/${database_cluster_id}/migrate`;
     return httpClient.put(url, body);
 };
+exports.migrateDatabaseCluster = migrateDatabaseCluster;
 //# sourceMappingURL=migrate-database-cluster.js.map
 
 /***/ }),
@@ -8191,7 +8896,7 @@ module.exports = require("path");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateFirewall = void 0;
-exports.updateFirewall = ({ httpClient, }) => ({ droplet_ids, id, inbound_rules, name, outbound_rules, tags, }) => {
+const updateFirewall = ({ httpClient, }) => ({ droplet_ids, id, inbound_rules, name, outbound_rules, tags, }) => {
     const path = '/firewalls';
     const body = {
         droplet_ids,
@@ -8203,6 +8908,7 @@ exports.updateFirewall = ({ httpClient, }) => ({ droplet_ids, id, inbound_rules,
     const url = `${path}/${id}`;
     return httpClient.put(url, body);
 };
+exports.updateFirewall = updateFirewall;
 //# sourceMappingURL=update-firewall.js.map
 
 /***/ }),
@@ -8217,11 +8923,12 @@ exports.updateFirewall = ({ httpClient, }) => ({ droplet_ids, id, inbound_rules,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBalance = void 0;
-exports.getBalance = ({ httpClient, }) => () => {
+const getBalance = ({ httpClient, }) => () => {
     const path = '/customers/my/balance';
     const url = `${path}`;
     return httpClient.get(url);
 };
+exports.getBalance = getBalance;
 //# sourceMappingURL=get-balance.js.map
 
 /***/ }),
@@ -8233,172 +8940,16 @@ exports.getBalance = ({ httpClient, }) => () => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSnapshot = void 0;
-exports.deleteSnapshot = ({ httpClient, }) => ({ id, snapshot_id, }) => {
+const deleteSnapshot = ({ httpClient, }) => ({ snapshot_id, }) => {
     const path = '/snapshots';
-    const url = `${path}/${snapshot_id || id}`;
+    const url = `${path}/${snapshot_id}`;
     return httpClient.delete(url);
 };
+exports.deleteSnapshot = deleteSnapshot;
 //# sourceMappingURL=delete-snapshot.js.map
 
 /***/ }),
-/* 632 */
-/***/ (function(module) {
-
-/**
- * Helpers.
- */
-
-var s = 1000;
-var m = s * 60;
-var h = m * 60;
-var d = h * 24;
-var y = d * 365.25;
-
-/**
- * Parse or format the given `val`.
- *
- * Options:
- *
- *  - `long` verbose formatting [false]
- *
- * @param {String|Number} val
- * @param {Object} [options]
- * @throws {Error} throw an error if val is not a non-empty string or a number
- * @return {String|Number}
- * @api public
- */
-
-module.exports = function(val, options) {
-  options = options || {};
-  var type = typeof val;
-  if (type === 'string' && val.length > 0) {
-    return parse(val);
-  } else if (type === 'number' && isNaN(val) === false) {
-    return options.long ? fmtLong(val) : fmtShort(val);
-  }
-  throw new Error(
-    'val is not a non-empty string or a valid number. val=' +
-      JSON.stringify(val)
-  );
-};
-
-/**
- * Parse the given `str` and return milliseconds.
- *
- * @param {String} str
- * @return {Number}
- * @api private
- */
-
-function parse(str) {
-  str = String(str);
-  if (str.length > 100) {
-    return;
-  }
-  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
-    str
-  );
-  if (!match) {
-    return;
-  }
-  var n = parseFloat(match[1]);
-  var type = (match[2] || 'ms').toLowerCase();
-  switch (type) {
-    case 'years':
-    case 'year':
-    case 'yrs':
-    case 'yr':
-    case 'y':
-      return n * y;
-    case 'days':
-    case 'day':
-    case 'd':
-      return n * d;
-    case 'hours':
-    case 'hour':
-    case 'hrs':
-    case 'hr':
-    case 'h':
-      return n * h;
-    case 'minutes':
-    case 'minute':
-    case 'mins':
-    case 'min':
-    case 'm':
-      return n * m;
-    case 'seconds':
-    case 'second':
-    case 'secs':
-    case 'sec':
-    case 's':
-      return n * s;
-    case 'milliseconds':
-    case 'millisecond':
-    case 'msecs':
-    case 'msec':
-    case 'ms':
-      return n;
-    default:
-      return undefined;
-  }
-}
-
-/**
- * Short format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtShort(ms) {
-  if (ms >= d) {
-    return Math.round(ms / d) + 'd';
-  }
-  if (ms >= h) {
-    return Math.round(ms / h) + 'h';
-  }
-  if (ms >= m) {
-    return Math.round(ms / m) + 'm';
-  }
-  if (ms >= s) {
-    return Math.round(ms / s) + 's';
-  }
-  return ms + 'ms';
-}
-
-/**
- * Long format for `ms`.
- *
- * @param {Number} ms
- * @return {String}
- * @api private
- */
-
-function fmtLong(ms) {
-  return plural(ms, d, 'day') ||
-    plural(ms, h, 'hour') ||
-    plural(ms, m, 'minute') ||
-    plural(ms, s, 'second') ||
-    ms + ' ms';
-}
-
-/**
- * Pluralization helper.
- */
-
-function plural(ms, n, name) {
-  if (ms < n) {
-    return;
-  }
-  if (ms < n * 1.5) {
-    return Math.floor(ms / n) + ' ' + name;
-  }
-  return Math.ceil(ms / n) + ' ' + name + 's';
-}
-
-
-/***/ }),
+/* 632 */,
 /* 633 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -8406,7 +8957,7 @@ function plural(ms, n, name) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createKubernetesCluster = void 0;
-exports.createKubernetesCluster = ({ httpClient, }) => ({ name, region, version, tags, auto_upgrade, maintenance_policy, node_pools, vpc_uuid, }) => {
+const createKubernetesCluster = ({ httpClient, }) => ({ name, region, version, tags, auto_upgrade, maintenance_policy, node_pools, vpc_uuid, }) => {
     const path = '/kubernetes/clusters';
     const body = {
         name,
@@ -8421,11 +8972,28 @@ exports.createKubernetesCluster = ({ httpClient, }) => ({ name, region, version,
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createKubernetesCluster = createKubernetesCluster;
 //# sourceMappingURL=create-kubernetes-cluster.js.map
 
 /***/ }),
 /* 634 */,
-/* 635 */,
+/* 635 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.addContainerRegistry = void 0;
+const addContainerRegistry = ({ httpClient, }) => ({ cluster_uuids, }) => {
+    const path = '/kubernetes/clusters/registry';
+    const body = { cluster_uuids };
+    const url = `${path}`;
+    return httpClient.post(url, body);
+};
+exports.addContainerRegistry = addContainerRegistry;
+//# sourceMappingURL=add-container-registry.js.map
+
+/***/ }),
 /* 636 */,
 /* 637 */,
 /* 638 */
@@ -8435,14 +9003,15 @@ exports.createKubernetesCluster = ({ httpClient, }) => ({ name, region, version,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDropletSnapshots = void 0;
-exports.listDropletSnapshots = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
+const listDropletSnapshots = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
     const path = '/droplets';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${droplet_id}/snapshots`;
     return httpClient.get(url, {
-        params: queryParams,
+        params: query_params,
     });
 };
+exports.listDropletSnapshots = listDropletSnapshots;
 //# sourceMappingURL=list-droplet-snapshots.js.map
 
 /***/ }),
@@ -8454,12 +9023,13 @@ exports.listDropletSnapshots = ({ httpClient, }) => ({ droplet_id, page = 1, per
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tagResources = void 0;
-exports.tagResources = ({ httpClient, }) => ({ tag_name, resources, }) => {
+const tagResources = ({ httpClient, }) => ({ tag_name, resources, }) => {
     const path = '/tags';
     const body = { resources };
     const url = `${path}/${tag_name}/resources`;
     return httpClient.post(url, body);
 };
+exports.tagResources = tagResources;
 //# sourceMappingURL=tag-resources.js.map
 
 /***/ }),
@@ -8481,16 +9051,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFloatingIpAction = void 0;
-exports.getFloatingIpAction = ({ httpClient, }) => ({ action_id, ip, }) => {
+const getFloatingIpAction = ({ httpClient, }) => ({ action_id, ip, }) => {
     const path = '/floating_ips';
     const url = `${path}/${ip}/actions/${action_id}`;
     return httpClient.get(url);
 };
+exports.getFloatingIpAction = getFloatingIpAction;
 //# sourceMappingURL=get-floating-ip-action.js.map
 
 /***/ }),
 /* 645 */,
-/* 646 */,
+/* 646 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.runAppDetection = void 0;
+const runAppDetection = ({ httpClient, }) => ({ commit_sha, component_type, git, github, }) => {
+    const path = '/apps/detect';
+    const body = {
+        commit_sha,
+        component_type,
+        git,
+        github,
+    };
+    const url = `${path}`;
+    return httpClient.post(url, body);
+};
+exports.runAppDetection = runAppDetection;
+//# sourceMappingURL=run-app-detection.js.map
+
+/***/ }),
 /* 647 */,
 /* 648 */,
 /* 649 */,
@@ -8499,7 +9091,22 @@ exports.getFloatingIpAction = ({ httpClient, }) => ({ action_id, ip, }) => {
 /* 652 */,
 /* 653 */,
 /* 654 */,
-/* 655 */,
+/* 655 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.cancelAppDeployment = void 0;
+const cancelAppDeployment = ({ httpClient, }) => ({ app_id, deployment_id, }) => {
+    const path = '/apps';
+    const url = `${path}/${app_id}/deployments/${deployment_id}/cancel`;
+    return httpClient.post(url);
+};
+exports.cancelAppDeployment = cancelAppDeployment;
+//# sourceMappingURL=cancel-app-deployment.js.map
+
+/***/ }),
 /* 656 */,
 /* 657 */
 /***/ (function(__unusedmodule, exports) {
@@ -8508,15 +9115,17 @@ exports.getFloatingIpAction = ({ httpClient, }) => ({ action_id, ip, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateVpc = void 0;
-exports.updateVpc = ({ httpClient, }) => ({ description, name, vpc_id, }) => {
+const updateVpc = ({ httpClient, }) => ({ description, is_default, name, vpc_id, }) => {
     const path = '/vpcs';
     const body = {
+        default: is_default,
         description,
         name,
     };
     const url = `${path}/${vpc_id}`;
     return httpClient.patch(url, body);
 };
+exports.updateVpc = updateVpc;
 //# sourceMappingURL=update-vpc.js.map
 
 /***/ }),
@@ -8542,7 +9151,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(846), exports);
@@ -8564,13 +9173,14 @@ __exportStar(__webpack_require__(317), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.enableDropletIpv6 = void 0;
-exports.enableDropletIpv6 = ({ httpClient, }) => ({ droplet_id, }) => {
+const enableDropletIpv6 = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'enable_ipv6';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.enableDropletIpv6 = enableDropletIpv6;
 //# sourceMappingURL=enable-droplet-ipv6.js.map
 
 /***/ }),
@@ -8584,11 +9194,12 @@ exports.enableDropletIpv6 = ({ httpClient, }) => ({ droplet_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFloatingIp = void 0;
-exports.createFloatingIp = ({ httpClient, }) => (body) => {
+const createFloatingIp = ({ httpClient, }) => (body) => {
     const path = '/floating_ips';
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createFloatingIp = createFloatingIp;
 //# sourceMappingURL=create-floating-ip.js.map
 
 /***/ }),
@@ -8599,12 +9210,13 @@ exports.createFloatingIp = ({ httpClient, }) => (body) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addTagsToFirewall = void 0;
-exports.addTagsToFirewall = ({ httpClient, }) => ({ firewall_id, tags, }) => {
+const addTagsToFirewall = ({ httpClient, }) => ({ firewall_id, tags, }) => {
     const path = '/firewalls';
     const body = { tags };
     const url = `${path}/${firewall_id}/tags`;
     return httpClient.post(url, body);
 };
+exports.addTagsToFirewall = addTagsToFirewall;
 //# sourceMappingURL=add-tags-to-firewall.js.map
 
 /***/ }),
@@ -8635,6 +9247,31 @@ var createError = __webpack_require__(851);
 var enhanceError = __webpack_require__(369);
 
 var isHttps = /https:?/;
+
+/**
+ *
+ * @param {http.ClientRequestArgs} options
+ * @param {AxiosProxyConfig} proxy
+ * @param {string} location
+ */
+function setProxy(options, proxy, location) {
+  options.hostname = proxy.host;
+  options.host = proxy.host;
+  options.port = proxy.port;
+  options.path = location;
+
+  // Basic proxy authorization
+  if (proxy.auth) {
+    var base64 = Buffer.from(proxy.auth.username + ':' + proxy.auth.password, 'utf8').toString('base64');
+    options.headers['Proxy-Authorization'] = 'Basic ' + base64;
+  }
+
+  // If a proxy is used, any redirects must also pass through the proxy
+  options.beforeRedirect = function beforeRedirect(redirection) {
+    redirection.headers.host = redirection.host;
+    setProxy(redirection, proxy, redirection.href);
+  };
+}
 
 /*eslint consistent-return:0*/
 module.exports = function httpAdapter(config) {
@@ -8746,11 +9383,11 @@ module.exports = function httpAdapter(config) {
           });
         }
 
-
         if (shouldProxy) {
           proxy = {
             host: parsedProxyUrl.hostname,
-            port: parsedProxyUrl.port
+            port: parsedProxyUrl.port,
+            protocol: parsedProxyUrl.protocol
           };
 
           if (parsedProxyUrl.auth) {
@@ -8765,17 +9402,8 @@ module.exports = function httpAdapter(config) {
     }
 
     if (proxy) {
-      options.hostname = proxy.host;
-      options.host = proxy.host;
       options.headers.host = parsed.hostname + (parsed.port ? ':' + parsed.port : '');
-      options.port = proxy.port;
-      options.path = protocol + '//' + parsed.hostname + (parsed.port ? ':' + parsed.port : '') + options.path;
-
-      // Basic proxy authorization
-      if (proxy.auth) {
-        var base64 = Buffer.from(proxy.auth.username + ':' + proxy.auth.password, 'utf8').toString('base64');
-        options.headers['Proxy-Authorization'] = 'Basic ' + base64;
-      }
+      setProxy(options, proxy, protocol + '//' + parsed.hostname + (parsed.port ? ':' + parsed.port : '') + options.path);
     }
 
     var transport;
@@ -8791,8 +9419,8 @@ module.exports = function httpAdapter(config) {
       transport = isHttpsProxy ? httpsFollow : httpFollow;
     }
 
-    if (config.maxContentLength && config.maxContentLength > -1) {
-      options.maxBodyLength = config.maxContentLength;
+    if (config.maxBodyLength > -1) {
+      options.maxBodyLength = config.maxBodyLength;
     }
 
     // Create the request
@@ -8801,21 +9429,26 @@ module.exports = function httpAdapter(config) {
 
       // uncompress the response body transparently if required
       var stream = res;
-      switch (res.headers['content-encoding']) {
-      /*eslint default-case:0*/
-      case 'gzip':
-      case 'compress':
-      case 'deflate':
-        // add the unzipper to the body stream processing pipeline
-        stream = (res.statusCode === 204) ? stream : stream.pipe(zlib.createUnzip());
-
-        // remove the content-encoding in order to not confuse downstream operations
-        delete res.headers['content-encoding'];
-        break;
-      }
 
       // return the last request in case of redirects
       var lastRequest = res.req || req;
+
+
+      // if no content, is HEAD request or decompress disabled we should not decompress
+      if (res.statusCode !== 204 && lastRequest.method !== 'HEAD' && config.decompress !== false) {
+        switch (res.headers['content-encoding']) {
+        /*eslint default-case:0*/
+        case 'gzip':
+        case 'compress':
+        case 'deflate':
+        // add the unzipper to the body stream processing pipeline
+          stream = stream.pipe(zlib.createUnzip());
+
+          // remove the content-encoding in order to not confuse downstream operations
+          delete res.headers['content-encoding'];
+          break;
+        }
+      }
 
       var response = {
         status: res.statusCode,
@@ -8850,6 +9483,9 @@ module.exports = function httpAdapter(config) {
           var responseData = Buffer.concat(responseBuffer);
           if (config.responseType !== 'arraybuffer') {
             responseData = responseData.toString(config.responseEncoding);
+            if (!config.responseEncoding || config.responseEncoding === 'utf8') {
+              responseData = utils.stripBOM(responseData);
+            }
           }
 
           response.data = responseData;
@@ -8860,7 +9496,7 @@ module.exports = function httpAdapter(config) {
 
     // Handle errors
     req.on('error', function handleRequestError(err) {
-      if (req.aborted) return;
+      if (req.aborted && err.code !== 'ERR_FR_TOO_MANY_REDIRECTS') return;
       reject(enhanceError(err, config, null, req));
     });
 
@@ -8918,7 +9554,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createProject = void 0;
-exports.createProject = ({ httpClient, }) => ({ name, description, purpose, environment, }) => {
+const createProject = ({ httpClient, }) => ({ name, description, purpose, environment, }) => {
     const path = '/projects';
     const body = {
         name,
@@ -8929,10 +9565,31 @@ exports.createProject = ({ httpClient, }) => ({ name, description, purpose, envi
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createProject = createProject;
 //# sourceMappingURL=create-project.js.map
 
 /***/ }),
-/* 675 */,
+/* 675 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.destroyDropletAndAssociatedResources = void 0;
+const destroyDropletAndAssociatedResources = ({ httpClient, }) => ({ droplet_id, snapshots, volume_snapshots, volumes, }) => {
+    const path = '/droplets';
+    const url = `${path}/${droplet_id}/destroy_with_associated_resources/selective`;
+    const body = {
+        snapshots,
+        volume_snapshots,
+        volumes,
+    };
+    return httpClient.delete(url, { data: body });
+};
+exports.destroyDropletAndAssociatedResources = destroyDropletAndAssociatedResources;
+//# sourceMappingURL=destroy-droplet-and-associated-resources.js.map
+
+/***/ }),
 /* 676 */,
 /* 677 */,
 /* 678 */
@@ -8951,11 +9608,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDatabaseClusterUser = void 0;
-exports.getDatabaseClusterUser = ({ httpClient, }) => ({ database_cluster_id, user_name, }) => {
+const getDatabaseClusterUser = ({ httpClient, }) => ({ database_cluster_id, user_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/users/${user_name}`;
     return httpClient.get(url);
 };
+exports.getDatabaseClusterUser = getDatabaseClusterUser;
 //# sourceMappingURL=get-database-cluster-user.js.map
 
 /***/ }),
@@ -8966,13 +9624,14 @@ exports.getDatabaseClusterUser = ({ httpClient, }) => ({ database_cluster_id, us
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.enableDropletPrivateNetworking = void 0;
-exports.enableDropletPrivateNetworking = ({ httpClient, }) => ({ droplet_id, }) => {
+const enableDropletPrivateNetworking = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'enable_private_networking';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.enableDropletPrivateNetworking = enableDropletPrivateNetworking;
 //# sourceMappingURL=enable-droplet-private-networking.js.map
 
 /***/ }),
@@ -8983,11 +9642,12 @@ exports.enableDropletPrivateNetworking = ({ httpClient, }) => ({ droplet_id, }) 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAccount = void 0;
-exports.getAccount = ({ httpClient, }) => () => {
+const getAccount = ({ httpClient, }) => () => {
     const path = '/account';
     const url = `${path}`;
     return httpClient.get(url);
 };
+exports.getAccount = getAccount;
 //# sourceMappingURL=get-account.js.map
 
 /***/ }),
@@ -9004,7 +9664,7 @@ exports.getAccount = ({ httpClient, }) => () => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSshKey = void 0;
-exports.createSshKey = ({ httpClient, }) => ({ name, public_key, }) => {
+const createSshKey = ({ httpClient, }) => ({ name, public_key, }) => {
     const path = '/account/keys';
     const body = {
         name,
@@ -9013,6 +9673,7 @@ exports.createSshKey = ({ httpClient, }) => ({ name, public_key, }) => {
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createSshKey = createSshKey;
 //# sourceMappingURL=create-ssh-key.js.map
 
 /***/ }),
@@ -9023,12 +9684,13 @@ exports.createSshKey = ({ httpClient, }) => ({ name, public_key, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDatabaseClusterBackups = void 0;
-exports.listDatabaseClusterBackups = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
+const listDatabaseClusterBackups = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
     const path = '/databases';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${database_cluster_id}/backups`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDatabaseClusterBackups = listDatabaseClusterBackups;
 //# sourceMappingURL=list-database-cluster-backups.js.map
 
 /***/ }),
@@ -9040,12 +9702,13 @@ exports.listDatabaseClusterBackups = ({ httpClient, }) => ({ page = 1, per_page 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDropletsByTag = void 0;
-exports.deleteDropletsByTag = ({ httpClient, }) => ({ tag_name, }) => {
+const deleteDropletsByTag = ({ httpClient, }) => ({ tag_name, }) => {
     const path = '/droplets';
-    const queryParams = { tag_name };
+    const query_params = { tag_name };
     const url = `${path}`;
-    return httpClient.delete(url, { params: queryParams });
+    return httpClient.delete(url, { params: query_params });
 };
+exports.deleteDropletsByTag = deleteDropletsByTag;
 //# sourceMappingURL=delete-droplets-by-tag.js.map
 
 /***/ }),
@@ -9064,14 +9727,14 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(865), exports);
 __exportStar(__webpack_require__(667), exports);
 __exportStar(__webpack_require__(533), exports);
 __exportStar(__webpack_require__(644), exports);
-__exportStar(__webpack_require__(461), exports);
+__exportStar(__webpack_require__(697), exports);
 __exportStar(__webpack_require__(99), exports);
 __exportStar(__webpack_require__(273), exports);
 __exportStar(__webpack_require__(311), exports);
@@ -9081,7 +9744,22 @@ __exportStar(__webpack_require__(73), exports);
 /***/ }),
 /* 695 */,
 /* 696 */,
-/* 697 */,
+/* 697 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getFloatingIp = void 0;
+const getFloatingIp = ({ httpClient, }) => ({ ip, }) => {
+    const path = '/floating_ips';
+    const url = `${path}/${ip}`;
+    return httpClient.get(url);
+};
+exports.getFloatingIp = getFloatingIp;
+//# sourceMappingURL=get-floating-ip.js.map
+
+/***/ }),
 /* 698 */,
 /* 699 */,
 /* 700 */,
@@ -9099,7 +9777,7 @@ __exportStar(__webpack_require__(73), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createConnectionPool = void 0;
-exports.createConnectionPool = ({ httpClient, }) => ({ database_cluster_id, db_name, mode, pool_name, size, user_name, }) => {
+const createConnectionPool = ({ httpClient, }) => ({ database_cluster_id, db_name, mode, pool_name, size, user_name, }) => {
     const path = '/databases';
     const body = {
         db: db_name,
@@ -9111,6 +9789,7 @@ exports.createConnectionPool = ({ httpClient, }) => ({ database_cluster_id, db_n
     const url = `${path}/${database_cluster_id}/pools`;
     return httpClient.post(url, body);
 };
+exports.createConnectionPool = createConnectionPool;
 //# sourceMappingURL=create-connection-pool.js.map
 
 /***/ }),
@@ -9142,12 +9821,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDatabaseClusterFirewallRules = void 0;
-exports.updateDatabaseClusterFirewallRules = ({ httpClient, }) => ({ database_cluster_id, rules, }) => {
+const updateDatabaseClusterFirewallRules = ({ httpClient, }) => ({ database_cluster_id, rules, }) => {
     const path = '/databases';
     const body = { rules };
     const url = `${path}/${database_cluster_id}/firewall`;
     return httpClient.put(url, body);
 };
+exports.updateDatabaseClusterFirewallRules = updateDatabaseClusterFirewallRules;
 //# sourceMappingURL=update-database-cluster-firewall-rules.js.map
 
 /***/ }),
@@ -9160,7 +9840,7 @@ exports.updateDatabaseClusterFirewallRules = ({ httpClient, }) => ({ database_cl
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFirewall = void 0;
-exports.createFirewall = ({ httpClient, }) => ({ droplet_ids, inbound_rules, name, outbound_rules, tags, }) => {
+const createFirewall = ({ httpClient, }) => ({ droplet_ids, inbound_rules, name, outbound_rules, tags, }) => {
     const path = '/firewalls';
     const body = {
         droplet_ids,
@@ -9172,6 +9852,7 @@ exports.createFirewall = ({ httpClient, }) => ({ droplet_ids, inbound_rules, nam
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createFirewall = createFirewall;
 //# sourceMappingURL=create-firewall.js.map
 
 /***/ }),
@@ -9182,7 +9863,7 @@ exports.createFirewall = ({ httpClient, }) => ({ droplet_ids, inbound_rules, nam
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDroplets = void 0;
-exports.createDroplets = ({ httpClient, }) => ({ backups, image, ipv6, monitoring, names, private_networking, region, size, ssh_keys, tags, user_data, volumes, vpc_uuid, }) => {
+const createDroplets = ({ httpClient, }) => ({ backups, image, ipv6, monitoring, names, private_networking, region, size, ssh_keys, tags, user_data, volumes, vpc_uuid, }) => {
     const path = '/droplets';
     const body = {
         backups,
@@ -9202,6 +9883,7 @@ exports.createDroplets = ({ httpClient, }) => ({ backups, image, ipv6, monitorin
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createDroplets = createDroplets;
 //# sourceMappingURL=create-droplets.js.map
 
 /***/ }),
@@ -9214,12 +9896,13 @@ exports.createDroplets = ({ httpClient, }) => ({ backups, image, ipv6, monitorin
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDefaultProjectResources = void 0;
-exports.listDefaultProjectResources = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listDefaultProjectResources = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/projects';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/default/resources`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listDefaultProjectResources = listDefaultProjectResources;
 //# sourceMappingURL=list-default-project-resources.js.map
 
 /***/ }),
@@ -9237,21 +9920,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* 725 */,
 /* 726 */,
 /* 727 */
-/***/ (function(module) {
+/***/ (function(__unusedmodule, exports) {
 
 "use strict";
 
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-cors.js.map
 
 /***/ }),
 /* 728 */,
@@ -9262,7 +9936,7 @@ module.exports = function bind(fn, thisArg) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createContext = void 0;
-exports.createContext = ({ axios, requestTimeoutInMs = 1000 * 15, endpoint = 'https://api.digitalocean.com/v2', token, }) => {
+const createContext = ({ axios, requestTimeoutInMs = 1000 * 15, endpoint = 'https://api.digitalocean.com/v2', token, }) => {
     const { freeze } = Object;
     const headers = freeze({
         'Authorization': `Bearer ${token}`,
@@ -9276,6 +9950,7 @@ exports.createContext = ({ axios, requestTimeoutInMs = 1000 * 15, endpoint = 'ht
     const httpClient = axios.create(axiosConfig);
     return freeze({ endpoint, httpClient });
 };
+exports.createContext = createContext;
 //# sourceMappingURL=create-context.js.map
 
 /***/ }),
@@ -9288,11 +9963,12 @@ exports.createContext = ({ axios, requestTimeoutInMs = 1000 * 15, endpoint = 'ht
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProject = void 0;
-exports.deleteProject = ({ httpClient, }) => ({ project_id, }) => {
+const deleteProject = ({ httpClient, }) => ({ project_id, }) => {
     const path = '/projects';
     const url = `${path}/${project_id}`;
     return httpClient.delete(url);
 };
+exports.deleteProject = deleteProject;
 //# sourceMappingURL=delete-project.js.map
 
 /***/ }),
@@ -9314,7 +9990,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=database-cluster-engine.js.map
 
 /***/ }),
-/* 735 */,
+/* 735 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-route.js.map
+
+/***/ }),
 /* 736 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -9322,214 +10006,36 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listVolumes = void 0;
-exports.listVolumes = ({ httpClient, }) => ({ name, page = 1, per_page = 25, }) => {
+const listVolumes = ({ httpClient, }) => ({ name = undefined, page = 1, per_page = 25, }) => {
     const path = '/volumes';
-    const queryParams = { page, per_page };
-    const hasNameFilter = typeof name === 'string';
-    if (hasNameFilter)
-        Object.assign(queryParams, { name });
+    const query_params = { name, page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listVolumes = listVolumes;
 //# sourceMappingURL=list-volumes.js.map
 
 /***/ }),
 /* 737 */,
-/* 738 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Module dependencies.
- */
-
-var tty = __webpack_require__(867);
-var util = __webpack_require__(669);
-
-/**
- * This is the Node.js implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = __webpack_require__(110);
-exports.init = init;
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-
-/**
- * Colors.
- */
-
-exports.colors = [ 6, 2, 3, 4, 5, 1 ];
-
-try {
-  var supportsColor = __webpack_require__(247);
-  if (supportsColor && supportsColor.level >= 2) {
-    exports.colors = [
-      20, 21, 26, 27, 32, 33, 38, 39, 40, 41, 42, 43, 44, 45, 56, 57, 62, 63, 68,
-      69, 74, 75, 76, 77, 78, 79, 80, 81, 92, 93, 98, 99, 112, 113, 128, 129, 134,
-      135, 148, 149, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171,
-      172, 173, 178, 179, 184, 185, 196, 197, 198, 199, 200, 201, 202, 203, 204,
-      205, 206, 207, 208, 209, 214, 215, 220, 221
-    ];
-  }
-} catch (err) {
-  // swallow - we only care if `supports-color` is available; it doesn't have to be.
-}
-
-/**
- * Build up the default `inspectOpts` object from the environment variables.
- *
- *   $ DEBUG_COLORS=no DEBUG_DEPTH=10 DEBUG_SHOW_HIDDEN=enabled node script.js
- */
-
-exports.inspectOpts = Object.keys(process.env).filter(function (key) {
-  return /^debug_/i.test(key);
-}).reduce(function (obj, key) {
-  // camel-case
-  var prop = key
-    .substring(6)
-    .toLowerCase()
-    .replace(/_([a-z])/g, function (_, k) { return k.toUpperCase() });
-
-  // coerce string value into JS value
-  var val = process.env[key];
-  if (/^(yes|on|true|enabled)$/i.test(val)) val = true;
-  else if (/^(no|off|false|disabled)$/i.test(val)) val = false;
-  else if (val === 'null') val = null;
-  else val = Number(val);
-
-  obj[prop] = val;
-  return obj;
-}, {});
-
-/**
- * Is stdout a TTY? Colored output is enabled when `true`.
- */
-
-function useColors() {
-  return 'colors' in exports.inspectOpts
-    ? Boolean(exports.inspectOpts.colors)
-    : tty.isatty(process.stderr.fd);
-}
-
-/**
- * Map %o to `util.inspect()`, all on a single line.
- */
-
-exports.formatters.o = function(v) {
-  this.inspectOpts.colors = this.useColors;
-  return util.inspect(v, this.inspectOpts)
-    .split('\n').map(function(str) {
-      return str.trim()
-    }).join(' ');
-};
-
-/**
- * Map %o to `util.inspect()`, allowing multiple lines if needed.
- */
-
-exports.formatters.O = function(v) {
-  this.inspectOpts.colors = this.useColors;
-  return util.inspect(v, this.inspectOpts);
-};
-
-/**
- * Adds ANSI color escape codes if enabled.
- *
- * @api public
- */
-
-function formatArgs(args) {
-  var name = this.namespace;
-  var useColors = this.useColors;
-
-  if (useColors) {
-    var c = this.color;
-    var colorCode = '\u001b[3' + (c < 8 ? c : '8;5;' + c);
-    var prefix = '  ' + colorCode + ';1m' + name + ' ' + '\u001b[0m';
-
-    args[0] = prefix + args[0].split('\n').join('\n' + prefix);
-    args.push(colorCode + 'm+' + exports.humanize(this.diff) + '\u001b[0m');
-  } else {
-    args[0] = getDate() + name + ' ' + args[0];
-  }
-}
-
-function getDate() {
-  if (exports.inspectOpts.hideDate) {
-    return '';
-  } else {
-    return new Date().toISOString() + ' ';
-  }
-}
-
-/**
- * Invokes `util.format()` with the specified arguments and writes to stderr.
- */
-
-function log() {
-  return process.stderr.write(util.format.apply(util, arguments) + '\n');
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  if (null == namespaces) {
-    // If you set a process.env field to null or undefined, it gets cast to the
-    // string 'null' or 'undefined'. Just delete instead.
-    delete process.env.DEBUG;
-  } else {
-    process.env.DEBUG = namespaces;
-  }
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  return process.env.DEBUG;
-}
-
-/**
- * Init logic for `debug` instances.
- *
- * Create a new `inspectOpts` object in case `useColors` is set
- * differently for a particular `debug` instance.
- */
-
-function init (debug) {
-  debug.inspectOpts = {};
-
-  var keys = Object.keys(exports.inspectOpts);
-  for (var i = 0; i < keys.length; i++) {
-    debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
-  }
-}
-
-/**
- * Enable namespaces listed in `process.env.DEBUG` initially.
- */
-
-exports.enable(load());
-
-
-/***/ }),
+/* 738 */,
 /* 739 */,
 /* 740 */,
-/* 741 */,
+/* 741 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getApp = void 0;
+const getApp = ({ httpClient, }) => ({ app_id, }) => {
+    const path = '/apps';
+    const url = `${path}/${app_id}`;
+    return httpClient.get(url);
+};
+exports.getApp = getApp;
+//# sourceMappingURL=get-app.js.map
+
+/***/ }),
 /* 742 */,
 /* 743 */
 /***/ (function(__unusedmodule, exports) {
@@ -9538,12 +10044,13 @@ exports.enable(load());
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listReadOnlyReplicas = void 0;
-exports.listReadOnlyReplicas = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
+const listReadOnlyReplicas = ({ httpClient, }) => ({ page = 1, per_page = 25, database_cluster_id, }) => {
     const path = '/databases';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${database_cluster_id}/replicas`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listReadOnlyReplicas = listReadOnlyReplicas;
 //# sourceMappingURL=list-read-only-replicas.js.map
 
 /***/ }),
@@ -9560,7 +10067,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(487), exports);
@@ -9568,8 +10075,8 @@ __exportStar(__webpack_require__(292), exports);
 __exportStar(__webpack_require__(760), exports);
 __exportStar(__webpack_require__(776), exports);
 __exportStar(__webpack_require__(355), exports);
-__exportStar(__webpack_require__(31), exports);
-__exportStar(__webpack_require__(78), exports);
+__exportStar(__webpack_require__(601), exports);
+__exportStar(__webpack_require__(81), exports);
 __exportStar(__webpack_require__(332), exports);
 __exportStar(__webpack_require__(537), exports);
 __exportStar(__webpack_require__(379), exports);
@@ -9583,11 +10090,12 @@ __exportStar(__webpack_require__(379), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCertificate = void 0;
-exports.getCertificate = ({ httpClient, }) => ({ certificate_id, }) => {
+const getCertificate = ({ httpClient, }) => ({ certificate_id, }) => {
     const path = '/certificates';
     const url = `${path}/${certificate_id}`;
     return httpClient.get(url);
 };
+exports.getCertificate = getCertificate;
 //# sourceMappingURL=get-certificate.js.map
 
 /***/ }),
@@ -9598,11 +10106,12 @@ exports.getCertificate = ({ httpClient, }) => ({ certificate_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDomainRecord = void 0;
-exports.getDomainRecord = ({ httpClient, }) => ({ domain_name, domain_record_id, }) => {
+const getDomainRecord = ({ httpClient, }) => ({ domain_name, domain_record_id, }) => {
     const path = '/domains';
     const url = `${path}/${domain_name}/records/${domain_record_id}`;
     return httpClient.get(url);
 };
+exports.getDomainRecord = getDomainRecord;
 //# sourceMappingURL=get-domain-record.js.map
 
 /***/ }),
@@ -9621,14 +10130,15 @@ module.exports = require("fs");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDropletNeighborhoods = void 0;
-exports.listDropletNeighborhoods = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listDropletNeighborhoods = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/reports/droplet_neighbors_ids';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
     return httpClient.get(url, {
-        params: queryParams,
+        params: query_params,
     });
 };
+exports.listDropletNeighborhoods = listDropletNeighborhoods;
 //# sourceMappingURL=list-droplet-neighborhoods.js.map
 
 /***/ }),
@@ -9649,13 +10159,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.attachVolumeToDroplet = void 0;
-exports.attachVolumeToDroplet = ({ httpClient, }) => ({ droplet_id, id, region, volume_id, }) => {
+const attachVolumeToDroplet = ({ httpClient, }) => ({ droplet_id, region, volume_id, }) => {
     const path = '/volumes';
     const type = 'attach';
     const body = { droplet_id, region, type };
-    const url = `${path}/${volume_id || id}/actions`;
+    const url = `${path}/${volume_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.attachVolumeToDroplet = attachVolumeToDroplet;
 //# sourceMappingURL=attach-volume-to-droplet.js.map
 
 /***/ }),
@@ -9679,12 +10190,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRulesToFirewall = void 0;
-exports.addRulesToFirewall = ({ httpClient, }) => ({ firewall_id, inbound_rules, outbound_rules, }) => {
+const addRulesToFirewall = ({ httpClient, }) => ({ firewall_id, inbound_rules, outbound_rules, }) => {
     const path = '/firewalls';
     const body = { inbound_rules, outbound_rules };
     const url = `${path}/${firewall_id}/rules`;
     return httpClient.post(url, body);
 };
+exports.addRulesToFirewall = addRulesToFirewall;
 //# sourceMappingURL=add-rules-to-firewall.js.map
 
 /***/ }),
@@ -9695,11 +10207,12 @@ exports.addRulesToFirewall = ({ httpClient, }) => ({ firewall_id, inbound_rules,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteImage = void 0;
-exports.deleteImage = ({ httpClient, }) => ({ image_id, }) => {
+const deleteImage = ({ httpClient, }) => ({ image_id, }) => {
     const path = '/images';
     const url = `${path}/${image_id}`;
     return httpClient.delete(url);
 };
+exports.deleteImage = deleteImage;
 //# sourceMappingURL=delete-image.js.map
 
 /***/ }),
@@ -9716,16 +10229,17 @@ module.exports = require("zlib");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listSnapshots = void 0;
-exports.listSnapshots = ({ httpClient, }) => ({ page = 1, per_page = 25, resource_type = undefined, }) => {
+const listSnapshots = ({ httpClient, }) => ({ page = 1, per_page = 25, resource_type = undefined, }) => {
     const path = '/snapshots';
-    const queryParams = { page, per_page };
-    const hasResourceTypeFilter = typeof resource_type === 'string';
-    if (hasResourceTypeFilter) {
-        Object.assign(queryParams, { resource_type });
-    }
+    const query_params = {
+        page,
+        per_page,
+        resource_type,
+    };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listSnapshots = listSnapshots;
 //# sourceMappingURL=list-snapshots.js.map
 
 /***/ }),
@@ -9738,24 +10252,50 @@ exports.listSnapshots = ({ httpClient, }) => ({ page = 1, per_page = 25, resourc
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listBillingHistory = void 0;
-exports.listBillingHistory = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listBillingHistory = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/customers/my/billing_history';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listBillingHistory = listBillingHistory;
 //# sourceMappingURL=list-billing-history.js.map
 
 /***/ }),
 /* 766 */,
 /* 767 */,
 /* 768 */,
-/* 769 */,
-/* 770 */,
+/* 769 */
+/***/ (function(module) {
+
+"use strict";
+
+
+/**
+ * Determines whether the payload is an error thrown by Axios
+ *
+ * @param {*} payload The value to test
+ * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
+ */
+module.exports = function isAxiosError(payload) {
+  return (typeof payload === 'object') && (payload.isAxiosError === true);
+};
+
+
+/***/ }),
+/* 770 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app.js.map
+
+/***/ }),
 /* 771 */
 /***/ (function(module) {
 
-module.exports = {"name":"axios","version":"0.19.2","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test && bundlesize","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://github.com/axios/axios","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"typings":"./index.d.ts","dependencies":{"follow-redirects":"1.5.10"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.19.2.tgz","_integrity":"sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==","_from":"axios@0.19.2"};
+module.exports = {"name":"axios","version":"0.21.1","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test && bundlesize","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://github.com/axios/axios","devDependencies":{"bundlesize":"^0.17.0","coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.0.2","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^20.1.0","grunt-karma":"^2.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^1.0.18","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^1.3.0","karma-chrome-launcher":"^2.2.0","karma-coverage":"^1.1.1","karma-firefox-launcher":"^1.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-opera-launcher":"^1.0.0","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^1.2.0","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.7","karma-webpack":"^1.7.0","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^5.2.0","sinon":"^4.5.0","typescript":"^2.8.1","url-search-params":"^0.10.0","webpack":"^1.13.1","webpack-dev-server":"^1.14.1"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.10.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.1.tgz","_integrity":"sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==","_from":"axios@0.21.1"};
 
 /***/ }),
 /* 772 */
@@ -9844,7 +10384,39 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 773 */,
+/* 773 */
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(__webpack_require__(655), exports);
+__exportStar(__webpack_require__(86), exports);
+__exportStar(__webpack_require__(42), exports);
+__exportStar(__webpack_require__(919), exports);
+__exportStar(__webpack_require__(479), exports);
+__exportStar(__webpack_require__(522), exports);
+__exportStar(__webpack_require__(971), exports);
+__exportStar(__webpack_require__(741), exports);
+__exportStar(__webpack_require__(879), exports);
+__exportStar(__webpack_require__(879), exports);
+__exportStar(__webpack_require__(67), exports);
+__exportStar(__webpack_require__(646), exports);
+__exportStar(__webpack_require__(233), exports);
+__exportStar(__webpack_require__(555), exports);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
 /* 774 */
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -9858,7 +10430,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(408), exports);
@@ -9874,11 +10446,12 @@ __exportStar(__webpack_require__(729), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImageAction = void 0;
-exports.getImageAction = ({ httpClient, }) => ({ image_id, action_id, }) => {
+const getImageAction = ({ httpClient, }) => ({ image_id, action_id, }) => {
     const path = '/images';
     const url = `${path}/${image_id}/actions/${action_id}`;
     return httpClient.get(url);
 };
+exports.getImageAction = getImageAction;
 //# sourceMappingURL=get-image-action.js.map
 
 /***/ }),
@@ -9889,11 +10462,12 @@ exports.getImageAction = ({ httpClient, }) => ({ image_id, action_id, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCertificate = void 0;
-exports.deleteCertificate = ({ httpClient, }) => ({ certificate_id, }) => {
+const deleteCertificate = ({ httpClient, }) => ({ certificate_id, }) => {
     const path = '/certificates';
     const url = `${path}/${certificate_id}`;
     return httpClient.delete(url);
 };
+exports.deleteCertificate = deleteCertificate;
 //# sourceMappingURL=delete-certificate.js.map
 
 /***/ }),
@@ -9977,9 +10551,10 @@ Axios.prototype.getUri = function getUri(config) {
 utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
   /*eslint func-names:0*/
   Axios.prototype[method] = function(url, config) {
-    return this.request(utils.merge(config || {}, {
+    return this.request(mergeConfig(config || {}, {
       method: method,
-      url: url
+      url: url,
+      data: (config || {}).data
     }));
   };
 });
@@ -9987,7 +10562,7 @@ utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData
 utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
   /*eslint func-names:0*/
   Axios.prototype[method] = function(url, data, config) {
-    return this.request(utils.merge(config || {}, {
+    return this.request(mergeConfig(config || {}, {
       method: method,
       url: url,
       data: data
@@ -10000,10 +10575,41 @@ module.exports = Axios;
 
 /***/ }),
 /* 780 */,
-/* 781 */,
+/* 781 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listTags = void 0;
+const listTags = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+    const path = '/tags';
+    const query_params = { page, per_page };
+    const url = `${path}`;
+    return httpClient.get(url, { params: query_params });
+};
+exports.listTags = listTags;
+//# sourceMappingURL=list-tags.js.map
+
+/***/ }),
 /* 782 */,
 /* 783 */,
-/* 784 */,
+/* 784 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+/**
+ * Detect Electron renderer / nwjs process, which is node, but we should
+ * treat as a browser.
+ */
+
+if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
+	module.exports = __webpack_require__(794);
+} else {
+	module.exports = __webpack_require__(947);
+}
+
+
+/***/ }),
 /* 785 */
 /***/ (function(module) {
 
@@ -10036,12 +10642,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listNodePools = void 0;
-exports.listNodePools = ({ httpClient, }) => ({ kubernetes_cluster_id, page = 1, per_page = 25, }) => {
+const listNodePools = ({ httpClient, }) => ({ kubernetes_cluster_id, page = 1, per_page = 25, }) => {
     const path = '/kubernetes/clusters';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${kubernetes_cluster_id}/node_pools`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listNodePools = listNodePools;
 //# sourceMappingURL=list-node-pools.js.map
 
 /***/ }),
@@ -10056,7 +10663,276 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=firewall-outbound-rule.js.map
 
 /***/ }),
-/* 794 */,
+/* 794 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-env browser */
+
+/**
+ * This is the web browser implementation of `debug()`.
+ */
+
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+	'#0000CC',
+	'#0000FF',
+	'#0033CC',
+	'#0033FF',
+	'#0066CC',
+	'#0066FF',
+	'#0099CC',
+	'#0099FF',
+	'#00CC00',
+	'#00CC33',
+	'#00CC66',
+	'#00CC99',
+	'#00CCCC',
+	'#00CCFF',
+	'#3300CC',
+	'#3300FF',
+	'#3333CC',
+	'#3333FF',
+	'#3366CC',
+	'#3366FF',
+	'#3399CC',
+	'#3399FF',
+	'#33CC00',
+	'#33CC33',
+	'#33CC66',
+	'#33CC99',
+	'#33CCCC',
+	'#33CCFF',
+	'#6600CC',
+	'#6600FF',
+	'#6633CC',
+	'#6633FF',
+	'#66CC00',
+	'#66CC33',
+	'#9900CC',
+	'#9900FF',
+	'#9933CC',
+	'#9933FF',
+	'#99CC00',
+	'#99CC33',
+	'#CC0000',
+	'#CC0033',
+	'#CC0066',
+	'#CC0099',
+	'#CC00CC',
+	'#CC00FF',
+	'#CC3300',
+	'#CC3333',
+	'#CC3366',
+	'#CC3399',
+	'#CC33CC',
+	'#CC33FF',
+	'#CC6600',
+	'#CC6633',
+	'#CC9900',
+	'#CC9933',
+	'#CCCC00',
+	'#CCCC33',
+	'#FF0000',
+	'#FF0033',
+	'#FF0066',
+	'#FF0099',
+	'#FF00CC',
+	'#FF00FF',
+	'#FF3300',
+	'#FF3333',
+	'#FF3366',
+	'#FF3399',
+	'#FF33CC',
+	'#FF33FF',
+	'#FF6600',
+	'#FF6633',
+	'#FF9900',
+	'#FF9933',
+	'#FFCC00',
+	'#FFCC33'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+// eslint-disable-next-line complexity
+function useColors() {
+	// NB: In an Electron preload script, document will be defined but not fully
+	// initialized. Since we know we're in Chrome, we'll just detect this case
+	// explicitly
+	if (typeof window !== 'undefined' && window.process && (window.process.type === 'renderer' || window.process.__nwjs)) {
+		return true;
+	}
+
+	// Internet Explorer and Edge do not support colors.
+	if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+		return false;
+	}
+
+	// Is webkit? http://stackoverflow.com/a/16459606/376773
+	// document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+	return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
+		// Is firebug? http://stackoverflow.com/a/398120/376773
+		(typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
+		// Is firefox >= v31?
+		// https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+		// Double check webkit in userAgent just in case we are in a worker
+		(typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+}
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs(args) {
+	args[0] = (this.useColors ? '%c' : '') +
+		this.namespace +
+		(this.useColors ? ' %c' : ' ') +
+		args[0] +
+		(this.useColors ? '%c ' : ' ') +
+		'+' + module.exports.humanize(this.diff);
+
+	if (!this.useColors) {
+		return;
+	}
+
+	const c = 'color: ' + this.color;
+	args.splice(1, 0, c, 'color: inherit');
+
+	// The final "%c" is somewhat tricky, because there could be other
+	// arguments passed either before or after the %c, so we need to
+	// figure out the correct index to insert the CSS into
+	let index = 0;
+	let lastC = 0;
+	args[0].replace(/%[a-zA-Z%]/g, match => {
+		if (match === '%%') {
+			return;
+		}
+		index++;
+		if (match === '%c') {
+			// We only are interested in the *last* %c
+			// (the user may have provided their own)
+			lastC = index;
+		}
+	});
+
+	args.splice(lastC, 0, c);
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+function log(...args) {
+	// This hackery is required for IE8/9, where
+	// the `console.log` function doesn't have 'apply'
+	return typeof console === 'object' &&
+		console.log &&
+		console.log(...args);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+function save(namespaces) {
+	try {
+		if (namespaces) {
+			exports.storage.setItem('debug', namespaces);
+		} else {
+			exports.storage.removeItem('debug');
+		}
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+function load() {
+	let r;
+	try {
+		r = exports.storage.getItem('debug');
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+
+	// If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+	if (!r && typeof process !== 'undefined' && 'env' in process) {
+		r = process.env.DEBUG;
+	}
+
+	return r;
+}
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage() {
+	try {
+		// TVMLKit (Apple TV JS Runtime) does not have a window object, just localStorage in the global context
+		// The Browser also has localStorage in the global context.
+		return localStorage;
+	} catch (error) {
+		// Swallow
+		// XXX (@Qix-) should we be logging these?
+	}
+}
+
+module.exports = __webpack_require__(486)(exports);
+
+const {formatters} = module.exports;
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+formatters.j = function (v) {
+	try {
+		return JSON.stringify(v);
+	} catch (error) {
+		return '[UnexpectedJSONParseError]: ' + error.message;
+	}
+};
+
+
+/***/ }),
 /* 795 */,
 /* 796 */,
 /* 797 */,
@@ -10099,7 +10975,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 
-var bind = __webpack_require__(727);
+var bind = __webpack_require__(271);
 
 /*global toString:true*/
 
@@ -10202,6 +11078,21 @@ function isNumber(val) {
  */
 function isObject(val) {
   return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a plain Object
+ *
+ * @param {Object} val The value to test
+ * @return {boolean} True if value is a plain Object, otherwise false
+ */
+function isPlainObject(val) {
+  if (toString.call(val) !== '[object Object]') {
+    return false;
+  }
+
+  var prototype = Object.getPrototypeOf(val);
+  return prototype === null || prototype === Object.prototype;
 }
 
 /**
@@ -10360,34 +11251,12 @@ function forEach(obj, fn) {
 function merge(/* obj1, obj2, obj3, ... */) {
   var result = {};
   function assignValue(val, key) {
-    if (typeof result[key] === 'object' && typeof val === 'object') {
+    if (isPlainObject(result[key]) && isPlainObject(val)) {
       result[key] = merge(result[key], val);
-    } else {
-      result[key] = val;
-    }
-  }
-
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    forEach(arguments[i], assignValue);
-  }
-  return result;
-}
-
-/**
- * Function equal to merge with the difference being that no reference
- * to original objects is kept.
- *
- * @see merge
- * @param {Object} obj1 Object to merge
- * @returns {Object} Result of all merge properties
- */
-function deepMerge(/* obj1, obj2, obj3, ... */) {
-  var result = {};
-  function assignValue(val, key) {
-    if (typeof result[key] === 'object' && typeof val === 'object') {
-      result[key] = deepMerge(result[key], val);
-    } else if (typeof val === 'object') {
-      result[key] = deepMerge({}, val);
+    } else if (isPlainObject(val)) {
+      result[key] = merge({}, val);
+    } else if (isArray(val)) {
+      result[key] = val.slice();
     } else {
       result[key] = val;
     }
@@ -10418,6 +11287,19 @@ function extend(a, b, thisArg) {
   return a;
 }
 
+/**
+ * Remove byte order marker. This catches EF BB BF (the UTF-8 BOM)
+ *
+ * @param {string} content with BOM
+ * @return {string} content value without BOM
+ */
+function stripBOM(content) {
+  if (content.charCodeAt(0) === 0xFEFF) {
+    content = content.slice(1);
+  }
+  return content;
+}
+
 module.exports = {
   isArray: isArray,
   isArrayBuffer: isArrayBuffer,
@@ -10427,6 +11309,7 @@ module.exports = {
   isString: isString,
   isNumber: isNumber,
   isObject: isObject,
+  isPlainObject: isPlainObject,
   isUndefined: isUndefined,
   isDate: isDate,
   isFile: isFile,
@@ -10437,9 +11320,9 @@ module.exports = {
   isStandardBrowserEnv: isStandardBrowserEnv,
   forEach: forEach,
   merge: merge,
-  deepMerge: deepMerge,
   extend: extend,
-  trim: trim
+  trim: trim,
+  stripBOM: stripBOM
 };
 
 
@@ -10475,12 +11358,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDatabaseClusterUser = void 0;
-exports.createDatabaseClusterUser = ({ httpClient, }) => ({ database_cluster_id, mysql_settings, user_name, }) => {
+const createDatabaseClusterUser = ({ httpClient, }) => ({ database_cluster_id, mysql_settings, user_name, }) => {
     const path = '/databases';
     const body = { name: user_name, mysql_settings };
     const url = `${path}/${database_cluster_id}/users`;
     return httpClient.post(url, body);
 };
+exports.createDatabaseClusterUser = createDatabaseClusterUser;
 //# sourceMappingURL=create-database-cluster-user.js.map
 
 /***/ }),
@@ -10505,59 +11389,73 @@ module.exports = function mergeConfig(config1, config2) {
   config2 = config2 || {};
   var config = {};
 
-  var valueFromConfig2Keys = ['url', 'method', 'params', 'data'];
-  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy'];
+  var valueFromConfig2Keys = ['url', 'method', 'data'];
+  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy', 'params'];
   var defaultToConfig2Keys = [
-    'baseURL', 'url', 'transformRequest', 'transformResponse', 'paramsSerializer',
-    'timeout', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
-    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress',
-    'maxContentLength', 'validateStatus', 'maxRedirects', 'httpAgent',
-    'httpsAgent', 'cancelToken', 'socketPath'
+    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'timeoutMessage', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'decompress',
+    'maxContentLength', 'maxBodyLength', 'maxRedirects', 'transport', 'httpAgent',
+    'httpsAgent', 'cancelToken', 'socketPath', 'responseEncoding'
   ];
+  var directMergeKeys = ['validateStatus'];
+
+  function getMergedValue(target, source) {
+    if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
+      return utils.merge(target, source);
+    } else if (utils.isPlainObject(source)) {
+      return utils.merge({}, source);
+    } else if (utils.isArray(source)) {
+      return source.slice();
+    }
+    return source;
+  }
+
+  function mergeDeepProperties(prop) {
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
+    } else if (!utils.isUndefined(config1[prop])) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  }
 
   utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
-    if (typeof config2[prop] !== 'undefined') {
-      config[prop] = config2[prop];
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(undefined, config2[prop]);
     }
   });
 
-  utils.forEach(mergeDeepPropertiesKeys, function mergeDeepProperties(prop) {
-    if (utils.isObject(config2[prop])) {
-      config[prop] = utils.deepMerge(config1[prop], config2[prop]);
-    } else if (typeof config2[prop] !== 'undefined') {
-      config[prop] = config2[prop];
-    } else if (utils.isObject(config1[prop])) {
-      config[prop] = utils.deepMerge(config1[prop]);
-    } else if (typeof config1[prop] !== 'undefined') {
-      config[prop] = config1[prop];
-    }
-  });
+  utils.forEach(mergeDeepPropertiesKeys, mergeDeepProperties);
 
   utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
-    if (typeof config2[prop] !== 'undefined') {
-      config[prop] = config2[prop];
-    } else if (typeof config1[prop] !== 'undefined') {
-      config[prop] = config1[prop];
+    if (!utils.isUndefined(config2[prop])) {
+      config[prop] = getMergedValue(undefined, config2[prop]);
+    } else if (!utils.isUndefined(config1[prop])) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
+    }
+  });
+
+  utils.forEach(directMergeKeys, function merge(prop) {
+    if (prop in config2) {
+      config[prop] = getMergedValue(config1[prop], config2[prop]);
+    } else if (prop in config1) {
+      config[prop] = getMergedValue(undefined, config1[prop]);
     }
   });
 
   var axiosKeys = valueFromConfig2Keys
     .concat(mergeDeepPropertiesKeys)
-    .concat(defaultToConfig2Keys);
+    .concat(defaultToConfig2Keys)
+    .concat(directMergeKeys);
 
   var otherKeys = Object
-    .keys(config2)
+    .keys(config1)
+    .concat(Object.keys(config2))
     .filter(function filterAxiosKeys(key) {
       return axiosKeys.indexOf(key) === -1;
     });
 
-  utils.forEach(otherKeys, function otherKeysDefaultToConfig2(prop) {
-    if (typeof config2[prop] !== 'undefined') {
-      config[prop] = config2[prop];
-    } else if (typeof config1[prop] !== 'undefined') {
-      config[prop] = config1[prop];
-    }
-  });
+  utils.forEach(otherKeys, mergeDeepProperties);
 
   return config;
 };
@@ -10611,11 +11509,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDomainRecord = void 0;
-exports.deleteDomainRecord = ({ httpClient, }) => ({ domain_name, domain_record_id, }) => {
+const deleteDomainRecord = ({ httpClient, }) => ({ domain_name, domain_record_id, }) => {
     const path = '/domains';
     const url = `${path}/${domain_name}/records/${domain_record_id}`;
     return httpClient.delete(url);
 };
+exports.deleteDomainRecord = deleteDomainRecord;
 //# sourceMappingURL=delete-domain-record.js.map
 
 /***/ }),
@@ -10626,13 +11525,14 @@ exports.deleteDomainRecord = ({ httpClient, }) => ({ domain_name, domain_record_
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.powerOffDroplet = void 0;
-exports.powerOffDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
+const powerOffDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const type = 'power_off';
     const body = { type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.powerOffDroplet = powerOffDroplet;
 //# sourceMappingURL=power-off-droplet.js.map
 
 /***/ }),
@@ -10651,17 +11551,26 @@ module.exports = require("url");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTag = void 0;
-exports.getTag = ({ httpClient, }) => ({ tag_name, }) => {
+const getTag = ({ httpClient, }) => ({ tag_name, }) => {
     const path = '/tags';
     const url = `${path}/${tag_name}`;
     return httpClient.get(url);
 };
+exports.getTag = getTag;
 //# sourceMappingURL=get-tag.js.map
 
 /***/ }),
 /* 839 */,
 /* 840 */,
-/* 841 */,
+/* 841 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-progress.js.map
+
+/***/ }),
 /* 842 */,
 /* 843 */,
 /* 844 */,
@@ -10675,7 +11584,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=balance.js.map
 
 /***/ }),
-/* 847 */,
+/* 847 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteVolumeByName = void 0;
+const deleteVolumeByName = ({ httpClient, }) => ({ region, volume_name, }) => {
+    const path = '/volumes';
+    const query_params = { name: volume_name, region };
+    const url = `${path}`;
+    return httpClient.delete(url, { params: query_params });
+};
+exports.deleteVolumeByName = deleteVolumeByName;
+//# sourceMappingURL=delete-volume-by-name.js.map
+
+/***/ }),
 /* 848 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -10683,12 +11608,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listCdnEndpoints = void 0;
-exports.listCdnEndpoints = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listCdnEndpoints = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/cdn/endpoints';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listCdnEndpoints = listCdnEndpoints;
 //# sourceMappingURL=list-cdn-endpoints.js.map
 
 /***/ }),
@@ -10727,11 +11653,12 @@ module.exports = function createError(message, config, code, request, response) 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDroplet = void 0;
-exports.deleteDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
+const deleteDroplet = ({ httpClient, }) => ({ droplet_id, }) => {
     const path = '/droplets';
     const url = `${path}/${droplet_id}`;
     return httpClient.delete(url);
 };
+exports.deleteDroplet = deleteDroplet;
 //# sourceMappingURL=delete-droplet.js.map
 
 /***/ }),
@@ -10749,7 +11676,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(478), exports);
@@ -10772,7 +11699,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(191), exports);
@@ -10795,11 +11722,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroyDatabaseCluster = void 0;
-exports.destroyDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, }) => {
+const destroyDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}`;
     return httpClient.delete(url);
 };
+exports.destroyDatabaseCluster = destroyDatabaseCluster;
 //# sourceMappingURL=destroy-database-cluster.js.map
 
 /***/ }),
@@ -10811,7 +11739,7 @@ exports.destroyDatabaseCluster = ({ httpClient, }) => ({ database_cluster_id, })
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateDomainRecord = void 0;
-exports.updateDomainRecord = ({ httpClient, }) => ({ data, domain_name, domain_record_id, flags, name, port, priority, tag, ttl, type, weight, }) => {
+const updateDomainRecord = ({ httpClient, }) => ({ data, domain_name, domain_record_id, flags, name, port, priority, tag, ttl, type, weight, }) => {
     const path = '/domains';
     const body = {
         data,
@@ -10827,6 +11755,7 @@ exports.updateDomainRecord = ({ httpClient, }) => ({ data, domain_name, domain_r
     const url = `${path}/${domain_name}/records/${domain_record_id}`;
     return httpClient.put(url, body);
 };
+exports.updateDomainRecord = updateDomainRecord;
 //# sourceMappingURL=update-domain-record.js.map
 
 /***/ }),
@@ -10846,13 +11775,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignIpToDroplet = void 0;
-exports.assignIpToDroplet = ({ httpClient, }) => ({ droplet_id, ip, }) => {
+const assignIpToDroplet = ({ httpClient, }) => ({ droplet_id, ip, }) => {
     const path = '/floating_ips';
     const type = 'assign';
     const body = { droplet_id, type };
     const url = `${path}/${ip}/actions`;
     return httpClient.post(url, body);
 };
+exports.assignIpToDroplet = assignIpToDroplet;
 //# sourceMappingURL=assign-ip-to-droplet.js.map
 
 /***/ }),
@@ -10871,13 +11801,14 @@ module.exports = require("tty");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.renameDroplet = void 0;
-exports.renameDroplet = ({ httpClient, }) => ({ droplet_id, name, }) => {
+const renameDroplet = ({ httpClient, }) => ({ droplet_id, name, }) => {
     const path = '/droplets';
     const type = 'rename';
     const body = { name, type };
     const url = `${path}/${droplet_id}/actions`;
     return httpClient.post(url, body);
 };
+exports.renameDroplet = renameDroplet;
 //# sourceMappingURL=rename-droplet.js.map
 
 /***/ }),
@@ -10903,7 +11834,7 @@ module.exports = function isCancel(value) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.restoreDatabaseClusterBackup = void 0;
-exports.restoreDatabaseClusterBackup = ({ httpClient, }) => ({ backup_restore, engine, name, num_nodes, region, size, tags, version, }) => {
+const restoreDatabaseClusterBackup = ({ httpClient, }) => ({ backup_restore, engine, name, num_nodes, region, size, tags, version, }) => {
     const path = '/databases';
     const body = {
         backup_restore,
@@ -10918,6 +11849,7 @@ exports.restoreDatabaseClusterBackup = ({ httpClient, }) => ({ backup_restore, e
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.restoreDatabaseClusterBackup = restoreDatabaseClusterBackup;
 //# sourceMappingURL=restore-database-cluster-backup.js.map
 
 /***/ }),
@@ -10936,7 +11868,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(426), exports);
@@ -10945,37 +11877,20 @@ __exportStar(__webpack_require__(426), exports);
 /***/ }),
 /* 878 */,
 /* 879 */
-/***/ (function(module) {
+/***/ (function(__unusedmodule, exports) {
 
 "use strict";
 
-
-/**
- * Syntactic sugar for invoking a function and expanding an array for arguments.
- *
- * Common use case would be to use `Function.prototype.apply`.
- *
- *  ```js
- *  function f(x, y, z) {}
- *  var args = [1, 2, 3];
- *  f.apply(null, args);
- *  ```
- *
- * With `spread` this example can be re-written.
- *
- *  ```js
- *  spread(function(x, y, z) {})([1, 2, 3]);
- *  ```
- *
- * @param {Function} callback
- * @returns {Function}
- */
-module.exports = function spread(callback) {
-  return function wrap(arr) {
-    return callback.apply(null, arr);
-  };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listAppDeployments = void 0;
+const listAppDeployments = ({ httpClient, }) => ({ app_id, page = 1, per_page = 25, }) => {
+    const path = '/apps';
+    const params = { page, per_page };
+    const url = `${path}/${app_id}/deployments`;
+    return httpClient.get(url, { params });
 };
-
+exports.listAppDeployments = listAppDeployments;
+//# sourceMappingURL=list-app-deployments.js.map
 
 /***/ }),
 /* 880 */
@@ -10985,11 +11900,12 @@ module.exports = function spread(callback) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDomain = void 0;
-exports.getDomain = ({ httpClient, }) => ({ name, }) => {
+const getDomain = ({ httpClient, }) => ({ name, }) => {
     const path = '/domains';
     const url = `${path}/${name}`;
     return httpClient.get(url);
 };
+exports.getDomain = getDomain;
 //# sourceMappingURL=get-domain.js.map
 
 /***/ }),
@@ -11001,11 +11917,12 @@ exports.getDomain = ({ httpClient, }) => ({ name, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getReadOnlyReplica = void 0;
-exports.getReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, read_only_replica_name, }) => {
+const getReadOnlyReplica = ({ httpClient, }) => ({ database_cluster_id, read_only_replica_name, }) => {
     const path = '/databases';
     const url = `${path}/${database_cluster_id}/replicas/${read_only_replica_name}`;
     return httpClient.get(url);
 };
+exports.getReadOnlyReplica = getReadOnlyReplica;
 //# sourceMappingURL=get-read-only-replica.js.map
 
 /***/ }),
@@ -11024,7 +11941,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(193), exports);
@@ -11058,14 +11975,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listDropletKernels = void 0;
-exports.listDropletKernels = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
+const listDropletKernels = ({ httpClient, }) => ({ droplet_id, page = 1, per_page = 25, }) => {
     const path = '/droplets';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}/${droplet_id}/kernels`;
     return httpClient.get(url, {
-        params: queryParams,
+        params: query_params,
     });
 };
+exports.listDropletKernels = listDropletKernels;
 //# sourceMappingURL=list-droplet-kernels.js.map
 
 /***/ }),
@@ -11078,16 +11996,33 @@ exports.listDropletKernels = ({ httpClient, }) => ({ droplet_id, page = 1, per_p
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTag = void 0;
-exports.deleteTag = ({ httpClient, }) => ({ tag_name, }) => {
+const deleteTag = ({ httpClient, }) => ({ tag_name, }) => {
     const path = '/tags';
     const url = `${path}/${tag_name}`;
     return httpClient.delete(url);
 };
+exports.deleteTag = deleteTag;
 //# sourceMappingURL=delete-tag.js.map
 
 /***/ }),
 /* 893 */,
-/* 894 */,
+/* 894 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listVpcResources = void 0;
+const listVpcResources = ({ httpClient, }) => ({ page = 1, per_page = 25, resource_type, vpc_id, }) => {
+    const path = '/vpcs';
+    const query_params = { page, per_page, resource_type };
+    const url = `${path}/${vpc_id}/members`;
+    return httpClient.get(url, { params: query_params });
+};
+exports.listVpcResources = listVpcResources;
+//# sourceMappingURL=list-vpc-resources.js.map
+
+/***/ }),
 /* 895 */
 /***/ (function(__unusedmodule, exports) {
 
@@ -11095,11 +12030,12 @@ exports.deleteTag = ({ httpClient, }) => ({ tag_name, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listKubernetesClusterAvailableUpgrades = void 0;
-exports.listKubernetesClusterAvailableUpgrades = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
+const listKubernetesClusterAvailableUpgrades = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
     const path = '/kubernetes/clusters';
     const url = `${path}/${kubernetes_cluster_id}/upgrades`;
     return httpClient.get(url);
 };
+exports.listKubernetesClusterAvailableUpgrades = listKubernetesClusterAvailableUpgrades;
 //# sourceMappingURL=list-kubernetes-cluster-available-upgrades.js.map
 
 /***/ }),
@@ -11110,11 +12046,12 @@ exports.listKubernetesClusterAvailableUpgrades = ({ httpClient, }) => ({ kuberne
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFirewall = void 0;
-exports.getFirewall = ({ httpClient, }) => ({ firewall_id, }) => {
+const getFirewall = ({ httpClient, }) => ({ firewall_id, }) => {
     const path = '/firewalls';
     const url = `${path}/${firewall_id}`;
     return httpClient.get(url);
 };
+exports.getFirewall = getFirewall;
 //# sourceMappingURL=get-firewall.js.map
 
 /***/ }),
@@ -11132,7 +12069,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(445), exports);
@@ -11147,7 +12084,7 @@ __exportStar(__webpack_require__(38), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDomain = void 0;
-exports.createDomain = ({ httpClient, }) => ({ ip_address, name, }) => {
+const createDomain = ({ httpClient, }) => ({ ip_address, name, }) => {
     const path = '/domains';
     const body = {
         ip_address,
@@ -11156,10 +12093,30 @@ exports.createDomain = ({ httpClient, }) => ({ ip_address, name, }) => {
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createDomain = createDomain;
 //# sourceMappingURL=create-domain.js.map
 
 /***/ }),
-/* 900 */,
+/* 900 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+var debug;
+
+module.exports = function () {
+  if (!debug) {
+    try {
+      /* eslint global-require: off */
+      debug = __webpack_require__(784)("follow-redirects");
+    }
+    catch (error) {
+      debug = function () { /* */ };
+    }
+  }
+  debug.apply(null, arguments);
+};
+
+
+/***/ }),
 /* 901 */,
 /* 902 */
 /***/ (function(__unusedmodule, exports) {
@@ -11189,7 +12146,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(579), exports);
@@ -11197,14 +12154,18 @@ __exportStar(__webpack_require__(617), exports);
 __exportStar(__webpack_require__(718), exports);
 __exportStar(__webpack_require__(853), exports);
 __exportStar(__webpack_require__(691), exports);
+__exportStar(__webpack_require__(541), exports);
+__exportStar(__webpack_require__(675), exports);
 __exportStar(__webpack_require__(361), exports);
 __exportStar(__webpack_require__(405), exports);
 __exportStar(__webpack_require__(428), exports);
 __exportStar(__webpack_require__(663), exports);
 __exportStar(__webpack_require__(680), exports);
 __exportStar(__webpack_require__(946), exports);
+__exportStar(__webpack_require__(117), exports);
 __exportStar(__webpack_require__(256), exports);
 __exportStar(__webpack_require__(213), exports);
+__exportStar(__webpack_require__(254), exports);
 __exportStar(__webpack_require__(370), exports);
 __exportStar(__webpack_require__(889), exports);
 __exportStar(__webpack_require__(750), exports);
@@ -11220,6 +12181,7 @@ __exportStar(__webpack_require__(869), exports);
 __exportStar(__webpack_require__(196), exports);
 __exportStar(__webpack_require__(403), exports);
 __exportStar(__webpack_require__(70), exports);
+__exportStar(__webpack_require__(418), exports);
 __exportStar(__webpack_require__(282), exports);
 __exportStar(__webpack_require__(137), exports);
 __exportStar(__webpack_require__(465), exports);
@@ -11247,12 +12209,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDatabaseClusterDb = void 0;
-exports.createDatabaseClusterDb = ({ httpClient, }) => ({ database_cluster_id, db_name, }) => {
+const createDatabaseClusterDb = ({ httpClient, }) => ({ database_cluster_id, db_name, }) => {
     const path = '/databases';
     const body = { name: db_name };
     const url = `${path}/${database_cluster_id}/dbs`;
     return httpClient.post(url, body);
 };
+exports.createDatabaseClusterDb = createDatabaseClusterDb;
 //# sourceMappingURL=create-database-cluster-db.js.map
 
 /***/ }),
@@ -11263,12 +12226,13 @@ exports.createDatabaseClusterDb = ({ httpClient, }) => ({ database_cluster_id, d
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listSizes = void 0;
-exports.listSizes = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listSizes = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/sizes';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listSizes = listSizes;
 //# sourceMappingURL=list-sizes.js.map
 
 /***/ }),
@@ -11279,15 +12243,31 @@ exports.listSizes = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteKubernetesCluster = void 0;
-exports.deleteKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
+const deleteKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id, }) => {
     const path = '/kubernetes/clusters';
     const url = `${path}/${kubernetes_cluster_id}`;
     return httpClient.delete(url);
 };
+exports.deleteKubernetesCluster = deleteKubernetesCluster;
 //# sourceMappingURL=delete-kubernetes-cluster.js.map
 
 /***/ }),
-/* 919 */,
+/* 919 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteApp = void 0;
+const deleteApp = ({ httpClient, }) => ({ app_id, }) => {
+    const path = '/apps';
+    const url = `${path}/${app_id}`;
+    return httpClient.delete(url);
+};
+exports.deleteApp = deleteApp;
+//# sourceMappingURL=delete-app.js.map
+
+/***/ }),
 /* 920 */,
 /* 921 */,
 /* 922 */,
@@ -11300,14 +12280,15 @@ exports.deleteKubernetesCluster = ({ httpClient, }) => ({ kubernetes_cluster_id,
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addRulesToLoadBalancer = void 0;
-exports.addRulesToLoadBalancer = ({ httpClient, }) => ({ forwarding_rules, id, load_balancer_id, }) => {
+const addRulesToLoadBalancer = ({ httpClient, }) => ({ forwarding_rules, load_balancer_id, }) => {
     const path = '/load_balancers';
     const body = {
         forwarding_rules,
     };
-    const url = `${path}/${load_balancer_id || id}/forwarding_rules`;
+    const url = `${path}/${load_balancer_id}/forwarding_rules`;
     return httpClient.post(url, body);
 };
+exports.addRulesToLoadBalancer = addRulesToLoadBalancer;
 //# sourceMappingURL=add-rules-to-load-balancer.js.map
 
 /***/ }),
@@ -11320,12 +12301,13 @@ exports.addRulesToLoadBalancer = ({ httpClient, }) => ({ forwarding_rules, id, l
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTag = void 0;
-exports.createTag = ({ httpClient, }) => ({ name, }) => {
+const createTag = ({ httpClient, }) => ({ name, }) => {
     const path = '/tags';
     const body = { name };
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createTag = createTag;
 //# sourceMappingURL=create-tag.js.map
 
 /***/ }),
@@ -11342,7 +12324,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(265), exports);
@@ -11375,12 +12357,13 @@ __exportStar(__webpack_require__(157), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listProjects = void 0;
-exports.listProjects = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listProjects = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/projects';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listProjects = listProjects;
 //# sourceMappingURL=list-projects.js.map
 
 /***/ }),
@@ -11397,13 +12380,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(13), exports);
 __exportStar(__webpack_require__(284), exports);
 __exportStar(__webpack_require__(325), exports);
-__exportStar(__webpack_require__(418), exports);
+__exportStar(__webpack_require__(894), exports);
 __exportStar(__webpack_require__(602), exports);
 __exportStar(__webpack_require__(365), exports);
 __exportStar(__webpack_require__(657), exports);
@@ -11412,7 +12395,15 @@ __exportStar(__webpack_require__(657), exports);
 /***/ }),
 /* 939 */,
 /* 940 */,
-/* 941 */,
+/* 941 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-progress-step-reason.js.map
+
+/***/ }),
 /* 942 */,
 /* 943 */,
 /* 944 */,
@@ -11424,15 +12415,278 @@ __exportStar(__webpack_require__(657), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDropletAction = void 0;
-exports.getDropletAction = ({ httpClient, }) => ({ action_id, droplet_id, }) => {
+const getDropletAction = ({ httpClient, }) => ({ action_id, droplet_id, }) => {
     const path = '/droplets';
     const url = `${path}/${droplet_id}/actions/${action_id}`;
     return httpClient.get(url);
 };
+exports.getDropletAction = getDropletAction;
 //# sourceMappingURL=get-droplet-action.js.map
 
 /***/ }),
-/* 947 */,
+/* 947 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Module dependencies.
+ */
+
+const tty = __webpack_require__(867);
+const util = __webpack_require__(669);
+
+/**
+ * This is the Node.js implementation of `debug()`.
+ */
+
+exports.init = init;
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+
+/**
+ * Colors.
+ */
+
+exports.colors = [6, 2, 3, 4, 5, 1];
+
+try {
+	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
+	// eslint-disable-next-line import/no-extraneous-dependencies
+	const supportsColor = __webpack_require__(247);
+
+	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
+		exports.colors = [
+			20,
+			21,
+			26,
+			27,
+			32,
+			33,
+			38,
+			39,
+			40,
+			41,
+			42,
+			43,
+			44,
+			45,
+			56,
+			57,
+			62,
+			63,
+			68,
+			69,
+			74,
+			75,
+			76,
+			77,
+			78,
+			79,
+			80,
+			81,
+			92,
+			93,
+			98,
+			99,
+			112,
+			113,
+			128,
+			129,
+			134,
+			135,
+			148,
+			149,
+			160,
+			161,
+			162,
+			163,
+			164,
+			165,
+			166,
+			167,
+			168,
+			169,
+			170,
+			171,
+			172,
+			173,
+			178,
+			179,
+			184,
+			185,
+			196,
+			197,
+			198,
+			199,
+			200,
+			201,
+			202,
+			203,
+			204,
+			205,
+			206,
+			207,
+			208,
+			209,
+			214,
+			215,
+			220,
+			221
+		];
+	}
+} catch (error) {
+	// Swallow - we only care if `supports-color` is available; it doesn't have to be.
+}
+
+/**
+ * Build up the default `inspectOpts` object from the environment variables.
+ *
+ *   $ DEBUG_COLORS=no DEBUG_DEPTH=10 DEBUG_SHOW_HIDDEN=enabled node script.js
+ */
+
+exports.inspectOpts = Object.keys(process.env).filter(key => {
+	return /^debug_/i.test(key);
+}).reduce((obj, key) => {
+	// Camel-case
+	const prop = key
+		.substring(6)
+		.toLowerCase()
+		.replace(/_([a-z])/g, (_, k) => {
+			return k.toUpperCase();
+		});
+
+	// Coerce string value into JS value
+	let val = process.env[key];
+	if (/^(yes|on|true|enabled)$/i.test(val)) {
+		val = true;
+	} else if (/^(no|off|false|disabled)$/i.test(val)) {
+		val = false;
+	} else if (val === 'null') {
+		val = null;
+	} else {
+		val = Number(val);
+	}
+
+	obj[prop] = val;
+	return obj;
+}, {});
+
+/**
+ * Is stdout a TTY? Colored output is enabled when `true`.
+ */
+
+function useColors() {
+	return 'colors' in exports.inspectOpts ?
+		Boolean(exports.inspectOpts.colors) :
+		tty.isatty(process.stderr.fd);
+}
+
+/**
+ * Adds ANSI color escape codes if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs(args) {
+	const {namespace: name, useColors} = this;
+
+	if (useColors) {
+		const c = this.color;
+		const colorCode = '\u001B[3' + (c < 8 ? c : '8;5;' + c);
+		const prefix = `  ${colorCode};1m${name} \u001B[0m`;
+
+		args[0] = prefix + args[0].split('\n').join('\n' + prefix);
+		args.push(colorCode + 'm+' + module.exports.humanize(this.diff) + '\u001B[0m');
+	} else {
+		args[0] = getDate() + name + ' ' + args[0];
+	}
+}
+
+function getDate() {
+	if (exports.inspectOpts.hideDate) {
+		return '';
+	}
+	return new Date().toISOString() + ' ';
+}
+
+/**
+ * Invokes `util.format()` with the specified arguments and writes to stderr.
+ */
+
+function log(...args) {
+	return process.stderr.write(util.format(...args) + '\n');
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+function save(namespaces) {
+	if (namespaces) {
+		process.env.DEBUG = namespaces;
+	} else {
+		// If you set a process.env field to null or undefined, it gets cast to the
+		// string 'null' or 'undefined'. Just delete instead.
+		delete process.env.DEBUG;
+	}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+	return process.env.DEBUG;
+}
+
+/**
+ * Init logic for `debug` instances.
+ *
+ * Create a new `inspectOpts` object in case `useColors` is set
+ * differently for a particular `debug` instance.
+ */
+
+function init(debug) {
+	debug.inspectOpts = {};
+
+	const keys = Object.keys(exports.inspectOpts);
+	for (let i = 0; i < keys.length; i++) {
+		debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
+	}
+}
+
+module.exports = __webpack_require__(486)(exports);
+
+const {formatters} = module.exports;
+
+/**
+ * Map %o to `util.inspect()`, all on a single line.
+ */
+
+formatters.o = function (v) {
+	this.inspectOpts.colors = this.useColors;
+	return util.inspect(v, this.inspectOpts)
+		.replace(/\s*\n\s*/g, ' ');
+};
+
+/**
+ * Map %O to `util.inspect()`, allowing multiple lines if needed.
+ */
+
+formatters.O = function (v) {
+	this.inspectOpts.colors = this.useColors;
+	return util.inspect(v, this.inspectOpts);
+};
+
+
+/***/ }),
 /* 948 */,
 /* 949 */
 /***/ (function(__unusedmodule, exports) {
@@ -11441,12 +12695,13 @@ exports.getDropletAction = ({ httpClient, }) => ({ action_id, droplet_id, }) => 
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.configureDatabaseClusterSqlModes = void 0;
-exports.configureDatabaseClusterSqlModes = ({ httpClient, }) => ({ database_cluster_id, sql_mode, }) => {
+const configureDatabaseClusterSqlModes = ({ httpClient, }) => ({ database_cluster_id, sql_mode, }) => {
     const path = '/databases';
     const body = { sql_mode };
     const url = `${path}/${database_cluster_id}/sql_mode`;
     return httpClient.put(url, body);
 };
+exports.configureDatabaseClusterSqlModes = configureDatabaseClusterSqlModes;
 //# sourceMappingURL=configure-database-cluster-sql-modes.js.map
 
 /***/ }),
@@ -11459,7 +12714,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=database-cluster-eviction-policy.js.map
 
 /***/ }),
-/* 951 */,
+/* 951 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=app-deployment-log-type.js.map
+
+/***/ }),
 /* 952 */,
 /* 953 */
 /***/ (function(__unusedmodule, exports) {
@@ -11468,14 +12731,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeDropletsFromLoadBalancer = void 0;
-exports.removeDropletsFromLoadBalancer = ({ httpClient, }) => ({ droplet_ids, id, load_balancer_id, }) => {
+const removeDropletsFromLoadBalancer = ({ httpClient, }) => ({ droplet_ids, load_balancer_id, }) => {
     const path = '/load_balancers';
     const body = {
         droplet_ids,
     };
-    const url = `${path}/${load_balancer_id || id}/droplets`;
+    const url = `${path}/${load_balancer_id}/droplets`;
     return httpClient.delete(url, { data: body });
 };
+exports.removeDropletsFromLoadBalancer = removeDropletsFromLoadBalancer;
 //# sourceMappingURL=remove-droplets-from-load-balancer.js.map
 
 /***/ }),
@@ -11529,7 +12793,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(643), exports);
@@ -11539,7 +12803,23 @@ __exportStar(__webpack_require__(754), exports);
 /***/ }),
 /* 966 */,
 /* 967 */,
-/* 968 */,
+/* 968 */
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.configureDatabaseClusterEvictionPolicy = void 0;
+const configureDatabaseClusterEvictionPolicy = ({ httpClient, }) => ({ database_cluster_id, eviction_policy, }) => {
+    const path = '/databases';
+    const body = { eviction_policy };
+    const url = `${path}/${database_cluster_id}/eviction_policy`;
+    return httpClient.put(url, body);
+};
+exports.configureDatabaseClusterEvictionPolicy = configureDatabaseClusterEvictionPolicy;
+//# sourceMappingURL=configure-database-cluster-eviction-policy.js.map
+
+/***/ }),
 /* 969 */,
 /* 970 */,
 /* 971 */
@@ -11548,7 +12828,14 @@ __exportStar(__webpack_require__(754), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=tag-resource-details.js.map
+exports.getAppDeployment = void 0;
+const getAppDeployment = ({ httpClient, }) => ({ app_id, deployment_id, }) => {
+    const path = '/apps';
+    const url = `${path}/${app_id}/deployments/${deployment_id}`;
+    return httpClient.get(url);
+};
+exports.getAppDeployment = getAppDeployment;
+//# sourceMappingURL=get-app-deployment.js.map
 
 /***/ }),
 /* 972 */,
@@ -11559,12 +12846,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.purgeCache = void 0;
-exports.purgeCache = ({ httpClient, }) => ({ cdn_endpoint_id, files, }) => {
+const purgeCache = ({ httpClient, }) => ({ cdn_endpoint_id, files, }) => {
     const path = '/cdn/endpoints';
     const body = { files };
     const url = `${path}/${cdn_endpoint_id}/cache`;
     return httpClient.delete(url, { data: body });
 };
+exports.purgeCache = purgeCache;
 //# sourceMappingURL=purge-cache.js.map
 
 /***/ }),
@@ -11586,11 +12874,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteLoadBalancer = void 0;
-exports.deleteLoadBalancer = ({ httpClient, }) => ({ id, load_balancer_id, }) => {
+const deleteLoadBalancer = ({ httpClient, }) => ({ load_balancer_id, }) => {
     const path = '/load_balancers';
-    const url = `${path}/${load_balancer_id || id}`;
+    const url = `${path}/${load_balancer_id}`;
     return httpClient.delete(url);
 };
+exports.deleteLoadBalancer = deleteLoadBalancer;
 //# sourceMappingURL=delete-load-balancer.js.map
 
 /***/ }),
@@ -11607,7 +12896,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(631), exports);
@@ -11624,11 +12913,12 @@ __exportStar(__webpack_require__(123), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createLoadBalancer = void 0;
-exports.createLoadBalancer = ({ httpClient, }) => ({ algorithm, droplet_ids, enable_proxy_protocol, forwarding_rules, health_check, name, redirect_http_to_https, region, sticky_sessions, tag, vpc_uuid, }) => {
+const createLoadBalancer = ({ httpClient, }) => ({ algorithm, droplet_ids, enable_backend_keepalive, enable_proxy_protocol, forwarding_rules, health_check, name, redirect_http_to_https, region, sticky_sessions, tag, vpc_uuid, }) => {
     const path = '/load_balancers';
     const body = {
         algorithm,
         droplet_ids,
+        enable_backend_keepalive,
         enable_proxy_protocol,
         forwarding_rules,
         health_check,
@@ -11642,6 +12932,7 @@ exports.createLoadBalancer = ({ httpClient, }) => ({ algorithm, droplet_ids, ena
     const url = `${path}`;
     return httpClient.post(url, body);
 };
+exports.createLoadBalancer = createLoadBalancer;
 //# sourceMappingURL=create-load-balancer.js.map
 
 /***/ }),
@@ -11658,10 +12949,10 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(__webpack_require__(971), exports);
+__exportStar(__webpack_require__(489), exports);
 __exportStar(__webpack_require__(974), exports);
 __exportStar(__webpack_require__(607), exports);
 __exportStar(__webpack_require__(444), exports);
@@ -11681,12 +12972,13 @@ __exportStar(__webpack_require__(55), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignResourcesToProject = void 0;
-exports.assignResourcesToProject = ({ httpClient, }) => ({ project_id, resources, }) => {
+const assignResourcesToProject = ({ httpClient, }) => ({ project_id, resources, }) => {
     const path = '/projects';
     const body = { resources };
     const url = `${path}/${project_id}/resources`;
     return httpClient.post(url, body);
 };
+exports.assignResourcesToProject = assignResourcesToProject;
 //# sourceMappingURL=assign-resources-to-project.js.map
 
 /***/ }),
@@ -11704,12 +12996,13 @@ exports.assignResourcesToProject = ({ httpClient, }) => ({ project_id, resources
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeTagsFromFirewall = void 0;
-exports.removeTagsFromFirewall = ({ httpClient, }) => ({ firewall_id, tags, }) => {
+const removeTagsFromFirewall = ({ httpClient, }) => ({ firewall_id, tags, }) => {
     const path = '/firewalls';
     const body = { tags };
     const url = `${path}/${firewall_id}/tags`;
     return httpClient.delete(url, { data: body });
 };
+exports.removeTagsFromFirewall = removeTagsFromFirewall;
 //# sourceMappingURL=remove-tags-from-firewall.js.map
 
 /***/ }),
@@ -11720,11 +13013,12 @@ exports.removeTagsFromFirewall = ({ httpClient, }) => ({ firewall_id, tags, }) =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFirewall = void 0;
-exports.deleteFirewall = ({ httpClient, }) => ({ firewall_id, }) => {
+const deleteFirewall = ({ httpClient, }) => ({ firewall_id, }) => {
     const path = '/firewalls';
     const url = `${path}/${firewall_id}`;
     return httpClient.delete(url);
 };
+exports.deleteFirewall = deleteFirewall;
 //# sourceMappingURL=delete-firewall.js.map
 
 /***/ }),
@@ -11744,12 +13038,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listFirewalls = void 0;
-exports.listFirewalls = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
+const listFirewalls = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
     const path = '/firewalls';
-    const queryParams = { page, per_page };
+    const query_params = { page, per_page };
     const url = `${path}`;
-    return httpClient.get(url, { params: queryParams });
+    return httpClient.get(url, { params: query_params });
 };
+exports.listFirewalls = listFirewalls;
 //# sourceMappingURL=list-firewalls.js.map
 
 /***/ }),
@@ -11761,11 +13056,12 @@ exports.listFirewalls = ({ httpClient, }) => ({ page = 1, per_page = 25, }) => {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProject = void 0;
-exports.getProject = ({ httpClient, }) => ({ project_id, }) => {
+const getProject = ({ httpClient, }) => ({ project_id, }) => {
     const path = '/projects';
     const url = `${path}/${project_id}`;
     return httpClient.get(url);
 };
+exports.getProject = getProject;
 //# sourceMappingURL=get-project.js.map
 
 /***/ })
