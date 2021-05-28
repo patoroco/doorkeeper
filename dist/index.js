@@ -4578,12 +4578,7 @@ function updateInboundRules({ firewall: firewallClient }, firewall, inboundRules
         if (dryrun) {
             return;
         }
-        const updated = {
-            id: firewall.id,
-            name: firewall.name,
-            inbound_rules: inboundRules,
-            outbound_rules: prepareOutboundRules(firewall.outbound_rules)
-        };
+        const updated = Object.assign(Object.assign({}, firewall), { inbound_rules: inboundRules, outbound_rules: prepareOutboundRules(firewall.outbound_rules) });
         const { data: { firewall: response } } = yield firewallClient.updateFirewall(updated);
         console.log(response.status);
     });

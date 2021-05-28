@@ -70,8 +70,7 @@ export async function updateInboundRules(
   }
 
   const updated = {
-    id: firewall.id,
-    name: firewall.name,
+    ...firewall,
     inbound_rules: inboundRules,
     outbound_rules: prepareOutboundRules(firewall.outbound_rules)
   };
