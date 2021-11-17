@@ -39,22 +39,46 @@ export async function getFirewall({firewall: firewallClient}: ClientInterface, n
   return firewall;
 }
 
-export function generateInboundRules(oldRules: IFirewallInboundRule[], config: ActionConfig): IFirewallInboundRule[] {
-  const {port, action, protocol, IP} = config;
+function applyRule(config: ActionConfig, rule: IFirewallInboundRule = {protocol: '', ports: '', sources: {}}) {
+  const cloneRule = { ...rule };
+  const { port, action, protocol, IP } = config;
 
-  return oldRules.map(rule => {
-    const cloneRule = {...rule};
-    if (rule.ports == port.toString() && rule.protocol == protocol) {
-      const addresses = cloneRule.sources.addresses ?? [];
-
-      if (action == "add") {
-        addresses.push(IP);
-      } else if (action == "remove") {
-        cloneRule.sources.addresses = addresses.filter(address => address != IP);
-      }
-    }
+  if (rule.ports != port.toString() || rule.protocol != protocol)
     return cloneRule;
+
+  if (!cloneRule.sources.addresses) {
+    cloneRule.sources.addresses = [];
+  }
+  const addresses = cloneRule.sources.addresses;
+  if (action == "add") {
+    if (!addresses.includes(IP)) {
+      addresses.push(IP);
+    }
+  } else if (action == "remove") {
+    cloneRule.sources.addresses = addresses.filter(address => address != IP);
+  }
+  
+  
+  return cloneRule;
+}
+
+export function generateInboundRules(oldRules: IFirewallInboundRule[], config: ActionConfig): IFirewallInboundRule[] {
+  const { port, action, protocol } = config;
+  const existingRules = oldRules.filter(r => r.ports == port.toString() && r.protocol == protocol);
+
+  if (!existingRules.length) {
+    oldRules.push(applyRule(config));
+    return oldRules;
+  }
+
+  return oldRules.map((r, index) => {
+    if (action == "remove" || (action == "add" && index == 0)) {
+      return applyRule(config, r)
+    } else {
+      return r;
+    }
   });
+
 }
 
 export async function updateInboundRules(
