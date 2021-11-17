@@ -118,8 +118,8 @@ export function printFirewallRules(inboundRules: IFirewallInboundRule[], title =
 function prepareOutboundRules(outboundRules: IFirewallOutboundRule[]): IFirewallOutboundRule[] {
   return outboundRules.map(rule => {
     const clonedRule = {...rule};
-    if (clonedRule.ports == "0") {
-      clonedRule.ports = "all";
+    if (clonedRule.ports == "all") {
+      clonedRule.ports = "0";
     }
     return clonedRule;
   });
