@@ -1,6 +1,6 @@
 {
   "name": "digitalocean-doorkeeper",
-  "version": "0.1.2",
+  "version": "0.3.0",
   "description": "This Github action allows you to open or close an specific port in your DigitalOcean firewall. It's really useful for deploy in your instances from Github Actions, as they don't provide a list of IPs to add to your security groups.",
   "main": "src/main.ts",
   "scripts": {
@@ -21,26 +21,27 @@
   },
   "homepage": "https://github.com/patoroco/doorkeeper#readme",
   "dependencies": {
-    "@actions/core": "^1.3.0",
+    "@actions/core": "^1.6.0",
     "@actions/github": "^4.0.0",
-    "@types/node-fetch": "^2.5.10",
-    "dots-wrapper": "^3.3.0",
-    "node-fetch": "^3.1.1"
+    "@types/node-fetch": "^2.5.12",
+    "dots-wrapper": "^3.6.2",
+    "node-fetch": "^2.6.7",
+    "follow-redirects": ">=1.14.7"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
-    "@types/node": "^14.17.1",
-    "@typescript-eslint/parser": "^4.25.0",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^14.18.9",
+    "@typescript-eslint/parser": "^4.33.0",
     "@zeit/ncc": "^0.22.3",
-    "eslint": "^7.27.0",
-    "eslint-plugin-github": "^4.1.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-github": "^4.3.5",
     "eslint-plugin-jest": "^23.20.0",
     "jest": "^26.6.3",
     "jest-circus": "^26.6.3",
     "jest-fetch-mock": "^3.0.3",
-    "prettier": "^2.3.0",
+    "prettier": "^2.5.1",
     "ts-jest": "^26.5.6",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.9"
+    "typescript": "^3.9.10"
   }
 }
