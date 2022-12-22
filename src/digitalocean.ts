@@ -41,9 +41,6 @@ export async function getFirewall({firewall: firewallClient}: ClientInterface, n
   // in case the firewall has no inbound rules
   firewall.inbound_rules = firewall.inbound_rules || [];
 
-
-  console.log("Firewall found: %j", firewall);
-
   return firewall;
 }
 
