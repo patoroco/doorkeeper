@@ -118,11 +118,21 @@ export async function updateInboundRules(
     outbound_rules: prepareOutboundRules(firewall.outbound_rules)
   };
 
-  const {
-    data: { firewall: response }
-  } = await firewallClient.updateFirewall(updated);
-
-  console.log(`DO status: ${response.status}`);
+  let maxRetries = 10;
+  while (true) {
+    const { data: { firewall: response } } = await firewallClient.updateFirewall(updated);
+    maxRetries--;
+    if (maxRetries < 0) {
+      break;  // give up
+    }
+    console.log(`DO status: ${response.status}`);
+    if (response.status == "waiting") {
+      console.log("waiting for DO to update the firewall...");
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    } else {
+      break;
+    }
+  }
 }
 
 export function printFirewallRules(inboundRules: IFirewallInboundRule[] = [], title = "") {
