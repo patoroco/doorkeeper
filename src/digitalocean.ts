@@ -41,6 +41,9 @@ export async function getFirewall({firewall: firewallClient}: ClientInterface, n
   // in case the firewall has no inbound rules
   firewall.inbound_rules = firewall.inbound_rules || [];
 
+
+  console.log("Firewall found: %j", firewall);
+
   return firewall;
 }
 
@@ -118,20 +121,38 @@ export async function updateInboundRules(
     outbound_rules: prepareOutboundRules(firewall.outbound_rules)
   };
 
-  let maxRetries = 10;
-  while (true) {
+  try {
+    
+    let maxRetries = 10;
     const { data: { firewall: response } } = await firewallClient.updateFirewall(updated);
-    maxRetries--;
-    if (maxRetries < 0) {
-      break;  // give up
-    }
-    console.log(`DO status: ${response.status}`);
-    if (response.status == "waiting") {
-      console.log("waiting for DO to update the firewall...");
+    let status = response.status;
+    const firewallId = (response.id as string);
+
+    /*
+      wait for DO to update the droplets using this firewall
+    */
+    while (true) {
+  
+      maxRetries--;
+      if (maxRetries < 0) {
+        break;  // give up
+      }
+      console.log(`DO status: ${status}`);
+      if (status != "waiting") {
+        break;
+      }
+      
+      console.log(" waiting for DO to update the droplets using this firewall...");
       await new Promise(resolve => setTimeout(resolve, 2000));
-    } else {
-      break;
+      
+      const { data: { firewall: fw } } = await firewallClient.getFirewall({ firewall_id: firewallId });
+      status = fw?.status || "errored";
+            
     }
+
+  } catch (e) {
+    console.error("FW Update failed: %j", updated);
+    console.error(e);
   }
 }
 
