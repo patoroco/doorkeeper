@@ -1286,40 +1286,30 @@ __exportStar(__webpack_require__(860), exports);
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = __webpack_require__(163);
 const digitalocean_1 = __webpack_require__(450);
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const config: ActionConfig = {
-        //   DO_TOKEN: process.env.DO_TOKEN as string,
-        //   action: "remove",
-        //   IP: "12.34.56.78",
-        //   port: 22,
-        //   protocol: "tcp",
-        //   dryrun: false,
-        //   firewallName: "ubuntu-dokku"
-        // };
-        const config = yield utils_1.getConfig();
-        console.log(`Current IP: ${config.IP}`);
-        if (config.dryrun) {
-            console.log("Running in DryRun MODE...");
-        }
-        const client = digitalocean_1.getDOClient(config);
-        const firewall = yield digitalocean_1.getFirewall(client, config.firewallName);
-        digitalocean_1.printFirewallRules(firewall.inbound_rules, "(original)");
-        const newRules = digitalocean_1.generateInboundRules(firewall.inbound_rules, config);
-        yield digitalocean_1.updateInboundRules(client, firewall, newRules, config.dryrun);
-    });
+async function main() {
+    // const config: ActionConfig = {
+    //   DO_TOKEN: process.env.DO_TOKEN as string,
+    //   action: "remove",
+    //   IP: "12.34.56.78",
+    //   port: 22,
+    //   protocol: "tcp",
+    //   dryrun: false,
+    //   firewallName: "ubuntu-dokku"
+    // };
+    const config = await utils_1.getConfig();
+    console.log(`Current IP: ${config.IP}`);
+    if (config.dryrun) {
+        console.log("Running in DryRun MODE...");
+    }
+    console.log(`Action: '${config.action}' on '${config.protocol}' port '${config.port}' to firewall '${config.firewallName}'`);
+    const client = digitalocean_1.getDOClient(config);
+    const firewall = await digitalocean_1.getFirewall(client, config.firewallName);
+    digitalocean_1.printFirewallRules(firewall.inbound_rules, "(original)");
+    const newRules = digitalocean_1.generateInboundRules(firewall.inbound_rules, config);
+    await digitalocean_1.updateInboundRules(client, firewall, newRules, config.dryrun);
 }
 main();
 
@@ -2118,15 +2108,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -2134,49 +2115,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLocalIP = exports.getConfig = void 0;
 const core = __importStar(__webpack_require__(470));
 const node_fetch_1 = __importDefault(__webpack_require__(454));
-function getConfig() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const token = core.getInput("digitaloceanToken");
-        if (token == undefined || token.length == 0) {
-            throw new Error("You must specify the 'digitaloceanToken' input.");
-        }
-        const firewallName = core.getInput("firewallName");
-        if (firewallName == undefined || firewallName.length == 0) {
-            throw new Error("You must specify the 'firewallName' input.");
-        }
-        const action = core.getInput("actionToDo");
-        if (action != "add" && action != "remove") {
-            throw new Error(`The input 'actionToDo' must one of these values: 'add' or 'remove'. Current value: '${action}'`);
-        }
-        const port = parseInt(core.getInput("port"));
-        if (core.getInput("port").length == 0 || port <= 0) {
-            throw new Error("The input 'port' must be a number greater than 0.");
-        }
-        const protocol = core.getInput("protocol");
-        if (protocol != "tcp" && protocol != "udp") {
-            throw new Error(`The input 'protocol' must be 'tcp' or 'udp'. Current value: ${protocol}`);
-        }
-        const dryrun = core.getInput("dryRun") == "true";
-        // TODO: try/catch for getting the IP
-        const IP = yield getLocalIP();
-        return {
-            DO_TOKEN: token,
-            firewallName,
-            action,
-            IP,
-            port,
-            protocol,
-            dryrun
-        };
-    });
+async function getConfig() {
+    const token = core.getInput("digitaloceanToken");
+    if (token == undefined || token.length == 0) {
+        throw new Error("You must specify the 'digitaloceanToken' input.");
+    }
+    const firewallName = core.getInput("firewallName");
+    if (firewallName == undefined || firewallName.length == 0) {
+        throw new Error("You must specify the 'firewallName' input.");
+    }
+    const action = core.getInput("actionToDo");
+    if (action != "add" && action != "remove") {
+        throw new Error(`The input 'actionToDo' must one of these values: 'add' or 'remove'. Current value: '${action}'`);
+    }
+    const port = parseInt(core.getInput("port"));
+    if (core.getInput("port").length == 0 || port <= 0) {
+        throw new Error("The input 'port' must be a number greater than 0.");
+    }
+    const protocol = core.getInput("protocol");
+    if (protocol != "tcp" && protocol != "udp") {
+        throw new Error(`The input 'protocol' must be 'tcp' or 'udp'. Current value: ${protocol}`);
+    }
+    const dryrun = core.getInput("dryRun") == "true";
+    // TODO: try/catch for getting the IP
+    const IP = await getLocalIP();
+    return {
+        DO_TOKEN: token,
+        firewallName,
+        action,
+        IP,
+        port,
+        protocol,
+        dryrun
+    };
 }
 exports.getConfig = getConfig;
 // TODO: remove the export here and test the full configuration
-function getLocalIP() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const response = yield node_fetch_1.default("https://ifconfig.me/ip");
-        return response.text();
-    });
+async function getLocalIP() {
+    const response = await node_fetch_1.default("https://ifconfig.me/ip");
+    return response.text();
 }
 exports.getLocalIP = getLocalIP;
 
@@ -5949,15 +5926,6 @@ __exportStar(__webpack_require__(513), exports);
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.printFirewallRules = exports.updateInboundRules = exports.generateInboundRules = exports.getFirewall = exports.getDOClient = void 0;
 const dots_wrapper_1 = __webpack_require__(507);
@@ -5965,22 +5933,27 @@ function getDOClient(config) {
     return dots_wrapper_1.createApiClient({ token: config.DO_TOKEN });
 }
 exports.getDOClient = getDOClient;
-function getFirewall({ firewall: firewallClient }, name) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { data: { firewalls } } = yield firewallClient.listFirewalls({});
-        const firewall = firewalls.find(f => f.name == name);
-        if (firewall == undefined) {
-            throw new Error(`The firewall with name '${name}', doesn't exist.`);
-        }
-        return firewall;
-    });
+async function getFirewall({ firewall: firewallClient }, name) {
+    const { data: { firewalls } } = await firewallClient.listFirewalls({});
+    const firewall = firewalls.find(f => f.name == name);
+    if (firewall == undefined) {
+        throw new Error(`The firewall with name '${name}', doesn't exist.`);
+    }
+    // in case the firewall has no inbound rules
+    firewall.inbound_rules = firewall.inbound_rules || [];
+    return firewall;
 }
 exports.getFirewall = getFirewall;
 function applyRule(config, rule = { protocol: '', ports: '', sources: {} }) {
-    const cloneRule = Object.assign({}, rule);
+    var _a;
+    const cloneRule = { ...rule };
     const { port, action, protocol, IP } = config;
-    if (rule.ports != port.toString() || rule.protocol != protocol)
-        return cloneRule;
+    if (!cloneRule.protocol) {
+        cloneRule.protocol = protocol;
+    }
+    if (!cloneRule.ports) {
+        cloneRule.ports = port.toString();
+    }
     if (!cloneRule.sources.addresses) {
         cloneRule.sources.addresses = [];
     }
@@ -5993,49 +5966,90 @@ function applyRule(config, rule = { protocol: '', ports: '', sources: {} }) {
     else if (action == "remove") {
         cloneRule.sources.addresses = addresses.filter(address => address != IP);
     }
+    if (((_a = cloneRule.sources) === null || _a === void 0 ? void 0 : _a.addresses.length) == 0) {
+        return null;
+    }
     return cloneRule;
 }
-function generateInboundRules(oldRules, config) {
+function generateInboundRules(oldRules = [], config) {
     const { port, action, protocol } = config;
     const existingRules = oldRules.filter(r => r.ports == port.toString() && r.protocol == protocol);
     if (!existingRules.length) {
-        oldRules.push(applyRule(config));
+        const newRule = applyRule(config);
+        if (newRule) {
+            oldRules.push(newRule);
+        }
         return oldRules;
     }
-    return oldRules.map((r, index) => {
+    return oldRules.reduce((out, r, index) => {
         if (action == "remove" || (action == "add" && index == 0)) {
-            return applyRule(config, r);
+            const newRule = applyRule(config, r);
+            if (newRule)
+                out.push(newRule);
         }
         else {
-            return r;
+            out.push(r);
         }
-    });
+        return out;
+    }, []);
 }
 exports.generateInboundRules = generateInboundRules;
-function updateInboundRules({ firewall: firewallClient }, firewall, inboundRules, dryrun = true) {
-    return __awaiter(this, void 0, void 0, function* () {
-        printFirewallRules(inboundRules, "(updated)");
-        if (dryrun) {
-            return;
+async function updateInboundRules({ firewall: firewallClient }, firewall, inboundRules, dryrun = true) {
+    printFirewallRules(inboundRules, "(updated)");
+    if (dryrun) {
+        return;
+    }
+    const updated = {
+        ...firewall,
+        inbound_rules: inboundRules.length ? inboundRules : [],
+        outbound_rules: prepareOutboundRules(firewall.outbound_rules)
+    };
+    try {
+        let maxRetries = 10;
+        const { data: { firewall: response } } = await firewallClient.updateFirewall(updated);
+        let status = response.status;
+        const firewallId = response.id;
+        /*
+          wait for DO to update the droplets using this firewall
+        */
+        while (true) {
+            maxRetries--;
+            if (maxRetries < 0) {
+                break; // give up
+            }
+            console.log(`DO status: ${status}`);
+            if (status != "waiting") {
+                break;
+            }
+            console.log(" waiting for DO to update the droplets using this firewall...");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            const { data: { firewall: fw } } = await firewallClient.getFirewall({ firewall_id: firewallId });
+            status = (fw === null || fw === void 0 ? void 0 : fw.status) || "errored";
         }
-        const updated = Object.assign(Object.assign({}, firewall), { inbound_rules: inboundRules, outbound_rules: prepareOutboundRules(firewall.outbound_rules) });
-        const { data: { firewall: response } } = yield firewallClient.updateFirewall(updated);
-        console.log(response.status);
-    });
+    }
+    catch (e) {
+        console.error("FW Update failed. updated : %j", updated);
+        console.error("FW Update failed. inboundRules: %j", inboundRules);
+        console.error(e);
+    }
 }
 exports.updateInboundRules = updateInboundRules;
-function printFirewallRules(inboundRules, title = "") {
+function printFirewallRules(inboundRules = [], title = "") {
     console.log("----------------------");
     console.log(`Firewall Inbound Rules ${title}`);
     console.log("----------------------");
+    if (inboundRules.length == 0) {
+        console.log("** no rules defined **");
+    }
     inboundRules.forEach(rule => {
-        console.log(`${rule.ports}::${rule.protocol} - ${rule.sources.addresses}`);
+        var _a;
+        console.log(`${rule.ports}::${rule.protocol} - ${(_a = rule.sources) === null || _a === void 0 ? void 0 : _a.addresses}`);
     });
 }
 exports.printFirewallRules = printFirewallRules;
-function prepareOutboundRules(outboundRules) {
+function prepareOutboundRules(outboundRules = []) {
     return outboundRules.map(rule => {
-        const clonedRule = Object.assign({}, rule);
+        const clonedRule = { ...rule };
         if (clonedRule.ports == "all") {
             clonedRule.ports = "0";
         }
@@ -12188,7 +12202,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* 771 */
 /***/ (function(module) {
 
-module.exports = {"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_from":"axios@0.21.4"};
+module.exports = {"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]};
 
 /***/ }),
 /* 772 */

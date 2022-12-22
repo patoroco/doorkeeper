@@ -148,7 +148,8 @@ export async function updateInboundRules(
     }
 
   } catch (e) {
-    console.error("FW Update failed: %j", updated);
+    console.error("FW Update failed. updated : %j", updated);
+    console.error("FW Update failed. inboundRules: %j", inboundRules);
     console.error(e);
   }
 }
