@@ -11,8 +11,8 @@ inputs:
     required: true
 
   actionToDo:
-      description: "'add'/'remove' the Github's IP"
-      required: true
+    description: "'add'/'remove' the Github's IP"
+    required: true
 
   protocol:
     description: "Protocol used by the service to update"
@@ -34,5 +34,5 @@ inputs:
     default: false
 
 runs:
-  using: "node12"
+  using: "node18"
   main: "dist/index.js"
