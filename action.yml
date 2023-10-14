@@ -1,7 +1,15 @@
 name: "DigitalOcean Doorkeeper"
+author: "Jorge Maroto (@patoroco)"
 description: "Open or close a specific port in your DigitalOcean firewall."
+runs:
+  using: "node20"
+  main: "dist/index.js"
 
 inputs:
+  # Input parameters allow you to specify data that the action expects to use during
+  # runtime. GitHub stores input parameters as environment variables.
+  # Input ids with uppercase letters are converted to lowercase during runtime.
+
   digitaloceanToken:
     description: "Digital Ocean token"
     required: true
@@ -16,23 +24,16 @@ inputs:
 
   protocol:
     description: "Protocol used by the service to update"
-    required: true
     default: "tcp"
 
   IP:
     description: "IP that will be added / removed. If it's not set, doorkeeper uses the local ip."
-    required: false
 
   port:
     description: "Port used by the service to update"
-    required: true
-    default: 22
+    default: "22"
 
   dryRun:
     description: "Specify true if you just want to check the action without apply it."
-    required: true
-    default: false
+    default: "true"
 
-runs:
-  using: "node20"
-  main: "dist/index.js"
