@@ -18,12 +18,14 @@ async function main() {
   if (config.dryrun) {
     console.log("Running in DryRun MODE...");
   }
+  console.log(`Action: '${config.action}' on '${config.protocol}' port '${config.port}' to firewall '${config.firewallName}'`)
 
   const client = getDOClient(config);
   const firewall = await getFirewall(client, config.firewallName);
   printFirewallRules(firewall.inbound_rules, "(original)");
 
   const newRules = generateInboundRules(firewall.inbound_rules, config);
+
   await updateInboundRules(client, firewall, newRules, config.dryrun);
 }
 

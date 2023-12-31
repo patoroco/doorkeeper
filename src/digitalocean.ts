@@ -1,9 +1,11 @@
-import {createApiClient, modules} from "dots-wrapper";
-import {IListRequest} from "dots-wrapper/dist/types/list-request";
+import { createApiClient, modules } from "dots-wrapper";
+import { IListRequest } from "dots-wrapper/dist/types/list-request";
 
-import {ActionConfig} from "./utils";
+import { ActionConfig } from "./utils";
 
-import {IFirewallInboundRule, IFirewallOutboundRule} from "dots-wrapper/dist/modules/firewall";
+import { IFirewallInboundRule, IFirewallOutboundRule } from "dots-wrapper/dist/modules/firewall";
+import { config } from "process";
+
 
 interface ClientInterface {
   firewall: Readonly<{
@@ -36,19 +38,27 @@ export async function getFirewall({firewall: firewallClient}: ClientInterface, n
     throw new Error(`The firewall with name '${name}', doesn't exist.`);
   }
 
+  // in case the firewall has no inbound rules
+  firewall.inbound_rules = firewall.inbound_rules || [];
+
   return firewall;
 }
 
-function applyRule(config: ActionConfig, rule: IFirewallInboundRule = {protocol: '', ports: '', sources: {}}) {
+function applyRule(config: ActionConfig, rule: IFirewallInboundRule = { protocol: '', ports: '', sources: {} }): IFirewallInboundRule | null {
   const cloneRule = { ...rule };
   const { port, action, protocol, IP } = config;
 
-  if (rule.ports != port.toString() || rule.protocol != protocol)
-    return cloneRule;
 
+  if (!cloneRule.protocol) {
+    cloneRule.protocol = protocol;
+  }
+  if (!cloneRule.ports) {
+    cloneRule.ports = port.toString();
+  }
   if (!cloneRule.sources.addresses) {
     cloneRule.sources.addresses = [];
   }
+
   const addresses = cloneRule.sources.addresses;
   if (action == "add") {
     if (!addresses.includes(IP)) {
@@ -56,33 +66,42 @@ function applyRule(config: ActionConfig, rule: IFirewallInboundRule = {protocol:
     }
   } else if (action == "remove") {
     cloneRule.sources.addresses = addresses.filter(address => address != IP);
+
   }
-  
-  
+
+  if(cloneRule.sources?.addresses.length == 0) {
+    return null;
+  }
+
   return cloneRule;
 }
 
-export function generateInboundRules(oldRules: IFirewallInboundRule[], config: ActionConfig): IFirewallInboundRule[] {
+export function generateInboundRules(oldRules: IFirewallInboundRule[] = [], config: ActionConfig): IFirewallInboundRule[] {
   const { port, action, protocol } = config;
   const existingRules = oldRules.filter(r => r.ports == port.toString() && r.protocol == protocol);
 
   if (!existingRules.length) {
-    oldRules.push(applyRule(config));
+    const newRule = applyRule(config);
+    if (newRule) {
+      oldRules.push(newRule);
+    }
     return oldRules;
   }
 
-  return oldRules.map((r, index) => {
+  return oldRules.reduce((out, r, index) => {
     if (action == "remove" || (action == "add" && index == 0)) {
-      return applyRule(config, r)
+      const newRule = applyRule(config, r);
+      if (newRule)
+        out.push(newRule)
     } else {
-      return r;
+      out.push(r);
     }
-  });
-
+    return out;
+  }, [] as IFirewallInboundRule[]);
 }
 
 export async function updateInboundRules(
-  {firewall: firewallClient}: ClientInterface,
+  { firewall: firewallClient }: ClientInterface,
   firewall: modules.firewall.IFirewall,
   inboundRules: IFirewallInboundRule[],
   dryrun = true
@@ -95,27 +114,59 @@ export async function updateInboundRules(
 
   const updated = {
     ...firewall,
-    inbound_rules: inboundRules,
+    inbound_rules: inboundRules.length ? inboundRules : [],
     outbound_rules: prepareOutboundRules(firewall.outbound_rules)
   };
 
-  const {
-    data: {firewall: response}
-  } = await firewallClient.updateFirewall(updated);
+  try {
+    
+    let maxRetries = 10;
+    const { data: { firewall: response } } = await firewallClient.updateFirewall(updated);
+    let status = response.status;
+    const firewallId = (response.id as string);
 
-  console.log((response as any).status);
+    /*
+      wait for DO to update the droplets using this firewall
+    */
+    while (true) {
+  
+      maxRetries--;
+      if (maxRetries < 0) {
+        break;  // give up
+      }
+      console.log(`DO status: ${status}`);
+      if (status != "waiting") {
+        break;
+      }
+      
+      console.log(" waiting for DO to update the droplets using this firewall...");
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const { data: { firewall: fw } } = await firewallClient.getFirewall({ firewall_id: firewallId });
+      status = fw?.status || "errored";
+            
+    }
+
+  } catch (e) {
+    console.error("FW Update failed. updated : %j", updated);
+    console.error("FW Update failed. inboundRules: %j", inboundRules);
+    console.error(e);
+  }
 }
 
-export function printFirewallRules(inboundRules: IFirewallInboundRule[], title = "") {
+export function printFirewallRules(inboundRules: IFirewallInboundRule[] = [], title = "") {
   console.log("----------------------");
   console.log(`Firewall Inbound Rules ${title}`);
   console.log("----------------------");
+  if(inboundRules.length == 0) {
+    console.log("** no rules defined **");
+  }
   inboundRules.forEach(rule => {
-    console.log(`${rule.ports}::${rule.protocol} - ${rule.sources.addresses}`);
+    console.log(`${rule.ports}::${rule.protocol} - ${rule.sources?.addresses}`);
   });
 }
 
-function prepareOutboundRules(outboundRules: IFirewallOutboundRule[]): IFirewallOutboundRule[] {
+function prepareOutboundRules(outboundRules: IFirewallOutboundRule[] = []): IFirewallOutboundRule[] {
   return outboundRules.map(rule => {
     const clonedRule = {...rule};
     if (clonedRule.ports == "all") {
