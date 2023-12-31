@@ -40,7 +40,13 @@ export async function getConfig(): Promise<ActionConfig> {
   const dryrun = core.getInput("dryRun") == "true";
 
   // TODO: try/catch for getting the IP
-  const IP = await getLocalIP();
+  let IP;
+  try {
+    IP = await getLocalIP();
+  } catch (error) {
+    // try again
+    IP = await getLocalIP();
+  }
 
   return {
     DO_TOKEN: token,
@@ -56,5 +62,6 @@ export async function getConfig(): Promise<ActionConfig> {
 // TODO: remove the export here and test the full configuration
 export async function getLocalIP(): Promise<string> {
   const response = await fetch("https://ifconfig.me/ip");
+  if (!response.ok) throw new Error(`Error getting the IP address: ${response.statusText}`);
   return response.text();
 }
