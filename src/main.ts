@@ -1,7 +1,7 @@
-import {getConfig, ActionConfig} from "./utils";
-import {getDOClient, getFirewall, generateInboundRules, updateInboundRules, printFirewallRules} from "./digitalocean";
+import {generateInboundRules, getDOClient, getFirewall, printFirewallRules, updateInboundRules} from "./digitalocean";
+import {getConfig} from "./utils";
 
-async function main() {
+async function main(): Promise<void> {
   // const config: ActionConfig = {
   //   DO_TOKEN: process.env.DO_TOKEN as string,
   //   action: "remove",
@@ -18,7 +18,9 @@ async function main() {
   if (config.dryrun) {
     console.log("Running in DryRun MODE...");
   }
-  console.log(`Action: '${config.action}' on '${config.protocol}' port '${config.port}' to firewall '${config.firewallName}'`)
+  console.log(
+    `Action: '${config.action}' on '${config.protocol}' port '${config.port}' to firewall '${config.firewallName}'`
+  );
 
   const client = getDOClient(config);
   const firewall = await getFirewall(client, config.firewallName);
