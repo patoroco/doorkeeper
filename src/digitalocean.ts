@@ -32,7 +32,6 @@ export async function getFirewall({firewall: firewallClient}: ClientInterface, n
   const {
     data: {firewalls}
   } = await firewallClient.listFirewalls({});
-
   const firewall = firewalls.find(f => f.name == name);
   if (firewall == undefined) {
     throw new Error(`The firewall with name '${name}', doesn't exist.`);
@@ -48,7 +47,6 @@ function applyRule(config: ActionConfig, rule: IFirewallInboundRule = { protocol
   const cloneRule = { ...rule };
   const { port, action, protocol, IP } = config;
 
-
   if (!cloneRule.protocol) {
     cloneRule.protocol = protocol;
   }
@@ -58,6 +56,9 @@ function applyRule(config: ActionConfig, rule: IFirewallInboundRule = { protocol
   if (!cloneRule.sources.addresses) {
     cloneRule.sources.addresses = [];
   }
+  if (!cloneRule.sources.droplet_ids) {
+    cloneRule.sources.droplet_ids = rule.sources?.droplet_ids || [];
+  }
 
   const addresses = cloneRule.sources.addresses;
   if (action == "add") {
@@ -66,10 +67,9 @@ function applyRule(config: ActionConfig, rule: IFirewallInboundRule = { protocol
     }
   } else if (action == "remove") {
     cloneRule.sources.addresses = addresses.filter(address => address != IP);
-
   }
 
-  if(cloneRule.sources?.addresses.length == 0) {
+  if(cloneRule.sources?.addresses.length === 0 && (!cloneRule.sources?.droplet_ids || cloneRule.sources.droplet_ids.length === 0)) {
     return null;
   }
 
@@ -79,25 +79,25 @@ function applyRule(config: ActionConfig, rule: IFirewallInboundRule = { protocol
 export function generateInboundRules(oldRules: IFirewallInboundRule[] = [], config: ActionConfig): IFirewallInboundRule[] {
   const { port, action, protocol } = config;
   const existingRules = oldRules.filter(r => r.ports == port.toString() && r.protocol == protocol);
+  const otherRules = oldRules.filter(r => r.ports != port.toString() || r.protocol != protocol);
 
   if (!existingRules.length) {
     const newRule = applyRule(config);
     if (newRule) {
-      oldRules.push(newRule);
+      return [...otherRules, newRule];
     }
-    return oldRules;
+    return otherRules;
   }
 
-  return oldRules.reduce((out, r, index) => {
-    if (action == "remove" || (action == "add" && index == 0)) {
-      const newRule = applyRule(config, r);
-      if (newRule)
-        out.push(newRule)
-    } else {
-      out.push(r);
+  const updatedRules = existingRules.reduce((out, r) => {
+    const newRule = applyRule(config, r);
+    if (newRule) {
+      out.push(newRule);
     }
     return out;
   }, [] as IFirewallInboundRule[]);
+
+  return [...otherRules, ...updatedRules];
 }
 
 export async function updateInboundRules(
@@ -114,12 +114,17 @@ export async function updateInboundRules(
 
   const updated = {
     ...firewall,
-    inbound_rules: inboundRules.length ? inboundRules : [],
-    outbound_rules: prepareOutboundRules(firewall.outbound_rules)
+    inbound_rules: inboundRules,
+    outbound_rules: prepareOutboundRules(firewall.outbound_rules),
+    droplet_ids: firewall.droplet_ids,
+    tags: firewall.tags,
+    id: firewall.id,
+    name: firewall.name,
+    status: firewall.status,
+    created_at: firewall.created_at
   };
 
   try {
-    
     let maxRetries = 10;
     const { data: { firewall: response } } = await firewallClient.updateFirewall(updated);
     let status = response.status;
@@ -129,7 +134,6 @@ export async function updateInboundRules(
       wait for DO to update the droplets using this firewall
     */
     while (true) {
-  
       maxRetries--;
       if (maxRetries < 0) {
         break;  // give up
@@ -144,7 +148,6 @@ export async function updateInboundRules(
       
       const { data: { firewall: fw } } = await firewallClient.getFirewall({ firewall_id: firewallId });
       status = fw?.status || "errored";
-            
     }
 
   } catch (e) {
@@ -162,7 +165,10 @@ export function printFirewallRules(inboundRules: IFirewallInboundRule[] = [], ti
     console.log("** no rules defined **");
   }
   inboundRules.forEach(rule => {
-    console.log(`${rule.ports}::${rule.protocol} - ${rule.sources?.addresses}`);
+    const addresses = rule.sources?.addresses?.length ? `IPs: ${rule.sources.addresses}` : '';
+    const droplets = rule.sources?.droplet_ids?.length ? `Droplets: ${rule.sources.droplet_ids}` : '';
+    const sources = [addresses, droplets].filter(Boolean).join(', ');
+    console.log(`${rule.ports}::${rule.protocol} - ${sources || 'No sources'}`);
   });
 }
 
