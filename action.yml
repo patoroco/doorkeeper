@@ -33,6 +33,10 @@ inputs:
     required: true
     default: false
 
+outputs:
+  ip:
+    description: "The IP address that was added/removed from the firewall"
+
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"
