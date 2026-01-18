@@ -1,5 +1,6 @@
-import {getConfig, ActionConfig} from "./utils";
-import {getDOClient, getFirewall, generateInboundRules, updateInboundRules, printFirewallRules} from "./digitalocean";
+import * as core from "@actions/core";
+import { getConfig, ActionConfig } from "./utils";
+import { getDOClient, getFirewall, generateInboundRules, updateInboundRules, printFirewallRules } from "./digitalocean";
 
 async function main() {
   // const config: ActionConfig = {
@@ -13,6 +14,9 @@ async function main() {
   // };
 
   const config = await getConfig();
+
+  // Output the IP so it can be used in subsequent jobs
+  core.setOutput("ip", config.IP);
 
   console.log(`Current IP: ${config.IP}`);
   if (config.dryrun) {

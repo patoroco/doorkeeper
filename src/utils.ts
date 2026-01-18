@@ -1,5 +1,4 @@
 import * as core from "@actions/core";
-import fetch from "node-fetch";
 
 export interface ActionConfig {
   DO_TOKEN: string;
@@ -39,13 +38,15 @@ export async function getConfig(): Promise<ActionConfig> {
 
   const dryrun = core.getInput("dryRun") == "true";
 
-  // TODO: try/catch for getting the IP
-  let IP;
-  try {
-    IP = await getLocalIP();
-  } catch (error) {
-    // try again
-    IP = await getLocalIP();
+  // Use the IP input if provided, otherwise get the public IP
+  let IP = core.getInput("IP");
+  if (!IP || IP.length === 0) {
+    try {
+      IP = await getLocalIP();
+    } catch (error) {
+      // try again
+      IP = await getLocalIP();
+    }
   }
 
   return {
