@@ -30,7 +30,7 @@ Create or update a workflow, adding the file `.github/workflows/doorkeeper.yml` 
 
 - name: Doorkeeper open
   id: doorkeeper_open
-  uses: patoroco/doorkeeper@v0.4.1
+  uses: patoroco/doorkeeper@v0.5.0
   with:
     digitaloceanToken: ${{ secrets.DO_TOKEN }}
     firewallName: "name_of_the_firewall"
@@ -42,7 +42,7 @@ Create or update a workflow, adding the file `.github/workflows/doorkeeper.yml` 
 ############################
 
 - name: Doorkeeper close
-  uses: patoroco/doorkeeper@v0.4.1
+  uses: patoroco/doorkeeper@v0.5.0
   with:
     digitaloceanToken: ${{ secrets.DO_TOKEN }}
     firewallName: "name_of_the_firewall"
@@ -81,7 +81,7 @@ This is useful when you want to ensure the same IP is removed in a cleanup step,
 ```yaml
 - name: Doorkeeper open
   id: doorkeeper
-  uses: patoroco/doorkeeper@v0.4.1
+  uses: patoroco/doorkeeper@v0.5.0
   with:
     digitaloceanToken: ${{ secrets.DO_TOKEN }}
     firewallName: "my-firewall"
@@ -91,7 +91,7 @@ This is useful when you want to ensure the same IP is removed in a cleanup step,
 
 - name: Doorkeeper close
   if: always()  # Run even if previous steps fail
-  uses: patoroco/doorkeeper@v0.4.1
+  uses: patoroco/doorkeeper@v0.5.0
   with:
     digitaloceanToken: ${{ secrets.DO_TOKEN }}
     firewallName: "my-firewall"
