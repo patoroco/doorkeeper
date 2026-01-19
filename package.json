@@ -1,6 +1,6 @@
 {
   "name": "digitalocean-doorkeeper",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "This Github action allows you to open or close an specific port in your DigitalOcean firewall. It's really useful for deploy in your instances from Github Actions, as they don't provide a list of IPs to add to your security groups.",
   "main": "src/main.ts",
   "scripts": {

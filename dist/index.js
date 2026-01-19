@@ -43611,7 +43611,7 @@ async function getFirewall({ firewall: firewallClient }, name) {
     return firewall;
 }
 function applyRule(config, rule = { protocol: '', ports: '', sources: {} }) {
-    var _a;
+    var _a, _b, _c;
     const cloneRule = { ...rule };
     const { port, action, protocol, IP } = config;
     if (!cloneRule.protocol) {
@@ -43623,6 +43623,9 @@ function applyRule(config, rule = { protocol: '', ports: '', sources: {} }) {
     if (!cloneRule.sources.addresses) {
         cloneRule.sources.addresses = [];
     }
+    if (!cloneRule.sources.droplet_ids) {
+        cloneRule.sources.droplet_ids = ((_a = rule.sources) === null || _a === void 0 ? void 0 : _a.droplet_ids) || [];
+    }
     const addresses = cloneRule.sources.addresses;
     if (action == "add") {
         if (!addresses.includes(IP)) {
@@ -43632,7 +43635,8 @@ function applyRule(config, rule = { protocol: '', ports: '', sources: {} }) {
     else if (action == "remove") {
         cloneRule.sources.addresses = addresses.filter((address) => address != IP);
     }
-    if (((_a = cloneRule.sources) === null || _a === void 0 ? void 0 : _a.addresses.length) == 0) {
+    // Only return null if both addresses and droplet_ids are empty
+    if (((_b = cloneRule.sources) === null || _b === void 0 ? void 0 : _b.addresses.length) === 0 && (!((_c = cloneRule.sources) === null || _c === void 0 ? void 0 : _c.droplet_ids) || cloneRule.sources.droplet_ids.length === 0)) {
         return null;
     }
     return cloneRule;
@@ -43640,24 +43644,22 @@ function applyRule(config, rule = { protocol: '', ports: '', sources: {} }) {
 function generateInboundRules(oldRules = [], config) {
     const { port, action, protocol } = config;
     const existingRules = oldRules.filter(r => r.ports == port.toString() && r.protocol == protocol);
+    const otherRules = oldRules.filter(r => r.ports != port.toString() || r.protocol != protocol);
     if (!existingRules.length) {
         const newRule = applyRule(config);
         if (newRule) {
-            oldRules.push(newRule);
+            return [...otherRules, newRule];
         }
-        return oldRules;
+        return otherRules;
     }
-    return oldRules.reduce((out, r, index) => {
-        if (action == "remove" || (action == "add" && index == 0)) {
-            const newRule = applyRule(config, r);
-            if (newRule)
-                out.push(newRule);
-        }
-        else {
-            out.push(r);
+    const updatedRules = existingRules.reduce((out, r) => {
+        const newRule = applyRule(config, r);
+        if (newRule) {
+            out.push(newRule);
         }
         return out;
     }, []);
+    return [...otherRules, ...updatedRules];
 }
 async function updateInboundRules({ firewall: firewallClient }, firewall, inboundRules, dryrun = true) {
     printFirewallRules(inboundRules, "(updated)");
@@ -43666,8 +43668,10 @@ async function updateInboundRules({ firewall: firewallClient }, firewall, inboun
     }
     const updated = {
         ...firewall,
-        inbound_rules: inboundRules.length ? inboundRules : [],
-        outbound_rules: prepareOutboundRules(firewall.outbound_rules)
+        inbound_rules: inboundRules,
+        outbound_rules: prepareOutboundRules(firewall.outbound_rules),
+        droplet_ids: firewall.droplet_ids,
+        tags: firewall.tags
     };
     try {
         let maxRetries = 10;
@@ -43706,8 +43710,11 @@ function printFirewallRules(inboundRules = [], title = "") {
         console.log("** no rules defined **");
     }
     inboundRules.forEach(rule => {
-        var _a;
-        console.log(`${rule.ports}::${rule.protocol} - ${(_a = rule.sources) === null || _a === void 0 ? void 0 : _a.addresses}`);
+        var _a, _b, _c, _d;
+        const addresses = ((_b = (_a = rule.sources) === null || _a === void 0 ? void 0 : _a.addresses) === null || _b === void 0 ? void 0 : _b.length) ? `IPs: ${rule.sources.addresses}` : '';
+        const droplets = ((_d = (_c = rule.sources) === null || _c === void 0 ? void 0 : _c.droplet_ids) === null || _d === void 0 ? void 0 : _d.length) ? `Droplets: ${rule.sources.droplet_ids}` : '';
+        const sources = [addresses, droplets].filter(Boolean).join(', ');
+        console.log(`${rule.ports}::${rule.protocol} - ${sources || 'No sources'}`);
     });
 }
 function prepareOutboundRules(outboundRules = []) {
